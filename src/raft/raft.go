@@ -24,6 +24,9 @@ import (
 
 	//	"6.824/labgob"
 	"6.824/labrpc"
+
+	"time"
+	"math/rand"
 )
 
 
@@ -49,7 +52,11 @@ type ApplyMsg struct {
 	SnapshotTerm  int
 	SnapshotIndex int
 }
-
+const (
+	LEADER = iota
+	CANDIDATE
+	FOLLOWER
+)
 //
 // A Go object implementing a single Raft peer.
 //
@@ -64,16 +71,27 @@ type Raft struct {
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
 
+	// persistent state
+	currentTerm int
+	voteFor		int
+	// log[]
+	
+	// Volatile state 4 log
+	commitIndex int 
+	lastApplied int 
+
+	// leaders state
+	nestIndex []int
+	matchIndex []int
+
+	role int
 }
 
 // return currentTerm and whether this server
 // believes it is the leader.
 func (rf *Raft) GetState() (int, bool) {
-
-	var term int
-	var isleader bool
 	// Your code here (2A).
-	return term, isleader
+	return rf.currentTerm, rf.role == LEADER
 }
 
 //
@@ -143,6 +161,10 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 //
 type RequestVoteArgs struct {
 	// Your data here (2A, 2B).
+	Term int 
+	CandiddateID int
+	lastLogIndex int 
+	LastLogTerm int
 }
 
 //
@@ -151,6 +173,8 @@ type RequestVoteArgs struct {
 //
 type RequestVoteReply struct {
 	// Your data here (2A).
+	Term int
+	VoteGranted bool // accept or not
 }
 
 //
@@ -241,6 +265,9 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
+func (rf *Raft) getRandomTicker() time.Duration {
+	return (time.Duration)(150+rand.Intn(150)) * time.Millisecond;
+}
 // The ticker go routine starts a new election if this peer hasn't received
 // heartsbeats recently.
 func (rf *Raft) ticker() {
@@ -249,6 +276,11 @@ func (rf *Raft) ticker() {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
+		time.Sleep(rf.getRandomTicker())
+		if (rf.role == FOLLOWER) {
+			rf.role = CANDIDATE
+		}
+		//rf.role = CANDIDATE
 
 	}
 }
@@ -272,6 +304,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.me = me
 
 	// Your initialization code here (2A, 2B, 2C).
+	rf.currentTerm = 0
+	rf.role = FOLLOWER
+	
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
