@@ -56,6 +56,11 @@ const (
 	FOLLOWER
 )
 
+type LogContent struct {
+	Term    int
+	Content string
+}
+
 // A Go object implementing a single Raft peer.
 type Raft struct {
 	mu        sync.Mutex          // Lock to protect shared access to this peer's state
@@ -82,16 +87,17 @@ type Raft struct {
 	matchIndex []int
 
 	// added
-	role          int
-	currentLeader int
-	voteNum       int
+	role          atomic.Int32 // my role
+	currentLeader int          // currentLeader index
+	voteNum       int          // voteNum i got
+	rcvdHB        atomic.Bool  // rcvdHB or Not
 }
 
 // return currentTerm and whether this server
 // believes it is the leader.
 func (rf *Raft) GetState() (int, bool) {
 	// Your code here (2A).
-	return rf.currentTerm, rf.role == LEADER
+	return rf.currentTerm, rf.role.Load() == LEADER
 }
 
 // save Raft's persistent state to stable storage,
@@ -267,12 +273,106 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
-func (rf *Raft) getRandomTicker() time.Duration {
-	return (time.Duration)(150+rand.Intn(150)) * time.Millisecond
+func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
+	return base + (time.Duration)(rand.Intn(150))*time.Millisecond
 }
 
-func (rf *Raft) becomeFollwer() {
-	rf.role = FOLLOWER
+func (rf *Raft) changeRole(role int) {
+	rf.role.Store((int32)(role))
+}
+
+func (rf *Raft) processLeader() {
+	if rf.role.Load() != LEADER {
+		return
+	}
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	for j := 0; j < len(rf.peers); j++ {
+		if j == rf.me {
+			continue
+		}
+		appendReq := rf.getAppendEntrisArg()
+		var appendRsp AppendEntriesReply
+		// todo: check term,check log
+		ret := rf.sendAppendEntries(j, &appendReq, &appendRsp)
+		if ret {
+			if appendRsp.Term > rf.currentTerm {
+				rf.currentTerm = appendRsp.Term
+				rf.changeRole(FOLLOWER)
+				return
+			}
+		}
+	}
+	time.Sleep(rf.getRandomTicker(150 * time.Millisecond))
+}
+
+func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
+	var appendReq AppendEntriesArgs
+	appendReq.LeaderCommit = rf.commitIndex
+	appendReq.LeaderId = rf.me
+	appendReq.PrevLogIndex = 1
+	appendReq.PrevLogTerm = rf.currentTerm // todo:
+	appendReq.Term = rf.currentTerm        // todo:
+	return appendReq
+}
+
+func (rf *Raft) getVoteArgs() RequestVoteArgs {
+	var req RequestVoteArgs
+	req.Term = rf.currentTerm
+	req.CandiddateID = rf.me
+	req.lastLogIndex = rf.commitIndex //?
+	req.LastLogTerm = rf.currentTerm  // ?
+	return req
+}
+
+func (rf *Raft) processCandidate() {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	rf.currentTerm++
+	for rf.role.Load() == CANDIDATE {
+		rf.voteFor = rf.me
+		rf.voteNum = 1
+
+		reqVote := rf.getVoteArgs()
+		for i := 0; i < len(rf.peers); i++ {
+			if i == rf.me {
+				continue
+			}
+			var rsp RequestVoteReply
+			ret := rf.sendRequestVote(i, &reqVote, &rsp)
+			if !ret {
+				continue
+			}
+
+			if rsp.Term > rf.currentTerm {
+				rf.currentTerm = rsp.Term
+				rf.changeRole(FOLLOWER)
+				return
+			}
+			if rsp.VoteGranted {
+				rf.voteNum++
+				if rf.voteNum > len(rf.peers)/2 {
+					rf.changeRole(LEADER)
+					rf.processLeader()
+					return
+				}
+			}
+		}
+		time.Sleep(rf.getRandomTicker(time.Second))
+	}
+}
+
+func (rf *Raft) processFollwer() {
+	if rf.role.Load() != FOLLOWER {
+		return
+	}
+	time.Sleep(rf.getRandomTicker(time.Second))
+	if rf.currentLeader == -1 || !rf.rcvdHB.Load() {
+		rf.changeRole(CANDIDATE)
+		rf.processCandidate()
+		return
+	}
+	rf.rcvdHB.Store(false)
 }
 
 // The ticker go routine starts a new election if this peer hasn't received
@@ -283,53 +383,14 @@ func (rf *Raft) ticker() {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
-		if rf.currentLeader == -1 { // todo: also need to check hb is ok or not
-			time.Sleep(rf.getRandomTicker())
-			rf.role = CANDIDATE
-			rf.voteFor = rf.me
-			rf.voteNum = 1 // vote myself
-
-			// start RequestVote
-			var req RequestVoteArgs
-			req.Term = rf.currentTerm
-			req.CandiddateID = rf.me
-			req.lastLogIndex = rf.commitIndex //?
-			req.LastLogTerm = rf.currentTerm  // ?
-			for i := 0; i < len(rf.peers); i++ {
-				if i == rf.me {
-					continue
-				}
-				var rpl RequestVoteReply
-				ret := rf.sendRequestVote(i, &req, &rpl)
-				if ret && rpl.VoteGranted { // todo: what is use for the rpl.Term?
-					rf.voteNum++
-					if rf.voteNum > len(rf.peers)/2 {
-						rf.role = LEADER
-						rf.currentTerm += 1
-						for j := 0; j < len(rf.peers); j++ {
-							if j == rf.me {
-								continue
-							}
-							var appendReq AppendEntriesArgs
-							appendReq.LeaderCommit = rf.commitIndex
-							appendReq.LeaderId = rf.me
-							appendReq.PrevLogIndex = 1
-							appendReq.PrevLogTerm = req.Term // todo:
-							appendReq.Term = rf.currentTerm  // todo:
-							var appendRpl AppendEntriesReply
-							go func(index int) {
-								// todo: check term,check log
-								rf.sendAppendEntries(index, &appendReq, &appendRpl)
-
-							}(j)
-						}
-
-					}
-
-				}
-			}
+		switch rf.role.Load() {
+		case FOLLOWER:
+			rf.processFollwer()
+		case CANDIDATE:
+			rf.processCandidate()
+		case LEADER:
+			rf.processLeader()
 		}
-
 	}
 }
 
