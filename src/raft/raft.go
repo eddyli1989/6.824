@@ -158,7 +158,7 @@ type RequestVoteArgs struct {
 	// Your data here (2A, 2B).
 	Term         int
 	CandiddateID int
-	lastLogIndex int
+	LastLogIndex int
 	LastLogTerm  int
 }
 
@@ -184,14 +184,45 @@ type RequestVoteReply struct {
 	VoteGranted bool // accept or not
 }
 
+func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	DPrintf("Index:%d, role:%d rcvd AppendEntries", rf.me, rf.role.Load())
+	if rf.role.Load() == CANDIDATE {
+		DPrintf("Index:%d, change me to follower", rf.me)
+		rf.role.Store(FOLLOWER)
+	}
+	rf.currentLeader = args.LeaderId
+	if args.Term > rf.currentTerm {
+		rf.currentTerm = args.Term
+	}
+
+	reply.Success = true
+	reply.Term = rf.currentTerm
+	rf.rcvdHB.Store(true)
+
+	//todo:process log
+}
+
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
-	reply.Term = rf.currentTerm
-	if args.Term < rf.currentTerm || args.lastLogIndex < rf.commitIndex || rf.voteFor != -1 {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	DPrintf("Index:%d, role:%d rcvd RequestVote from:%d", rf.me, rf.role.Load(), args.CandiddateID)
+	if rf.role.Load() != FOLLOWER {
+		reply.Term = rf.currentTerm
 		reply.VoteGranted = false
 		return
 	}
+	reply.Term = rf.currentTerm
+	if args.Term < rf.currentTerm || args.LastLogIndex < rf.commitIndex || rf.voteFor != -1 {
+		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
+		reply.VoteGranted = false
+		return
+	}
+	DPrintf("Index:%d, Accept vote to:%d, term:%d", rf.me, args.CandiddateID, args.Term)
+	rf.voteFor = args.CandiddateID
 	reply.VoteGranted = true
 }
 
@@ -285,6 +316,8 @@ func (rf *Raft) processLeader() {
 	if rf.role.Load() != LEADER {
 		return
 	}
+	DPrintf("Index:%d, change to leader", rf.me)
+
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	for j := 0; j < len(rf.peers); j++ {
@@ -293,14 +326,18 @@ func (rf *Raft) processLeader() {
 		}
 		appendReq := rf.getAppendEntrisArg()
 		var appendRsp AppendEntriesReply
-		// todo: check term,check log
+		// todo:check log
+		DPrintf("Index:%d Try Send AppendEntries to :%d Failed", rf.me, j)
 		ret := rf.sendAppendEntries(j, &appendReq, &appendRsp)
 		if ret {
+			DPrintf("Send AppendEntries to :%d Sucsicced", j)
 			if appendRsp.Term > rf.currentTerm {
 				rf.currentTerm = appendRsp.Term
 				rf.changeRole(FOLLOWER)
 				return
 			}
+		} else {
+			DPrintf("Send AppendEntries to :%d Failed", j)
 		}
 	}
 	time.Sleep(rf.getRandomTicker(150 * time.Millisecond))
@@ -320,7 +357,7 @@ func (rf *Raft) getVoteArgs() RequestVoteArgs {
 	var req RequestVoteArgs
 	req.Term = rf.currentTerm
 	req.CandiddateID = rf.me
-	req.lastLogIndex = rf.commitIndex //?
+	req.LastLogIndex = rf.commitIndex //?
 	req.LastLogTerm = rf.currentTerm  // ?
 	return req
 }
@@ -329,6 +366,7 @@ func (rf *Raft) processCandidate() {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	rf.currentTerm++
+	DPrintf("Index:%d, change to candidate, term:%d", rf.me, rf.currentTerm)
 	for rf.role.Load() == CANDIDATE {
 		rf.voteFor = rf.me
 		rf.voteNum = 1
@@ -367,6 +405,7 @@ func (rf *Raft) processFollwer() {
 		return
 	}
 	time.Sleep(rf.getRandomTicker(time.Second))
+	DPrintf("Index:%d, change to follower", rf.me)
 	if rf.currentLeader == -1 || !rf.rcvdHB.Load() {
 		rf.changeRole(CANDIDATE)
 		rf.processCandidate()
@@ -412,7 +451,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// Your initialization code here (2A, 2B, 2C).
 	rf.currentTerm = 0
-	rf.role = FOLLOWER
+	rf.role.Store(FOLLOWER)
 	rf.currentLeader = -1
 	rf.voteFor = -1
 
