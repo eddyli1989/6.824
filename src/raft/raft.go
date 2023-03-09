@@ -475,7 +475,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
-
+	DPrintf("Index:%d, we have %d peers", rf.me, len(peers))
 	// start ticker goroutine to start elections
 	go rf.ticker()
 
