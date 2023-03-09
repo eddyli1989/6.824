@@ -56,6 +56,10 @@ const (
 	FOLLOWER
 )
 
+const ElectionBaseTime = 500 * time.Millisecond
+const ElectionRandTime = 100 // ms
+const HBInterval = 150 * time.Millisecond
+
 type LogContent struct {
 	Term    int
 	Content string
@@ -313,7 +317,7 @@ func (rf *Raft) killed() bool {
 }
 
 func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
-	return base + (time.Duration)(rand.Intn(150))*time.Millisecond
+	return base + (time.Duration)(rand.Intn(ElectionRandTime))*time.Millisecond
 }
 
 func (rf *Raft) changeRole(role int) {
@@ -358,7 +362,7 @@ func (rf *Raft) processLeader() {
 			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, j)
 		}
 	}
-	time.Sleep(rf.getRandomTicker(100 * time.Millisecond))
+	time.Sleep(HBInterval)
 }
 
 func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
@@ -415,7 +419,7 @@ func (rf *Raft) processCandidate() {
 				}
 			}
 		}
-		time.Sleep(rf.getRandomTicker(time.Second))
+		time.Sleep(rf.getRandomTicker(ElectionBaseTime))
 	}
 }
 
@@ -423,7 +427,7 @@ func (rf *Raft) processFollwer() {
 	if rf.role.Load() != FOLLOWER {
 		return
 	}
-	time.Sleep(rf.getRandomTicker(time.Second))
+	time.Sleep(rf.getRandomTicker(ElectionBaseTime))
 	DPrintf("Index:%d, change to follower", rf.me)
 	if rf.currentLeader == -1 || !rf.rcvdHB.Load() {
 		rf.changeRole(CANDIDATE)
