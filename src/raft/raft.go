@@ -216,26 +216,35 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	DPrintf("Index:%d, role:%d rcvd RequestVote from:%d", rf.me, rf.role.Load(), args.CandiddateID)
-	if rf.role.Load() != FOLLOWER {
+
+	if args.Term < rf.currentTerm {
+		DPrintf("Index:%d, Reject vote to:%d Req term:%d, currentTerm:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
+		reply.VoteGranted = false
 		reply.Term = rf.currentTerm
-		reply.VoteGranted = false
 		return
 	}
+
+	if args.Term == rf.currentTerm {
+		if rf.role.Load() != FOLLOWER {
+			DPrintf("Index:%d Reject vote to:%d same term but i'm not follower, role:%d", rf.me, args.CandiddateID, rf.role.Load())
+			reply.Term = rf.currentTerm
+			reply.VoteGranted = false
+			return
+		}
+
+		if rf.voteFor != -1 {
+			DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
+			reply.VoteGranted = false
+			return
+		}
+	}
+	// todo check log index
+	DPrintf("Index:%d, Accept vote to:%d, term:%d, current term:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
+
 	reply.Term = rf.currentTerm
-	if args.Term > rf.currentTerm {
-		reply.VoteGranted = true
-		DPrintf("Index:%d, Accept vote to:%d, term:%d is bigger", rf.me, args.CandiddateID, args.Term)
-		rf.voteFor = args.CandiddateID
-		return
-	}
-	if args.Term < rf.currentTerm || args.LastLogIndex < rf.commitIndex || rf.voteFor != -1 {
-		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
-		reply.VoteGranted = false
-		return
-	}
-	DPrintf("Index:%d, Accept vote to:%d, term:%d", rf.me, args.CandiddateID, args.Term)
-	rf.voteFor = args.CandiddateID
 	reply.VoteGranted = true
+	rf.voteFor = args.CandiddateID
+	rf.currentTerm = args.Term
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -307,6 +316,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 // confusing debug output. any goroutine with a long-running loop
 // should call killed() to check whether it should stop.
 func (rf *Raft) Kill() {
+	DPrintf("Index:%d, kill", rf.me)
 	atomic.StoreInt32(&rf.dead, 1)
 	// Your code here, if desired.
 }
@@ -342,26 +352,37 @@ func (rf *Raft) processLeader() {
 
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+
+	wg := sync.WaitGroup{}
 	for j := 0; j < len(rf.peers); j++ {
 		if j == rf.me {
 			continue
+		}
+		if rf.role.Load() != LEADER {
+			return
 		}
 		appendReq := rf.getAppendEntrisArg()
 		var appendRsp AppendEntriesReply
 		// todo:check log
 		DPrintf("Index:%d Try Send AppendEntries to :%d", rf.me, j)
-		ret := rf.sendAppendEntries(j, &appendReq, &appendRsp)
-		if ret {
-			DPrintf("Index:%d Send AppendEntries to :%d Sucsicced", rf.me, j)
-			if appendRsp.Term > rf.currentTerm {
-				rf.currentTerm = appendRsp.Term
-				rf.changeRole(FOLLOWER)
-				return
+
+		wg.Add(1)
+		go func(index int) {
+			defer wg.Done()
+			ret := rf.sendAppendEntries(index, &appendReq, &appendRsp)
+			if ret {
+				DPrintf("Index:%d Send AppendEntries to :%d Sucsicced", rf.me, index)
+				if appendRsp.Term > rf.currentTerm {
+					rf.currentTerm = appendRsp.Term
+					rf.changeRole(FOLLOWER)
+					return
+				}
+			} else {
+				DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
 			}
-		} else {
-			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, j)
-		}
+		}(j)
 	}
+	wg.Wait()
 	time.Sleep(HBInterval)
 }
 
@@ -394,31 +415,40 @@ func (rf *Raft) processCandidate() {
 		rf.voteNum = 1
 
 		reqVote := rf.getVoteArgs()
+		wg := sync.WaitGroup{}
 		for i := 0; i < len(rf.peers); i++ {
 			if i == rf.me {
 				continue
 			}
-			var rsp RequestVoteReply
-			DPrintf("Index:%d, send RequestVote to :%d", rf.me, i)
-			ret := rf.sendRequestVote(i, &reqVote, &rsp)
-			if !ret {
-				DPrintf("Index:%d, send RequestVote to :%d FAILED!", rf.me, i)
-				continue
-			}
-			DPrintf("Index:%d, send RequestVote to :%d Success", rf.me, i)
-			if rsp.Term > rf.currentTerm {
-				rf.currentTerm = rsp.Term
-				rf.changeRole(FOLLOWER)
+			if rf.role.Load() != CANDIDATE {
 				return
 			}
-			if rsp.VoteGranted {
-				rf.voteNum++
-				if rf.voteNum > len(rf.peers)/2 {
-					rf.changeRole(LEADER)
+			wg.Add(1)
+			go func(index int) {
+				defer wg.Done()
+				var rsp RequestVoteReply
+				DPrintf("Index:%d, send RequestVote to :%d", rf.me, index)
+				ret := rf.sendRequestVote(index, &reqVote, &rsp)
+				if !ret {
+					DPrintf("Index:%d, send RequestVote to :%d FAILED!", rf.me, index)
 					return
 				}
-			}
+				DPrintf("Index:%d, send RequestVote to :%d Success", rf.me, index)
+				if rsp.Term > rf.currentTerm {
+					rf.currentTerm = rsp.Term
+					rf.changeRole(FOLLOWER) // how to return ?
+					return
+				}
+				if rsp.VoteGranted {
+					rf.voteNum++
+					if rf.voteNum > len(rf.peers)/2 {
+						rf.changeRole(LEADER) // how to return ?
+						return
+					}
+				}
+			}(i)
 		}
+		wg.Wait()
 		time.Sleep(rf.getRandomTicker(ElectionBaseTime))
 	}
 }
