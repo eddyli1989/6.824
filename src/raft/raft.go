@@ -194,19 +194,20 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	defer rf.mu.Unlock()
 
 	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d", rf.me, rf.role.Load(), args.LeaderId)
-	if rf.role.Load() == CANDIDATE {
-		DPrintf("Index:%d, change me to follower", rf.me)
-		rf.changeRole(FOLLOWER)
+	if args.Term < rf.currentTerm {
+		DPrintf("Index:%d, Reject AppendEntries term:%d is small", rf.me, args.Term)
+		reply.Success = false
+		reply.Term = rf.currentTerm
+		return
 	}
 
+	rf.currentTerm = args.Term
+	rf.rcvdHB.Store(true)
+	rf.changeRole(FOLLOWER)
 	rf.currentLeader = args.LeaderId
-	if args.Term > rf.currentTerm {
-		rf.currentTerm = args.Term
-	}
 
 	reply.Success = true
 	reply.Term = rf.currentTerm
-	rf.rcvdHB.Store(true)
 
 	//todo:process log
 }
@@ -241,13 +242,13 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// todo check log index
 	DPrintf("Index:%d, Accept vote to:%d, term:%d, current term:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
 
+	rf.changeRole(FOLLOWER)
 	reply.VoteGranted = true
 
 	rf.voteFor = args.CandiddateID
 	rf.currentTerm = args.Term
 
 	rf.rcvdHB.Store(true)
-	rf.changeRole(FOLLOWER)
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -334,7 +335,8 @@ func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
 }
 
 func (rf *Raft) changeRole(role int) {
-	if role == FOLLOWER {
+	DPrintf("Index:%d, change role from:%d to :%d", rf.me, rf.role.Load(), role)
+	if role == FOLLOWER && rf.role.Load() != FOLLOWER {
 		rf.voteFor = -1
 		rf.rcvdHB.Store(false)
 	}
@@ -352,8 +354,7 @@ func (rf *Raft) processLeader() {
 		return
 	}
 	DPrintf("Index:%d, change to leader", rf.me)
-
-	wg := sync.WaitGroup{}
+	ch := make(chan bool, len(rf.peers))
 	for j := 0; j < len(rf.peers); j++ {
 		if j == rf.me {
 			continue
@@ -366,9 +367,11 @@ func (rf *Raft) processLeader() {
 		// todo:check log
 		DPrintf("Index:%d Try Send AppendEntries to :%d", rf.me, j)
 
-		wg.Add(1)
 		go func(index int) {
-			defer wg.Done()
+			defer func() {
+				ch <- false
+				DPrintf("Index:%d AppendEntries to :%d  finish", rf.me, index)
+			}()
 			ret := rf.sendAppendEntries(index, &appendReq, &appendRsp)
 			if ret {
 				rf.mu.Lock()
@@ -377,14 +380,35 @@ func (rf *Raft) processLeader() {
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
 					rf.changeRole(FOLLOWER)
+					ch <- true
 				}
 				return
 			}
 			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
 		}(j)
 	}
-	wg.Wait()
-	time.Sleep(HBInterval)
+
+	var count int = 0
+	var sleeped time.Duration = 0
+	var waitTime = 5 * time.Millisecond
+	for count != (len(rf.peers)-1) && sleeped < HBInterval {
+		select {
+		case ret, _ := <-ch:
+			count++
+			// role changed
+			if ret {
+				DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+				return
+			}
+		case <-time.After(waitTime):
+			sleeped += waitTime
+		}
+	}
+
+	DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+	if sleeped < HBInterval {
+		time.Sleep(HBInterval - sleeped)
+	}
 }
 
 func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
@@ -425,7 +449,10 @@ func (rf *Raft) processCandidate() {
 		}
 
 		go func(index int) {
-			defer func() { ch <- false }()
+			defer func() {
+				ch <- false
+				DPrintf("Index:%d RequestVote to :%d  finish", rf.me, index)
+			}()
 			var rsp RequestVoteReply
 			DPrintf("Index:%d, send RequestVote to :%d", rf.me, index)
 			ret := rf.sendRequestVote(index, &reqVote, &rsp)
@@ -455,20 +482,21 @@ func (rf *Raft) processCandidate() {
 	}
 	count := 0
 	var sleeped time.Duration = 0
-	for count != len(rf.peers) {
-		ret, ok := <-ch
-		if ok {
+	var waitTime = 5 * time.Millisecond
+	for count != (len(rf.peers)-1) && sleeped < ElectionBaseTime {
+		select {
+		case ret, _ := <-ch:
 			count++
-		} else {
-			time.Sleep(5 * time.Millisecond)
-			sleeped += (5 * time.Millisecond)
+			if ret {
+				DPrintf("Index:%d Out loop in processCandidate, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+				return
+			}
+		case <-time.After(waitTime):
+			sleeped += (waitTime)
 			continue
 		}
-
-		if ret {
-			return
-		}
 	}
+	DPrintf("Index:%d Out loop in processCandidate, sleep:%d ms", rf.me, sleeped/time.Millisecond)
 	if sleeped > ElectionBaseTime {
 		return
 	}
@@ -497,6 +525,7 @@ func (rf *Raft) ticker() {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
+		DPrintf("Index:%d, Role:%d, In loop", rf.me, rf.role.Load())
 		switch rf.role.Load() {
 		case FOLLOWER:
 			rf.processFollwer()
