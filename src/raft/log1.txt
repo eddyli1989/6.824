@@ -1,1 +1,2498 @@
-ok  	6.824/raft	18.175s
+2023/03/14 07:26:02 Index:0, we have 3 peers
+2023/03/14 07:26:02 Index:0, Role:2, In loop
+2023/03/14 07:26:02 Index:1, we have 3 peers
+2023/03/14 07:26:02 Index:1, Role:2, In loop
+2023/03/14 07:26:02 Index:2, we have 3 peers
+2023/03/14 07:26:02 Index:2, Role:2, In loop
+Test (2A): initial election ...
+2023/03/14 07:26:02 Index:0, role:2 GetState
+2023/03/14 07:26:02 Index:1, role:2 GetState
+2023/03/14 07:26:02 Index:2, role:2 GetState
+2023/03/14 07:26:02 Index:1, change to follower
+2023/03/14 07:26:02 Index:1, change role from:2 to :1
+2023/03/14 07:26:02 Index:1, Role:1, In loop
+2023/03/14 07:26:02 Index:1, change to candidate, term:1
+2023/03/14 07:26:02 Index:1, send RequestVote to :0
+2023/03/14 07:26:02 Index:1, send RequestVote to :2
+2023/03/14 07:26:02 Index:0, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:02 Index:0, Accept vote to:1, term:1, current term:0
+2023/03/14 07:26:02 Index:2, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:02 Index:2, Accept vote to:1, term:1, current term:0
+2023/03/14 07:26:02 Index:0, change role from:2 to :2
+2023/03/14 07:26:02 Index:2, change role from:2 to :2
+2023/03/14 07:26:02 Index:1, send RequestVote to :0 Success
+2023/03/14 07:26:02 Index:1, change role from:1 to :0
+2023/03/14 07:26:02 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:02 Index:1, send RequestVote to :2 Success
+2023/03/14 07:26:02 Index:1 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:02 Index:1, Role:0, In loop
+2023/03/14 07:26:02 Index:1, change role from:0 to :0
+2023/03/14 07:26:02 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:02 Index:1, change to leader
+2023/03/14 07:26:02 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:02 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:02 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:02 Index:0, change role from:2 to :2
+2023/03/14 07:26:02 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:02 Index:2, change role from:2 to :2
+2023/03/14 07:26:02 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:02 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:02 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:02 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:02 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:02 Index:2, change to follower
+2023/03/14 07:26:02 Index:2, Role:2, In loop
+2023/03/14 07:26:02 Index:0, change to follower
+2023/03/14 07:26:02 Index:0, Role:2, In loop
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:0, role:2 GetState
+2023/03/14 07:26:03 Index:1, role:0 GetState
+2023/03/14 07:26:03 Index:2, role:2 GetState
+2023/03/14 07:26:03 Index:0, role:2 GetState
+2023/03/14 07:26:03 Index:1, role:0 GetState
+2023/03/14 07:26:03 Index:2, role:2 GetState
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:0, change to follower
+2023/03/14 07:26:03 Index:0, Role:2, In loop
+2023/03/14 07:26:03 Index:2, change to follower
+2023/03/14 07:26:03 Index:2, Role:2, In loop
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:1, Role:0, In loop
+2023/03/14 07:26:03 Index:1, change to leader
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:03 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:03 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:0, change role from:2 to :2
+2023/03/14 07:26:03 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:03 Index:2, change role from:2 to :2
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:03 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:03 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:03 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:03 Index:0, change to follower
+2023/03/14 07:26:03 Index:0, Role:2, In loop
+2023/03/14 07:26:04 Index:2, change to follower
+2023/03/14 07:26:04 Index:2, Role:2, In loop
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:04 Index:0, change to follower
+2023/03/14 07:26:04 Index:0, Role:2, In loop
+2023/03/14 07:26:04 Index:2, change to follower
+2023/03/14 07:26:04 Index:2, Role:2, In loop
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:04 Index:1, Role:0, In loop
+2023/03/14 07:26:04 Index:1, change to leader
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:04 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:04 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:0, change role from:2 to :2
+2023/03/14 07:26:04 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:04 Index:2, change role from:2 to :2
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:04 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:04 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:04 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:0, change to follower
+2023/03/14 07:26:05 Index:0, Role:2, In loop
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:2, change to follower
+2023/03/14 07:26:05 Index:2, Role:2, In loop
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:0, role:2 GetState
+2023/03/14 07:26:05 Index:1, role:0 GetState
+2023/03/14 07:26:05 Index:2, role:2 GetState
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:0, change to follower
+2023/03/14 07:26:05 Index:0, Role:2, In loop
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:2, change to follower
+2023/03/14 07:26:05 Index:2, Role:2, In loop
+2023/03/14 07:26:05 Index:1, Role:0, In loop
+2023/03/14 07:26:05 Index:1, change to leader
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:05 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:05 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:05 Index:2, change role from:2 to :2
+2023/03/14 07:26:05 Index:0, change role from:2 to :2
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:05 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:05 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:05 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:05 Index:0, role:2 GetState
+2023/03/14 07:26:05 Index:1, role:0 GetState
+2023/03/14 07:26:05 Index:2, role:2 GetState
+  ... Passed --   3.5  3   42    7442    0
+2023/03/14 07:26:05 Index:0, kill
+2023/03/14 07:26:05 Index:1, kill
+2023/03/14 07:26:05 Index:2, kill
+2023/03/14 07:26:05 Index:0, we have 3 peers
+2023/03/14 07:26:05 Index:0, Role:2, In loop
+2023/03/14 07:26:05 Index:1, we have 3 peers
+2023/03/14 07:26:05 Index:1, Role:2, In loop
+2023/03/14 07:26:05 Index:2, we have 3 peers
+2023/03/14 07:26:05 Index:2, Role:2, In loop
+Test (2A): election after network failure ...
+2023/03/14 07:26:06 Index:0, change to follower
+2023/03/14 07:26:06 Index:2, change to follower
+2023/03/14 07:26:06 Index:0, role:2 GetState
+2023/03/14 07:26:06 Index:1, role:2 GetState
+2023/03/14 07:26:06 Index:2, role:2 GetState
+2023/03/14 07:26:06 Index:1, change to follower
+2023/03/14 07:26:06 Index:1, change role from:2 to :1
+2023/03/14 07:26:06 Index:1, Role:1, In loop
+2023/03/14 07:26:06 Index:1, change to candidate, term:1
+2023/03/14 07:26:06 Index:1, send RequestVote to :2
+2023/03/14 07:26:06 Index:1, send RequestVote to :0
+2023/03/14 07:26:06 Index:2, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:06 Index:0, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:06 Index:0, Accept vote to:1, term:1, current term:0
+2023/03/14 07:26:06 Index:2, Accept vote to:1, term:1, current term:0
+2023/03/14 07:26:06 Index:2, change role from:2 to :2
+2023/03/14 07:26:06 Index:0, change role from:2 to :2
+2023/03/14 07:26:06 Index:1, send RequestVote to :2 Success
+2023/03/14 07:26:06 Index:1, change role from:1 to :0
+2023/03/14 07:26:06 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:06 Index:1, send RequestVote to :0 Success
+2023/03/14 07:26:06 Index:1 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:06 Index:1, Role:0, In loop
+2023/03/14 07:26:06 Index:1, change to leader
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:06 Index:1, change role from:0 to :0
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:06 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:06 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:0, change role from:2 to :2
+2023/03/14 07:26:06 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:2, change role from:2 to :2
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:06 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:06 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:06 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:06 Index:0, change to follower
+2023/03/14 07:26:06 Index:0, Role:2, In loop
+2023/03/14 07:26:06 Index:2, change to follower
+2023/03/14 07:26:06 Index:2, Role:2, In loop
+2023/03/14 07:26:06 Index:1, Role:0, In loop
+2023/03/14 07:26:06 Index:1, change to leader
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:06 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:0, change role from:2 to :2
+2023/03/14 07:26:06 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:2, change role from:2 to :2
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:06 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:06 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:06 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:06 Index:1, Role:0, In loop
+2023/03/14 07:26:06 Index:1, change to leader
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:06 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:0, change role from:2 to :2
+2023/03/14 07:26:06 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:06 Index:2, change role from:2 to :2
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:06 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:06 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:06 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:06 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:06 Index:0, role:2 GetState
+2023/03/14 07:26:06 Index:1, role:0 GetState
+2023/03/14 07:26:06 Index:2, role:2 GetState
+2023/03/14 07:26:06 Test: now the leader is 1
+2023/03/14 07:26:06 Test: now leader 1 disconnect
+2023/03/14 07:26:06 Index:1, Role:0, In loop
+2023/03/14 07:26:06 Index:1, change to leader
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:06 Index:2, change to follower
+2023/03/14 07:26:06 Index:2, Role:2, In loop
+2023/03/14 07:26:06 Index:0, change to follower
+2023/03/14 07:26:06 Index:0, Role:2, In loop
+2023/03/14 07:26:06 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:06 Index:1, Role:0, In loop
+2023/03/14 07:26:06 Index:1, change to leader
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:06 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:07 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:1, Role:0, In loop
+2023/03/14 07:26:07 Index:1, change to leader
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:07 Index:0, role:2 GetState
+2023/03/14 07:26:07 Index:2, role:2 GetState
+2023/03/14 07:26:07 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:1, Role:0, In loop
+2023/03/14 07:26:07 Index:1, change to leader
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:07 Index:2, change to follower
+2023/03/14 07:26:07 Index:2, change role from:2 to :1
+2023/03/14 07:26:07 Index:2, Role:1, In loop
+2023/03/14 07:26:07 Index:2, change to candidate, term:2
+2023/03/14 07:26:07 Index:2, send RequestVote to :1
+2023/03/14 07:26:07 Index:2, send RequestVote to :0
+2023/03/14 07:26:07 Index:0, role:2 rcvd RequestVote from:2
+2023/03/14 07:26:07 Index:0, Accept vote to:2, term:2, current term:1
+2023/03/14 07:26:07 Index:0, change role from:2 to :2
+2023/03/14 07:26:07 Index:2, send RequestVote to :0 Success
+2023/03/14 07:26:07 Index:2, change role from:1 to :0
+2023/03/14 07:26:07 Index:2 RequestVote to :0  finish
+2023/03/14 07:26:07 Index:2 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:07 Index:2, Role:0, In loop
+2023/03/14 07:26:07 Index:2, change to leader
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:07 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:0, change role from:2 to :2
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:07 Index:0, change to follower
+2023/03/14 07:26:07 Index:0, Role:2, In loop
+2023/03/14 07:26:07 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:1, Role:0, In loop
+2023/03/14 07:26:07 Index:1, change to leader
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:07 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:2, Role:0, In loop
+2023/03/14 07:26:07 Index:2, change to leader
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:07 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:0, change role from:2 to :2
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:07 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:07 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:07 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:1, Role:0, In loop
+2023/03/14 07:26:07 Index:1, change to leader
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:07 Index:0, role:2 GetState
+2023/03/14 07:26:07 Index:2, role:0 GetState
+2023/03/14 07:26:07 Test: now select another leader success
+2023/03/14 07:26:07 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:2, Role:0, In loop
+2023/03/14 07:26:07 Index:2, change to leader
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:07 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:0, change role from:2 to :2
+2023/03/14 07:26:07 Index:1, role:0 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:1, change role from:0 to :2
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:07 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:07 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:07 Index:1, Role:2, In loop
+2023/03/14 07:26:07 Index:2, Role:0, In loop
+2023/03/14 07:26:07 Index:2, change to leader
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:07 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:07 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:1, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:07 Index:1, change role from:2 to :2
+2023/03/14 07:26:07 Index:0, change role from:2 to :2
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:07 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:07 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:07 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:08 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:08 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:08 Index:0, change to follower
+2023/03/14 07:26:08 Index:0, Role:2, In loop
+2023/03/14 07:26:08 Index:2, Role:0, In loop
+2023/03/14 07:26:08 Index:2, change to leader
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:08 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:08 Index:0, change role from:2 to :2
+2023/03/14 07:26:08 Index:1, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:08 Index:1, change role from:2 to :2
+2023/03/14 07:26:08 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:08 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:08 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:08 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:08 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:08 Index:0, role:2 GetState
+2023/03/14 07:26:08 Index:1, role:2 GetState
+2023/03/14 07:26:08 Index:2, role:0 GetState
+2023/03/14 07:26:08 Test: now reconected leader 1 becomes follower, new leader is:2
+2023/03/14 07:26:08 Test: now disconnect leader:2 and 0, then wait 2 sec
+2023/03/14 07:26:08 Index:2, Role:0, In loop
+2023/03/14 07:26:08 Index:2, change to leader
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:08 Index:1, change to follower
+2023/03/14 07:26:08 Index:1, Role:2, In loop
+2023/03/14 07:26:08 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:08 Index:2, Role:0, In loop
+2023/03/14 07:26:08 Index:2, change to leader
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:08 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:08 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:08 Index:0, change to follower
+2023/03/14 07:26:08 Index:0, Role:2, In loop
+2023/03/14 07:26:08 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:08 Index:2, Role:0, In loop
+2023/03/14 07:26:08 Index:2, change to leader
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:08 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:08 Index:2, Role:0, In loop
+2023/03/14 07:26:08 Index:2, change to leader
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:08 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:1, change to follower
+2023/03/14 07:26:09 Index:1, change role from:2 to :1
+2023/03/14 07:26:09 Index:1, Role:1, In loop
+2023/03/14 07:26:09 Index:1, change to candidate, term:3
+2023/03/14 07:26:09 Index:1, send RequestVote to :0
+2023/03/14 07:26:09 Index:1, send RequestVote to :2
+2023/03/14 07:26:09 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:09 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:09 Index:0, change to follower
+2023/03/14 07:26:09 Index:0, change role from:2 to :1
+2023/03/14 07:26:09 Index:0, Role:1, In loop
+2023/03/14 07:26:09 Index:0, change to candidate, term:3
+2023/03/14 07:26:09 Index:0, send RequestVote to :2
+2023/03/14 07:26:09 Index:0, send RequestVote to :1
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:09 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:09 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:09 Index:0, send RequestVote to :1 FAILED!
+2023/03/14 07:26:09 Index:0 RequestVote to :1  finish
+2023/03/14 07:26:09 Index:1 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:09 Index:1, Role:1, In loop
+2023/03/14 07:26:09 Index:1, change to candidate, term:4
+2023/03/14 07:26:09 Index:1, send RequestVote to :0
+2023/03/14 07:26:09 Index:1, send RequestVote to :2
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:09 Index:0 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:09 Index:0, Role:1, In loop
+2023/03/14 07:26:09 Index:0, change to candidate, term:4
+2023/03/14 07:26:09 Index:0, send RequestVote to :2
+2023/03/14 07:26:09 Index:0, send RequestVote to :1
+2023/03/14 07:26:09 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:09 Index:2, Role:0, In loop
+2023/03/14 07:26:09 Index:2, change to leader
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:09 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:2, Role:0, In loop
+2023/03/14 07:26:10 Index:2, change to leader
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:10 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:10 Index:1, role:1 GetState
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:2, Role:0, In loop
+2023/03/14 07:26:10 Index:1 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:10 Index:2, change to leader
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:1, Role:1, In loop
+2023/03/14 07:26:10 Index:1, change to candidate, term:5
+2023/03/14 07:26:10 Index:1, send RequestVote to :2
+2023/03/14 07:26:10 Index:1, send RequestVote to :0
+2023/03/14 07:26:10 Index:0, role:1 rcvd RequestVote from:1
+2023/03/14 07:26:10 Index:0, Accept vote to:1, term:5, current term:4
+2023/03/14 07:26:10 Index:0, change role from:1 to :2
+2023/03/14 07:26:10 Index:1, send RequestVote to :0 Success
+2023/03/14 07:26:10 Index:1, change role from:1 to :0
+2023/03/14 07:26:10 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:10 Index:1 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:10 Index:1, Role:0, In loop
+2023/03/14 07:26:10 Index:1, change to leader
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:10 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:10 Index:0, change role from:2 to :2
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:10 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:10 Index:0 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:2, Role:0, In loop
+2023/03/14 07:26:10 Index:2, change to leader
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:1, Role:0, In loop
+2023/03/14 07:26:10 Index:1, change to leader
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:10 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:10 Index:0, change role from:2 to :2
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:10 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:10 Index:0, Role:2, In loop
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:10 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:10 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:10 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:2, Role:0, In loop
+2023/03/14 07:26:10 Index:2, change to leader
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:1, Role:0, In loop
+2023/03/14 07:26:10 Index:1, change to leader
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:10 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:10 Index:0, change role from:2 to :2
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:10 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:10 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:10 Index:0, role:2 GetState
+2023/03/14 07:26:10 Index:1, role:0 GetState
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:2, Role:0, In loop
+2023/03/14 07:26:10 Index:2, change to leader
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:2 Try Send AppendEntries to :1
+2023/03/14 07:26:10 Index:0, role:2 rcvd AppendEntries,from:2
+2023/03/14 07:26:10 Index:0, Reject AppendEntries term:2 is small
+2023/03/14 07:26:10 Index:1, role:0 rcvd AppendEntries,from:2
+2023/03/14 07:26:10 Index:1, Reject AppendEntries term:2 is small
+2023/03/14 07:26:10 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:10 Index:2, change role from:0 to :2
+2023/03/14 07:26:10 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:10 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:10 Index:2, Role:2, In loop
+2023/03/14 07:26:10 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:10 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:10 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:10 Index:1, Role:0, In loop
+2023/03/14 07:26:10 Index:1, change to leader
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:10 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:10 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:10 Index:0, change role from:2 to :2
+2023/03/14 07:26:10 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:10 Index:2, change role from:2 to :2
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:10 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:10 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:10 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:10 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:11 Index:1, Role:0, In loop
+2023/03/14 07:26:11 Index:1, change to leader
+2023/03/14 07:26:11 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:11 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:11 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:11 Index:0, change role from:2 to :2
+2023/03/14 07:26:11 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:11 Index:2, change role from:2 to :2
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:11 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:11 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:11 Index:0, change to follower
+2023/03/14 07:26:11 Index:0, Role:2, In loop
+2023/03/14 07:26:11 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:11 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:11 Index:1, Role:0, In loop
+2023/03/14 07:26:11 Index:1, change to leader
+2023/03/14 07:26:11 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:11 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:11 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:11 Index:0, change role from:2 to :2
+2023/03/14 07:26:11 Index:2, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:11 Index:2, change role from:2 to :2
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:11 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:11 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:11 Index:0, role:2 GetState
+2023/03/14 07:26:11 Index:1, role:0 GetState
+2023/03/14 07:26:11 Index:2, role:2 GetState
+  ... Passed --   5.4  3   84   11296    0
+2023/03/14 07:26:11 Index:0, kill
+2023/03/14 07:26:11 Index:1, kill
+2023/03/14 07:26:11 Index:2, kill
+2023/03/14 07:26:11 Index:0, we have 7 peers
+2023/03/14 07:26:11 Index:0, Role:2, In loop
+2023/03/14 07:26:11 Index:1, we have 7 peers
+2023/03/14 07:26:11 Index:1, Role:2, In loop
+2023/03/14 07:26:11 Index:2, we have 7 peers
+2023/03/14 07:26:11 Index:2, Role:2, In loop
+2023/03/14 07:26:11 Index:3, we have 7 peers
+2023/03/14 07:26:11 Index:3, Role:2, In loop
+2023/03/14 07:26:11 Index:4, we have 7 peers
+2023/03/14 07:26:11 Index:4, Role:2, In loop
+2023/03/14 07:26:11 Index:5, we have 7 peers
+2023/03/14 07:26:11 Index:5, Role:2, In loop
+2023/03/14 07:26:11 Index:6, we have 7 peers
+2023/03/14 07:26:11 Index:6, Role:2, In loop
+Test (2A): multiple elections ...
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:11 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:1, send RequestVote to :2 FAILED!
+2023/03/14 07:26:11 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:11 Index:2, change to follower
+2023/03/14 07:26:11 Index:1, send RequestVote to :0 FAILED!
+2023/03/14 07:26:11 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:11 Index:0, change to follower
+2023/03/14 07:26:11 Index:0, role:2 GetState
+2023/03/14 07:26:11 Index:1, role:2 GetState
+2023/03/14 07:26:11 Index:2, role:2 GetState
+2023/03/14 07:26:11 Index:3, role:2 GetState
+2023/03/14 07:26:11 Index:4, role:2 GetState
+2023/03/14 07:26:11 Index:5, role:2 GetState
+2023/03/14 07:26:11 Index:6, role:2 GetState
+2023/03/14 07:26:11 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:11 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:11 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:3, change to follower
+2023/03/14 07:26:11 Index:3, change role from:2 to :1
+2023/03/14 07:26:11 Index:3, Role:1, In loop
+2023/03/14 07:26:11 Index:3, change to candidate, term:1
+2023/03/14 07:26:11 Index:3, send RequestVote to :2
+2023/03/14 07:26:11 Index:3, send RequestVote to :0
+2023/03/14 07:26:11 Index:3, send RequestVote to :5
+2023/03/14 07:26:11 Index:3, send RequestVote to :4
+2023/03/14 07:26:11 Index:3, send RequestVote to :6
+2023/03/14 07:26:11 Index:4, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:5, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:5, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:5, change role from:2 to :2
+2023/03/14 07:26:11 Index:6, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:6, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:6, change role from:2 to :2
+2023/03/14 07:26:11 Index:2, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:2, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:2, change role from:2 to :2
+2023/03/14 07:26:11 Index:0, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:0, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:0, change role from:2 to :2
+2023/03/14 07:26:11 Index:3, send RequestVote to :5 Success
+2023/03/14 07:26:11 Index:4, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:4, change role from:2 to :2
+2023/03/14 07:26:11 Index:3, send RequestVote to :6 Success
+2023/03/14 07:26:11 Index:3 RequestVote to :6  finish
+2023/03/14 07:26:11 Index:3 RequestVote to :5  finish
+2023/03/14 07:26:11 Index:3, send RequestVote to :2 Success
+2023/03/14 07:26:11 Index:3, send RequestVote to :1
+2023/03/14 07:26:11 Index:3, change role from:1 to :0
+2023/03/14 07:26:11 Index:3 RequestVote to :2  finish
+2023/03/14 07:26:11 Index:3 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:11 Index:3, send RequestVote to :0 Success
+2023/03/14 07:26:11 Index:3, Role:0, In loop
+2023/03/14 07:26:11 Index:3, change to leader
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :0
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :1
+2023/03/14 07:26:11 Index:3, change role from:0 to :0
+2023/03/14 07:26:11 Index:1, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :2
+2023/03/14 07:26:11 Index:3 RequestVote to :0  finish
+2023/03/14 07:26:11 Index:3, send RequestVote to :4 Success
+2023/03/14 07:26:11 Index:3, change role from:0 to :0
+2023/03/14 07:26:11 Index:3 RequestVote to :4  finish
+2023/03/14 07:26:11 Index:1, Accept vote to:3, term:1, current term:0
+2023/03/14 07:26:11 Index:1, change role from:2 to :2
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :4
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :5
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :6
+2023/03/14 07:26:11 Index:2, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:2, change role from:2 to :2
+2023/03/14 07:26:11 Index:3, send RequestVote to :1 Success
+2023/03/14 07:26:11 Index:3, change role from:0 to :0
+2023/03/14 07:26:11 Index:3 RequestVote to :1  finish
+2023/03/14 07:26:11 Index:1, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:1, change role from:2 to :2
+2023/03/14 07:26:11 Index:5, change to follower
+2023/03/14 07:26:11 Index:5, change role from:2 to :1
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:4, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:4, change role from:2 to :2
+2023/03/14 07:26:11 Index:6, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:5, Role:1, In loop
+2023/03/14 07:26:11 Index:0, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:0, change role from:2 to :2
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:11 Index:6, change role from:2 to :2
+2023/03/14 07:26:11 Index:5, role:1 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:5, change role from:1 to :2
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :4  finish
+2023/03/14 07:26:11 Index:3 AppendEntries to :1  finish
+2023/03/14 07:26:11 Index:5, change to candidate, term:2
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:11 Index:5, Role:2, In loop
+2023/03/14 07:26:11 Index:3 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :6  finish
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :5  finish
+2023/03/14 07:26:11 Index:3 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:11 Index:2, change to follower
+2023/03/14 07:26:11 Index:2, Role:2, In loop
+2023/03/14 07:26:11 Index:1, change to follower
+2023/03/14 07:26:11 Index:1, Role:2, In loop
+2023/03/14 07:26:11 Index:6, change to follower
+2023/03/14 07:26:11 Index:6, Role:2, In loop
+2023/03/14 07:26:11 Index:0, change to follower
+2023/03/14 07:26:11 Index:0, Role:2, In loop
+2023/03/14 07:26:11 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:11 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:4, change to follower
+2023/03/14 07:26:11 Index:4, Role:2, In loop
+2023/03/14 07:26:11 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:11 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:3, Role:0, In loop
+2023/03/14 07:26:11 Index:3, change to leader
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :0
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :1
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :2
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :4
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :5
+2023/03/14 07:26:11 Index:3 Try Send AppendEntries to :6
+2023/03/14 07:26:11 Index:2, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:2, change role from:2 to :2
+2023/03/14 07:26:11 Index:5, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:5, Reject AppendEntries term:1 is small
+2023/03/14 07:26:11 Index:1, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:1, change role from:2 to :2
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:11 Index:4, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:4, change role from:2 to :2
+2023/03/14 07:26:11 Index:6, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:3 AppendEntries to :2  finish
+2023/03/14 07:26:11 Index:0, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:11 Index:3, change role from:0 to :2
+2023/03/14 07:26:11 Index:0, change role from:2 to :2
+2023/03/14 07:26:11 Index:6, change role from:2 to :2
+2023/03/14 07:26:11 Index:3 AppendEntries to :5  finish
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:11 Index:3 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:11 Index:3 AppendEntries to :1  finish
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :4  finish
+2023/03/14 07:26:11 Index:3, Role:2, In loop
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :0  finish
+2023/03/14 07:26:11 Index:3 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:11 Index:3 AppendEntries to :6  finish
+2023/03/14 07:26:12 Index:0, role:2 GetState
+2023/03/14 07:26:12 Index:1, role:2 GetState
+2023/03/14 07:26:12 Index:2, role:2 GetState
+2023/03/14 07:26:12 Index:3, role:2 GetState
+2023/03/14 07:26:12 Index:4, role:2 GetState
+2023/03/14 07:26:12 Index:5, role:2 GetState
+2023/03/14 07:26:12 Index:6, role:2 GetState
+2023/03/14 07:26:12 Index:5, change to follower
+2023/03/14 07:26:12 Index:5, change role from:2 to :1
+2023/03/14 07:26:12 Index:5, Role:1, In loop
+2023/03/14 07:26:12 Index:5, change to candidate, term:3
+2023/03/14 07:26:12 Index:5, send RequestVote to :2
+2023/03/14 07:26:12 Index:5, send RequestVote to :6
+2023/03/14 07:26:12 Index:5, send RequestVote to :4
+2023/03/14 07:26:12 Index:5, send RequestVote to :1
+2023/03/14 07:26:12 Index:5, send RequestVote to :3
+2023/03/14 07:26:12 Index:5, send RequestVote to :0
+2023/03/14 07:26:12 Index:6, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:6, Accept vote to:5, term:3, current term:1
+2023/03/14 07:26:12 Index:6, change role from:2 to :2
+2023/03/14 07:26:12 Index:4, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:4, Accept vote to:5, term:3, current term:1
+2023/03/14 07:26:12 Index:4, change role from:2 to :2
+2023/03/14 07:26:12 Index:3, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:3, Accept vote to:5, term:3, current term:2
+2023/03/14 07:26:12 Index:3, change role from:2 to :2
+2023/03/14 07:26:12 Index:5, send RequestVote to :6 Success
+2023/03/14 07:26:12 Index:5 RequestVote to :6  finish
+2023/03/14 07:26:12 Index:5, send RequestVote to :4 Success
+2023/03/14 07:26:12 Index:0, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:0, Accept vote to:5, term:3, current term:1
+2023/03/14 07:26:12 Index:0, change role from:2 to :2
+2023/03/14 07:26:12 Index:1, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:1, Accept vote to:5, term:3, current term:1
+2023/03/14 07:26:12 Index:5 RequestVote to :4  finish
+2023/03/14 07:26:12 Index:1, change role from:2 to :2
+2023/03/14 07:26:12 Index:5, send RequestVote to :3 Success
+2023/03/14 07:26:12 Index:5, change role from:1 to :0
+2023/03/14 07:26:12 Index:5 RequestVote to :3  finish
+2023/03/14 07:26:12 Index:5 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:12 Index:5, Role:0, In loop
+2023/03/14 07:26:12 Index:5, change to leader
+2023/03/14 07:26:12 Index:5, send RequestVote to :0 Success
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:12 Index:5, change role from:0 to :0
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:12 Index:5 RequestVote to :0  finish
+2023/03/14 07:26:12 Index:2, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:12 Index:2, Accept vote to:5, term:3, current term:1
+2023/03/14 07:26:12 Index:2, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:12 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:1, change role from:2 to :2
+2023/03/14 07:26:12 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:0, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:12 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:5, send RequestVote to :1 Success
+2023/03/14 07:26:12 Index:5, change role from:0 to :0
+2023/03/14 07:26:12 Index:5 RequestVote to :1  finish
+2023/03/14 07:26:12 Index:3, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:12 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:6, change role from:2 to :2
+2023/03/14 07:26:12 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:2, change role from:2 to :2
+2023/03/14 07:26:12 Index:5, send RequestVote to :2 Success
+2023/03/14 07:26:12 Index:1, change to follower
+2023/03/14 07:26:12 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:1, Role:2, In loop
+2023/03/14 07:26:12 Index:4, change role from:2 to :2
+2023/03/14 07:26:12 Index:5, change role from:0 to :0
+2023/03/14 07:26:12 Index:5 RequestVote to :2  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:12 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:12 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:12 Index:2, change to follower
+2023/03/14 07:26:12 Index:2, Role:2, In loop
+2023/03/14 07:26:12 Index:6, change to follower
+2023/03/14 07:26:12 Index:6, Role:2, In loop
+2023/03/14 07:26:12 Index:0, change to follower
+2023/03/14 07:26:12 Index:0, Role:2, In loop
+2023/03/14 07:26:12 Index:4, change to follower
+2023/03/14 07:26:12 Index:4, Role:2, In loop
+2023/03/14 07:26:12 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:12 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:12 Index:5, Role:0, In loop
+2023/03/14 07:26:12 Index:5, change to leader
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:12 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:2, change role from:2 to :2
+2023/03/14 07:26:12 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:4, change role from:2 to :2
+2023/03/14 07:26:12 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:6, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:12 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:12 Index:1, change role from:2 to :2
+2023/03/14 07:26:12 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:3, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:12 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:0, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:12 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:12 Index:3, change to follower
+2023/03/14 07:26:12 Index:3, Role:2, In loop
+2023/03/14 07:26:12 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:12 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:12 Index:5, Role:0, In loop
+2023/03/14 07:26:12 Index:5, change to leader
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:12 Index:0, send RequestVote to :2 FAILED!
+2023/03/14 07:26:12 Index:0 RequestVote to :2  finish
+2023/03/14 07:26:12 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:0, change role from:2 to :2
+2023/03/14 07:26:12 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:3, change role from:2 to :2
+2023/03/14 07:26:12 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:6, change role from:2 to :2
+2023/03/14 07:26:12 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:2, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:12 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:12 Index:4, change role from:2 to :2
+2023/03/14 07:26:12 Index:1, change role from:2 to :2
+2023/03/14 07:26:12 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:12 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:12 Index:5 Out loop in processLeader, sleep:10 ms
+2023/03/14 07:26:12 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:12 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:12 Index:0, role:2 GetState
+2023/03/14 07:26:12 Index:1, role:2 GetState
+2023/03/14 07:26:12 Index:2, role:2 GetState
+2023/03/14 07:26:12 Index:3, role:2 GetState
+2023/03/14 07:26:12 Index:4, role:2 GetState
+2023/03/14 07:26:12 Index:5, role:0 GetState
+2023/03/14 07:26:12 Index:6, role:2 GetState
+2023/03/14 07:26:12 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:12 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:12 Index:5, Role:0, In loop
+2023/03/14 07:26:12 Index:5, change to leader
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:12 Index:5 Send AppendEntries to :3 Failed
+2023/03/14 07:26:12 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:12 Index:1, change to follower
+2023/03/14 07:26:12 Index:1, Role:2, In loop
+2023/03/14 07:26:12 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:12 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:12 Index:0, change to follower
+2023/03/14 07:26:12 Index:0, Role:2, In loop
+2023/03/14 07:26:12 Index:6, change to follower
+2023/03/14 07:26:12 Index:6, Role:2, In loop
+2023/03/14 07:26:12 Index:2, change to follower
+2023/03/14 07:26:12 Index:2, Role:2, In loop
+2023/03/14 07:26:12 Index:4, change to follower
+2023/03/14 07:26:12 Index:4, Role:2, In loop
+2023/03/14 07:26:12 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:12 Index:5, Role:0, In loop
+2023/03/14 07:26:12 Index:5, change to leader
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:12 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:3, change to follower
+2023/03/14 07:26:13 Index:3, Role:2, In loop
+2023/03/14 07:26:13 Index:0, send RequestVote to :2 FAILED!
+2023/03/14 07:26:13 Index:0 RequestVote to :2  finish
+2023/03/14 07:26:13 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:13 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:5, Role:0, In loop
+2023/03/14 07:26:13 Index:5, change to leader
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:13 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:13 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:0, role:2 GetState
+2023/03/14 07:26:13 Index:1, role:2 GetState
+2023/03/14 07:26:13 Index:2, role:2 GetState
+2023/03/14 07:26:13 Index:4, role:2 GetState
+2023/03/14 07:26:13 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:5, Role:0, In loop
+2023/03/14 07:26:13 Index:5, change to leader
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:0, change to follower
+2023/03/14 07:26:13 Index:0, change role from:2 to :1
+2023/03/14 07:26:13 Index:0, Role:1, In loop
+2023/03/14 07:26:13 Index:0, change to candidate, term:4
+2023/03/14 07:26:13 Index:0, send RequestVote to :6
+2023/03/14 07:26:13 Index:0, send RequestVote to :3
+2023/03/14 07:26:13 Index:0, send RequestVote to :4
+2023/03/14 07:26:13 Index:0, send RequestVote to :2
+2023/03/14 07:26:13 Index:0, send RequestVote to :5
+2023/03/14 07:26:13 Index:0, send RequestVote to :1
+2023/03/14 07:26:13 Index:4, role:2 rcvd RequestVote from:0
+2023/03/14 07:26:13 Index:4, Accept vote to:0, term:4, current term:3
+2023/03/14 07:26:13 Index:2, role:2 rcvd RequestVote from:0
+2023/03/14 07:26:13 Index:2, Accept vote to:0, term:4, current term:3
+2023/03/14 07:26:13 Index:2, change role from:2 to :2
+2023/03/14 07:26:13 Index:4, change role from:2 to :2
+2023/03/14 07:26:13 Index:1, role:2 rcvd RequestVote from:0
+2023/03/14 07:26:13 Index:1, Accept vote to:0, term:4, current term:3
+2023/03/14 07:26:13 Index:1, change role from:2 to :2
+2023/03/14 07:26:13 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:0, send RequestVote to :4 Success
+2023/03/14 07:26:13 Index:0 RequestVote to :4  finish
+2023/03/14 07:26:13 Index:0, send RequestVote to :1 Success
+2023/03/14 07:26:13 Index:0 RequestVote to :1  finish
+2023/03/14 07:26:13 Index:0, send RequestVote to :2 Success
+2023/03/14 07:26:13 Index:0, change role from:1 to :0
+2023/03/14 07:26:13 Index:0 RequestVote to :2  finish
+2023/03/14 07:26:13 Index:0 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:13 Index:0, Role:0, In loop
+2023/03/14 07:26:13 Index:0, change to leader
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :5
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:2, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:2, change role from:2 to :2
+2023/03/14 07:26:13 Index:1, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:1, change role from:2 to :2
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :2  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:13 Index:4, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:4, change role from:2 to :2
+2023/03/14 07:26:13 Index:0 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :4  finish
+2023/03/14 07:26:13 Index:2, change to follower
+2023/03/14 07:26:13 Index:2, Role:2, In loop
+2023/03/14 07:26:13 Index:1, change to follower
+2023/03/14 07:26:13 Index:1, Role:2, In loop
+2023/03/14 07:26:13 Index:6, change to follower
+2023/03/14 07:26:13 Index:6, change role from:2 to :1
+2023/03/14 07:26:13 Index:6, Role:1, In loop
+2023/03/14 07:26:13 Index:6, change to candidate, term:4
+2023/03/14 07:26:13 Index:6, send RequestVote to :0
+2023/03/14 07:26:13 Index:6, send RequestVote to :2
+2023/03/14 07:26:13 Index:6, send RequestVote to :1
+2023/03/14 07:26:13 Index:6, send RequestVote to :3
+2023/03/14 07:26:13 Index:6, send RequestVote to :5
+2023/03/14 07:26:13 Index:6, send RequestVote to :4
+2023/03/14 07:26:13 Index:1, send RequestVote to :2 FAILED!
+2023/03/14 07:26:13 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:13 Index:4, change to follower
+2023/03/14 07:26:13 Index:4, Role:2, In loop
+2023/03/14 07:26:13 Index:3, change to follower
+2023/03/14 07:26:13 Index:3, change role from:2 to :1
+2023/03/14 07:26:13 Index:3, Role:1, In loop
+2023/03/14 07:26:13 Index:3, change to candidate, term:4
+2023/03/14 07:26:13 Index:1 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:3, send RequestVote to :0
+2023/03/14 07:26:13 Index:3, send RequestVote to :6
+2023/03/14 07:26:13 Index:3, send RequestVote to :1
+2023/03/14 07:26:13 Index:3, send RequestVote to :2
+2023/03/14 07:26:13 Index:3, send RequestVote to :4
+2023/03/14 07:26:13 Index:3, send RequestVote to :5
+2023/03/14 07:26:13 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:5, Role:0, In loop
+2023/03/14 07:26:13 Index:5, change to leader
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:0 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:0, Role:0, In loop
+2023/03/14 07:26:13 Index:0, change to leader
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :5
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:1, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:2, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:1, change role from:2 to :2
+2023/03/14 07:26:13 Index:2, change role from:2 to :2
+2023/03/14 07:26:13 Index:4, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:4, change role from:2 to :2
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :4  finish
+2023/03/14 07:26:13 Index:0 AppendEntries to :2  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:13 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:0, role:0 GetState
+2023/03/14 07:26:13 Index:1, role:2 GetState
+2023/03/14 07:26:13 Index:2, role:2 GetState
+2023/03/14 07:26:13 Index:4, role:2 GetState
+2023/03/14 07:26:13 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:5, Role:0, In loop
+2023/03/14 07:26:13 Index:5, change to leader
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:0, role:0 rcvd AppendEntries,from:5
+2023/03/14 07:26:13 Index:0, Reject AppendEntries term:3 is small
+2023/03/14 07:26:13 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:13 Index:2, Reject AppendEntries term:3 is small
+2023/03/14 07:26:13 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:1, Reject AppendEntries term:3 is small
+2023/03/14 07:26:13 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:13 Index:5, change role from:0 to :2
+2023/03/14 07:26:13 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:13 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:13 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:13 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:13 Index:5, Role:2, In loop
+2023/03/14 07:26:13 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:13 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:13 Index:4, Reject AppendEntries term:3 is small
+2023/03/14 07:26:13 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:13 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:13 Index:6, send RequestVote to :4 FAILED!
+2023/03/14 07:26:13 Index:6 RequestVote to :4  finish
+2023/03/14 07:26:13 Index:0 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:0, Role:0, In loop
+2023/03/14 07:26:13 Index:0, change to leader
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :5
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:2, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:2, change role from:2 to :2
+2023/03/14 07:26:13 Index:5, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:5, change role from:2 to :2
+2023/03/14 07:26:13 Index:4, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:4, change role from:2 to :2
+2023/03/14 07:26:13 Index:1, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:13 Index:1, change role from:2 to :2
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :4  finish
+2023/03/14 07:26:13 Index:0 AppendEntries to :5  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :2  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:2, change to follower
+2023/03/14 07:26:13 Index:2, Role:2, In loop
+2023/03/14 07:26:13 Index:1, change to follower
+2023/03/14 07:26:13 Index:1, Role:2, In loop
+2023/03/14 07:26:13 Index:0 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:13 Index:0, Role:0, In loop
+2023/03/14 07:26:13 Index:0, change to leader
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :1
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :2
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :3
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :4
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :5
+2023/03/14 07:26:13 Index:0 Try Send AppendEntries to :6
+2023/03/14 07:26:13 Index:2, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:1, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:2, change role from:2 to :2
+2023/03/14 07:26:13 Index:3, send RequestVote to :0 FAILED!
+2023/03/14 07:26:13 Index:3 RequestVote to :0  finish
+2023/03/14 07:26:13 Index:4, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:4, change role from:2 to :2
+2023/03/14 07:26:13 Index:1, change role from:2 to :2
+2023/03/14 07:26:13 Index:5, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:13 Index:5, change role from:2 to :2
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :2  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :1  finish
+2023/03/14 07:26:13 Index:0 AppendEntries to :4  finish
+2023/03/14 07:26:13 Index:0 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:13 Index:0 AppendEntries to :5  finish
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :6 Failed
+2023/03/14 07:26:14 Index:0 AppendEntries to :6  finish
+2023/03/14 07:26:14 Index:6 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:3, send RequestVote to :2 FAILED!
+2023/03/14 07:26:14 Index:3 RequestVote to :2  finish
+2023/03/14 07:26:14 Index:4, change to follower
+2023/03/14 07:26:14 Index:4, Role:2, In loop
+2023/03/14 07:26:14 Index:0 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:0, Role:0, In loop
+2023/03/14 07:26:14 Index:0, change to leader
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:3 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :3
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:0 Try Send AppendEntries to :6
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:4, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:14 Index:4, change role from:2 to :2
+2023/03/14 07:26:14 Index:5, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:14 Index:1, role:2 rcvd AppendEntries,from:0
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:0 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:1, change role from:2 to :2
+2023/03/14 07:26:14 Index:5, change role from:2 to :2
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:14 Index:0 AppendEntries to :4  finish
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:14 Index:0 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:14 Index:0 AppendEntries to :5  finish
+2023/03/14 07:26:14 Index:6, Role:1, In loop
+2023/03/14 07:26:14 Index:6, change to candidate, term:5
+2023/03/14 07:26:14 Index:6, send RequestVote to :1
+2023/03/14 07:26:14 Index:6, send RequestVote to :4
+2023/03/14 07:26:14 Index:6, send RequestVote to :2
+2023/03/14 07:26:14 Index:6, send RequestVote to :5
+2023/03/14 07:26:14 Index:6, send RequestVote to :3
+2023/03/14 07:26:14 Index:6, send RequestVote to :0
+2023/03/14 07:26:14 Index:2, send RequestVote to :1 FAILED!
+2023/03/14 07:26:14 Index:2 RequestVote to :1  finish
+2023/03/14 07:26:14 Index:0, role:0 GetState
+2023/03/14 07:26:14 Index:1, role:2 GetState
+2023/03/14 07:26:14 Index:2, role:2 GetState
+2023/03/14 07:26:14 Index:4, role:2 GetState
+2023/03/14 07:26:14 Index:5, role:2 GetState
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:3, Role:1, In loop
+2023/03/14 07:26:14 Index:3, change to candidate, term:5
+2023/03/14 07:26:14 Index:3, send RequestVote to :6
+2023/03/14 07:26:14 Index:3, send RequestVote to :4
+2023/03/14 07:26:14 Index:3, send RequestVote to :1
+2023/03/14 07:26:14 Index:3, send RequestVote to :0
+2023/03/14 07:26:14 Index:3, send RequestVote to :5
+2023/03/14 07:26:14 Index:3, send RequestVote to :2
+2023/03/14 07:26:14 Index:1, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:14 Index:1, Accept vote to:3, term:5, current term:4
+2023/03/14 07:26:14 Index:1, change role from:2 to :2
+2023/03/14 07:26:14 Index:4, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:14 Index:0, role:0 rcvd RequestVote from:3
+2023/03/14 07:26:14 Index:4, Accept vote to:3, term:5, current term:4
+2023/03/14 07:26:14 Index:0, Accept vote to:3, term:5, current term:4
+2023/03/14 07:26:14 Index:4, change role from:2 to :2
+2023/03/14 07:26:14 Index:2, role:2 rcvd RequestVote from:3
+2023/03/14 07:26:14 Index:2, Accept vote to:3, term:5, current term:4
+2023/03/14 07:26:14 Index:0, change role from:0 to :2
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:3, send RequestVote to :1 Success
+2023/03/14 07:26:14 Index:3 RequestVote to :1  finish
+2023/03/14 07:26:14 Index:3, send RequestVote to :4 Success
+2023/03/14 07:26:14 Index:3 RequestVote to :4  finish
+2023/03/14 07:26:14 Index:3, send RequestVote to :0 Success
+2023/03/14 07:26:14 Index:3, change role from:1 to :0
+2023/03/14 07:26:14 Index:3 RequestVote to :0  finish
+2023/03/14 07:26:14 Index:3, send RequestVote to :2 Success
+2023/03/14 07:26:14 Index:3, change role from:0 to :0
+2023/03/14 07:26:14 Index:3 RequestVote to :2  finish
+2023/03/14 07:26:14 Index:3 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:14 Index:3, Role:0, In loop
+2023/03/14 07:26:14 Index:3, change to leader
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :0
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :6
+2023/03/14 07:26:14 Index:1, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:1, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:4, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:4, change role from:2 to :2
+2023/03/14 07:26:14 Index:0, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :4  finish
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:3, send RequestVote to :1 FAILED!
+2023/03/14 07:26:14 Index:3 RequestVote to :1  finish
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:0 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:0, Role:2, In loop
+2023/03/14 07:26:14 Index:5, change to follower
+2023/03/14 07:26:14 Index:5, Role:2, In loop
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:3 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:3, Role:0, In loop
+2023/03/14 07:26:14 Index:3, change to leader
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :0
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :6
+2023/03/14 07:26:14 Index:0, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:4, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:4, change role from:2 to :2
+2023/03/14 07:26:14 Index:1, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :4  finish
+2023/03/14 07:26:14 Index:1, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:2, change to follower
+2023/03/14 07:26:14 Index:2, Role:2, In loop
+2023/03/14 07:26:14 Index:1, change to follower
+2023/03/14 07:26:14 Index:1, Role:2, In loop
+2023/03/14 07:26:14 Index:5 Send AppendEntries to :4 Failed
+2023/03/14 07:26:14 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:14 Index:1, send RequestVote to :2 FAILED!
+2023/03/14 07:26:14 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:14 Index:3 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:3, Role:0, In loop
+2023/03/14 07:26:14 Index:3, change to leader
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :0
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:3 Try Send AppendEntries to :6
+2023/03/14 07:26:14 Index:0, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:1, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:1, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:4, role:2 rcvd AppendEntries,from:3
+2023/03/14 07:26:14 Index:4, change role from:2 to :2
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:3 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:14 Index:3 AppendEntries to :4  finish
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:4, change to follower
+2023/03/14 07:26:14 Index:4, Role:2, In loop
+2023/03/14 07:26:14 Index:0, role:2 GetState
+2023/03/14 07:26:14 Index:1, role:2 GetState
+2023/03/14 07:26:14 Index:2, role:2 GetState
+2023/03/14 07:26:14 Index:3, role:0 GetState
+2023/03/14 07:26:14 Index:4, role:2 GetState
+2023/03/14 07:26:14 Index:6 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:14 Index:0 Send AppendEntries to :6 Failed
+2023/03/14 07:26:14 Index:0 AppendEntries to :6  finish
+2023/03/14 07:26:14 Index:6, Role:1, In loop
+2023/03/14 07:26:14 Index:6, change to candidate, term:6
+2023/03/14 07:26:14 Index:6, send RequestVote to :5
+2023/03/14 07:26:14 Index:6, send RequestVote to :2
+2023/03/14 07:26:14 Index:6, send RequestVote to :0
+2023/03/14 07:26:14 Index:6, send RequestVote to :4
+2023/03/14 07:26:14 Index:6, send RequestVote to :3
+2023/03/14 07:26:14 Index:6, send RequestVote to :1
+2023/03/14 07:26:14 Index:2, role:2 rcvd RequestVote from:6
+2023/03/14 07:26:14 Index:2, Accept vote to:6, term:6, current term:5
+2023/03/14 07:26:14 Index:0, role:2 rcvd RequestVote from:6
+2023/03/14 07:26:14 Index:0, Accept vote to:6, term:6, current term:5
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:3, role:0 rcvd RequestVote from:6
+2023/03/14 07:26:14 Index:3, Accept vote to:6, term:6, current term:5
+2023/03/14 07:26:14 Index:3, change role from:0 to :2
+2023/03/14 07:26:14 Index:6, send RequestVote to :2 Success
+2023/03/14 07:26:14 Index:6 RequestVote to :2  finish
+2023/03/14 07:26:14 Index:6, send RequestVote to :0 Success
+2023/03/14 07:26:14 Index:6 RequestVote to :0  finish
+2023/03/14 07:26:14 Index:6, send RequestVote to :3 Success
+2023/03/14 07:26:14 Index:6, change role from:1 to :0
+2023/03/14 07:26:14 Index:6 RequestVote to :3  finish
+2023/03/14 07:26:14 Index:6 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:14 Index:6, Role:0, In loop
+2023/03/14 07:26:14 Index:3 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:3, Role:2, In loop
+2023/03/14 07:26:14 Index:6, change to leader
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:3, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:3, change role from:2 to :2
+2023/03/14 07:26:14 Index:0, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :3  finish
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:14 Index:5 Send AppendEntries to :6 Failed
+2023/03/14 07:26:14 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:14 Index:5, change to follower
+2023/03/14 07:26:14 Index:5, change role from:2 to :1
+2023/03/14 07:26:14 Index:5, Role:1, In loop
+2023/03/14 07:26:14 Index:5, change to candidate, term:5
+2023/03/14 07:26:14 Index:5, send RequestVote to :4
+2023/03/14 07:26:14 Index:5, send RequestVote to :0
+2023/03/14 07:26:14 Index:5, send RequestVote to :3
+2023/03/14 07:26:14 Index:5, send RequestVote to :6
+2023/03/14 07:26:14 Index:5, send RequestVote to :2
+2023/03/14 07:26:14 Index:5, send RequestVote to :1
+2023/03/14 07:26:14 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:14 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:14 Index:0, change to follower
+2023/03/14 07:26:14 Index:0, Role:2, In loop
+2023/03/14 07:26:14 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:14 Index:6, Role:0, In loop
+2023/03/14 07:26:14 Index:6, change to leader
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:14 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:14 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:2, change role from:2 to :2
+2023/03/14 07:26:14 Index:3, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:3, change role from:2 to :2
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:14 Index:0, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:14 Index:0, change role from:2 to :2
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :3  finish
+2023/03/14 07:26:14 Index:6 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:14 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:6, send RequestVote to :2 FAILED!
+2023/03/14 07:26:15 Index:6 RequestVote to :2  finish
+2023/03/14 07:26:15 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:15 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :2 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :3 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:2, change to follower
+2023/03/14 07:26:15 Index:2, Role:2, In loop
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :2 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:1, change to follower
+2023/03/14 07:26:15 Index:1, Role:2, In loop
+2023/03/14 07:26:15 Index:3 Send AppendEntries to :5 Failed
+2023/03/14 07:26:15 Index:3 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:0 Send AppendEntries to :3 Failed
+2023/03/14 07:26:15 Index:0 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:15 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:15 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:15 Index:6, Role:0, In loop
+2023/03/14 07:26:15 Index:6, change to leader
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:15 Index:0, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:3, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:3, change role from:2 to :2
+2023/03/14 07:26:15 Index:2, change role from:2 to :2
+2023/03/14 07:26:15 Index:0, change role from:2 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :5 Failed
+2023/03/14 07:26:15 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:0, role:2 GetState
+2023/03/14 07:26:15 Index:2, role:2 GetState
+2023/03/14 07:26:15 Index:3, role:2 GetState
+2023/03/14 07:26:15 Index:6, role:0 GetState
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :5 Failed
+2023/03/14 07:26:15 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:4, change to follower
+2023/03/14 07:26:15 Index:4, change role from:2 to :1
+2023/03/14 07:26:15 Index:4, Role:1, In loop
+2023/03/14 07:26:15 Index:4, change to candidate, term:6
+2023/03/14 07:26:15 Index:4, send RequestVote to :2
+2023/03/14 07:26:15 Index:4, send RequestVote to :3
+2023/03/14 07:26:15 Index:4, send RequestVote to :0
+2023/03/14 07:26:15 Index:4, send RequestVote to :1
+2023/03/14 07:26:15 Index:0, role:2 rcvd RequestVote from:4
+2023/03/14 07:26:15 Index:0, Reject vote to:4, already voteFor:6, term:6
+2023/03/14 07:26:15 Index:4, send RequestVote to :5
+2023/03/14 07:26:15 Index:4, send RequestVote to :6
+2023/03/14 07:26:15 Index:2, role:2 rcvd RequestVote from:4
+2023/03/14 07:26:15 Index:2, Reject vote to:4, already voteFor:6, term:6
+2023/03/14 07:26:15 Index:3, role:2 rcvd RequestVote from:4
+2023/03/14 07:26:15 Index:3, Reject vote to:4, already voteFor:6, term:6
+2023/03/14 07:26:15 Index:6, role:0 rcvd RequestVote from:4
+2023/03/14 07:26:15 Index:6 Reject vote to:4 same term but i'm not follower, role:0
+2023/03/14 07:26:15 Index:4, send RequestVote to :2 Success
+2023/03/14 07:26:15 Index:4 RequestVote to :2  finish
+2023/03/14 07:26:15 Index:4, send RequestVote to :3 Success
+2023/03/14 07:26:15 Index:4 RequestVote to :3  finish
+2023/03/14 07:26:15 Index:4, send RequestVote to :6 Success
+2023/03/14 07:26:15 Index:4 RequestVote to :6  finish
+2023/03/14 07:26:15 Index:4, send RequestVote to :0 Success
+2023/03/14 07:26:15 Index:4 RequestVote to :0  finish
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :6 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:15 Index:3, change to follower
+2023/03/14 07:26:15 Index:3, Role:2, In loop
+2023/03/14 07:26:15 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:15 Index:6, Role:0, In loop
+2023/03/14 07:26:15 Index:6, change to leader
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:15 Index:0, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:0, change role from:2 to :2
+2023/03/14 07:26:15 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:2, change role from:2 to :2
+2023/03/14 07:26:15 Index:3, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:3, change role from:2 to :2
+2023/03/14 07:26:15 Index:4, role:1 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:4, change role from:1 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :4  finish
+2023/03/14 07:26:15 Index:0, change to follower
+2023/03/14 07:26:15 Index:0, Role:2, In loop
+2023/03/14 07:26:15 Index:5 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:15 Index:5, Role:1, In loop
+2023/03/14 07:26:15 Index:5, change to candidate, term:6
+2023/03/14 07:26:15 Index:5, send RequestVote to :6
+2023/03/14 07:26:15 Index:5, send RequestVote to :3
+2023/03/14 07:26:15 Index:5, send RequestVote to :1
+2023/03/14 07:26:15 Index:5, send RequestVote to :0
+2023/03/14 07:26:15 Index:5, send RequestVote to :2
+2023/03/14 07:26:15 Index:5, send RequestVote to :4
+2023/03/14 07:26:15 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:15 Index:6, Role:0, In loop
+2023/03/14 07:26:15 Index:6, change to leader
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:15 Index:0, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:0, change role from:2 to :2
+2023/03/14 07:26:15 Index:4, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:3, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:4, change role from:2 to :2
+2023/03/14 07:26:15 Index:3, change role from:2 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:2, change role from:2 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :4  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:1, change to follower
+2023/03/14 07:26:15 Index:1, change role from:2 to :1
+2023/03/14 07:26:15 Index:1, Role:1, In loop
+2023/03/14 07:26:15 Index:1, change to candidate, term:6
+2023/03/14 07:26:15 Index:1, send RequestVote to :6
+2023/03/14 07:26:15 Index:1, send RequestVote to :2
+2023/03/14 07:26:15 Index:1, send RequestVote to :0
+2023/03/14 07:26:15 Index:1, send RequestVote to :5
+2023/03/14 07:26:15 Index:1, send RequestVote to :3
+2023/03/14 07:26:15 Index:1, send RequestVote to :4
+2023/03/14 07:26:15 Index:2, change to follower
+2023/03/14 07:26:15 Index:2, Role:2, In loop
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :5 Failed
+2023/03/14 07:26:15 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:0 Send AppendEntries to :3 Failed
+2023/03/14 07:26:15 Index:0 AppendEntries to :3  finish
+2023/03/14 07:26:15 Index:0, role:2 GetState
+2023/03/14 07:26:15 Index:2, role:2 GetState
+2023/03/14 07:26:15 Index:3, role:2 GetState
+2023/03/14 07:26:15 Index:4, role:2 GetState
+2023/03/14 07:26:15 Index:6, role:0 GetState
+2023/03/14 07:26:15 Index:3 Send AppendEntries to :6 Failed
+2023/03/14 07:26:15 Index:3 AppendEntries to :6  finish
+2023/03/14 07:26:15 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:15 Index:6, Role:0, In loop
+2023/03/14 07:26:15 Index:6, change to leader
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:15 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:2, change role from:2 to :2
+2023/03/14 07:26:15 Index:5, role:1 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:4, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:5, change role from:1 to :2
+2023/03/14 07:26:15 Index:4, change role from:2 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :4  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:3, send RequestVote to :6 FAILED!
+2023/03/14 07:26:15 Index:3 RequestVote to :6  finish
+2023/03/14 07:26:15 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:15 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:15 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :1 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:15 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:15 Index:6, Role:0, In loop
+2023/03/14 07:26:15 Index:6, change to leader
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:15 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:15 Index:4, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:4, change role from:2 to :2
+2023/03/14 07:26:15 Index:5, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:5, change role from:2 to :2
+2023/03/14 07:26:15 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:15 Index:2, change role from:2 to :2
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :4  finish
+2023/03/14 07:26:15 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:15 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:5 Send AppendEntries to :2 Failed
+2023/03/14 07:26:15 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:15 Index:4 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:15 Index:0 Send AppendEntries to :5 Failed
+2023/03/14 07:26:15 Index:0 AppendEntries to :5  finish
+2023/03/14 07:26:15 Index:4, Role:2, In loop
+2023/03/14 07:26:15 Index:3, change to follower
+2023/03/14 07:26:15 Index:3, Role:2, In loop
+2023/03/14 07:26:15 Index:0, change to follower
+2023/03/14 07:26:15 Index:0, Role:2, In loop
+2023/03/14 07:26:15 Index:1, send RequestVote to :0 FAILED!
+2023/03/14 07:26:15 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:16 Index:6, send RequestVote to :1 FAILED!
+2023/03/14 07:26:16 Index:6 RequestVote to :1  finish
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :1 Failed
+2023/03/14 07:26:16 Index:6 AppendEntries to :1  finish
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :1 Failed
+2023/03/14 07:26:16 Index:6 AppendEntries to :1  finish
+2023/03/14 07:26:16 Index:5, send RequestVote to :1 FAILED!
+2023/03/14 07:26:16 Index:5 RequestVote to :1  finish
+2023/03/14 07:26:16 Index:0, send RequestVote to :3 FAILED!
+2023/03/14 07:26:16 Index:0 RequestVote to :3  finish
+2023/03/14 07:26:16 Index:6, send RequestVote to :5 FAILED!
+2023/03/14 07:26:16 Index:6 RequestVote to :5  finish
+2023/03/14 07:26:16 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:6, Role:0, In loop
+2023/03/14 07:26:16 Index:6, change to leader
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:5, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:16 Index:5, change role from:2 to :2
+2023/03/14 07:26:16 Index:2, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:16 Index:2, change role from:2 to :2
+2023/03/14 07:26:16 Index:4, role:2 rcvd AppendEntries,from:6
+2023/03/14 07:26:16 Index:4, change role from:2 to :2
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:16 Index:6 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:16 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:16 Index:6 AppendEntries to :4  finish
+2023/03/14 07:26:16 Index:6, send RequestVote to :4 FAILED!
+2023/03/14 07:26:16 Index:6 RequestVote to :4  finish
+2023/03/14 07:26:16 Index:5 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:16 Index:2, change to follower
+2023/03/14 07:26:16 Index:2, Role:2, In loop
+2023/03/14 07:26:16 Index:1 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:16 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:16 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:16 Index:5, send RequestVote to :3 FAILED!
+2023/03/14 07:26:16 Index:5 RequestVote to :3  finish
+2023/03/14 07:26:16 Index:5, Role:2, In loop
+2023/03/14 07:26:16 Index:2, role:2 GetState
+2023/03/14 07:26:16 Index:4, role:2 GetState
+2023/03/14 07:26:16 Index:5, role:2 GetState
+2023/03/14 07:26:16 Index:6, role:0 GetState
+2023/03/14 07:26:16 Index:1, Role:1, In loop
+2023/03/14 07:26:16 Index:1, change to candidate, term:7
+2023/03/14 07:26:16 Index:1, send RequestVote to :5
+2023/03/14 07:26:16 Index:1, send RequestVote to :4
+2023/03/14 07:26:16 Index:1, send RequestVote to :2
+2023/03/14 07:26:16 Index:1, send RequestVote to :3
+2023/03/14 07:26:16 Index:1, send RequestVote to :0
+2023/03/14 07:26:16 Index:1, send RequestVote to :6
+2023/03/14 07:26:16 Index:5, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:16 Index:4, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:16 Index:4, Accept vote to:1, term:7, current term:6
+2023/03/14 07:26:16 Index:3, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:16 Index:5, Accept vote to:1, term:7, current term:6
+2023/03/14 07:26:16 Index:0, role:2 rcvd RequestVote from:1
+2023/03/14 07:26:16 Index:5, change role from:2 to :2
+2023/03/14 07:26:16 Index:3, Accept vote to:1, term:7, current term:6
+2023/03/14 07:26:16 Index:4, change role from:2 to :2
+2023/03/14 07:26:16 Index:0, Accept vote to:1, term:7, current term:6
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:1, send RequestVote to :5 Success
+2023/03/14 07:26:16 Index:1 RequestVote to :5  finish
+2023/03/14 07:26:16 Index:1, send RequestVote to :4 Success
+2023/03/14 07:26:16 Index:1 RequestVote to :4  finish
+2023/03/14 07:26:16 Index:1, send RequestVote to :3 Success
+2023/03/14 07:26:16 Index:1, change role from:1 to :0
+2023/03/14 07:26:16 Index:1 RequestVote to :3  finish
+2023/03/14 07:26:16 Index:1 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:16 Index:1, Role:0, In loop
+2023/03/14 07:26:16 Index:1, send RequestVote to :0 Success
+2023/03/14 07:26:16 Index:1, change role from:0 to :0
+2023/03/14 07:26:16 Index:1, change to leader
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:1 RequestVote to :0  finish
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:16 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:4, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:4, change role from:2 to :2
+2023/03/14 07:26:16 Index:5, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:5, change role from:2 to :2
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :2 Failed
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :4  finish
+2023/03/14 07:26:16 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:16 Index:1 AppendEntries to :2  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:6, Role:0, In loop
+2023/03/14 07:26:16 Index:6, change to leader
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:2 Send AppendEntries to :1 Failed
+2023/03/14 07:26:16 Index:2 AppendEntries to :1  finish
+2023/03/14 07:26:16 Index:5 Send AppendEntries to :4 Failed
+2023/03/14 07:26:16 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:16 Index:1, send RequestVote to :6 FAILED!
+2023/03/14 07:26:16 Index:1 RequestVote to :6  finish
+2023/03/14 07:26:16 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:1, Role:0, In loop
+2023/03/14 07:26:16 Index:1, change to leader
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:16 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:5, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:5, change role from:2 to :2
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:4, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:4, change role from:2 to :2
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :4  finish
+2023/03/14 07:26:16 Index:0 Send AppendEntries to :5 Failed
+2023/03/14 07:26:16 Index:0 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:6, Role:0, In loop
+2023/03/14 07:26:16 Index:6, change to leader
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:0, send RequestVote to :1 FAILED!
+2023/03/14 07:26:16 Index:0 RequestVote to :1  finish
+2023/03/14 07:26:16 Index:3, change to follower
+2023/03/14 07:26:16 Index:3, Role:2, In loop
+2023/03/14 07:26:16 Index:6 Send AppendEntries to :1 Failed
+2023/03/14 07:26:16 Index:6 AppendEntries to :1  finish
+2023/03/14 07:26:16 Index:0, change to follower
+2023/03/14 07:26:16 Index:0, Role:2, In loop
+2023/03/14 07:26:16 Index:3, send RequestVote to :5 FAILED!
+2023/03/14 07:26:16 Index:3 RequestVote to :5  finish
+2023/03/14 07:26:16 Index:4, change to follower
+2023/03/14 07:26:16 Index:4, Role:2, In loop
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :6 Failed
+2023/03/14 07:26:16 Index:1 AppendEntries to :6  finish
+2023/03/14 07:26:16 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:1, Role:0, In loop
+2023/03/14 07:26:16 Index:1, change to leader
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:16 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:4, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:4, change role from:2 to :2
+2023/03/14 07:26:16 Index:5, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:5, change role from:2 to :2
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :4  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :5 Sucsicced
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:16 Index:1 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:6, Role:0, In loop
+2023/03/14 07:26:16 Index:6, change to leader
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :1
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:6 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1, send RequestVote to :3 FAILED!
+2023/03/14 07:26:16 Index:1 RequestVote to :3  finish
+2023/03/14 07:26:16 Index:2, change to follower
+2023/03/14 07:26:16 Index:2, change role from:2 to :1
+2023/03/14 07:26:16 Index:2, Role:1, In loop
+2023/03/14 07:26:16 Index:2, change to candidate, term:7
+2023/03/14 07:26:16 Index:2, send RequestVote to :6
+2023/03/14 07:26:16 Index:2, send RequestVote to :3
+2023/03/14 07:26:16 Index:2, send RequestVote to :1
+2023/03/14 07:26:16 Index:2, send RequestVote to :0
+2023/03/14 07:26:16 Index:2, send RequestVote to :4
+2023/03/14 07:26:16 Index:2, send RequestVote to :5
+2023/03/14 07:26:16 Index:0, role:2 GetState
+2023/03/14 07:26:16 Index:1, role:0 GetState
+2023/03/14 07:26:16 Index:3, role:2 GetState
+2023/03/14 07:26:16 Index:4, role:2 GetState
+2023/03/14 07:26:16 Index:5, role:2 GetState
+2023/03/14 07:26:16 Index:3 Send AppendEntries to :5 Failed
+2023/03/14 07:26:16 Index:3 AppendEntries to :5  finish
+2023/03/14 07:26:16 Index:5, change to follower
+2023/03/14 07:26:16 Index:5, Role:2, In loop
+2023/03/14 07:26:16 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:1, Role:0, In loop
+2023/03/14 07:26:16 Index:1, change to leader
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:16 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:6, role:0 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:6, change role from:0 to :2
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :6  finish
+2023/03/14 07:26:16 Index:6 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:6, Role:2, In loop
+2023/03/14 07:26:16 Index:1, send RequestVote to :2 FAILED!
+2023/03/14 07:26:16 Index:1 RequestVote to :2  finish
+2023/03/14 07:26:16 Index:2 Send AppendEntries to :0 Failed
+2023/03/14 07:26:16 Index:2 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:16 Index:1, Role:0, In loop
+2023/03/14 07:26:16 Index:1, change to leader
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:16 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:16 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:3, change role from:2 to :2
+2023/03/14 07:26:16 Index:6, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:6, change role from:2 to :2
+2023/03/14 07:26:16 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:16 Index:0, change role from:2 to :2
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :6  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:16 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:16 Index:1 Send AppendEntries to :4 Failed
+2023/03/14 07:26:16 Index:1 AppendEntries to :4  finish
+2023/03/14 07:26:17 Index:5, send RequestVote to :6 FAILED!
+2023/03/14 07:26:17 Index:5 RequestVote to :6  finish
+2023/03/14 07:26:17 Index:6 Send AppendEntries to :0 Failed
+2023/03/14 07:26:17 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :0 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:17 Index:3, change to follower
+2023/03/14 07:26:17 Index:3, Role:2, In loop
+2023/03/14 07:26:17 Index:4, change to follower
+2023/03/14 07:26:17 Index:4, Role:2, In loop
+2023/03/14 07:26:17 Index:6 Send AppendEntries to :2 Failed
+2023/03/14 07:26:17 Index:6 AppendEntries to :2  finish
+2023/03/14 07:26:17 Index:0, change to follower
+2023/03/14 07:26:17 Index:0, Role:2, In loop
+2023/03/14 07:26:17 Index:2, send RequestVote to :6 FAILED!
+2023/03/14 07:26:17 Index:2 RequestVote to :6  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :1 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:17 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:1, Role:0, In loop
+2023/03/14 07:26:17 Index:1, change to leader
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:3, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:17 Index:0, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:17 Index:0, change role from:2 to :2
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:6, role:2 rcvd AppendEntries,from:1
+2023/03/14 07:26:17 Index:6, change role from:2 to :2
+2023/03/14 07:26:17 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:17 Index:1 AppendEntries to :0  finish
+2023/03/14 07:26:17 Index:1 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:17 Index:1 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:1 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:17 Index:1 AppendEntries to :6  finish
+2023/03/14 07:26:17 Index:0, role:2 GetState
+2023/03/14 07:26:17 Index:1, role:0 GetState
+2023/03/14 07:26:17 Index:3, role:2 GetState
+2023/03/14 07:26:17 Index:6, role:2 GetState
+2023/03/14 07:26:17 Index:6, send RequestVote to :5 FAILED!
+2023/03/14 07:26:17 Index:6 RequestVote to :5  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :1 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:17 Index:2 Out loop in processCandidate, sleep:500 ms
+2023/03/14 07:26:17 Index:0 Send AppendEntries to :6 Failed
+2023/03/14 07:26:17 Index:0 AppendEntries to :6  finish
+2023/03/14 07:26:17 Index:5, change to follower
+2023/03/14 07:26:17 Index:5, change role from:2 to :1
+2023/03/14 07:26:17 Index:5, Role:1, In loop
+2023/03/14 07:26:17 Index:5, change to candidate, term:8
+2023/03/14 07:26:17 Index:5, send RequestVote to :6
+2023/03/14 07:26:17 Index:5, send RequestVote to :3
+2023/03/14 07:26:17 Index:5, send RequestVote to :1
+2023/03/14 07:26:17 Index:5, send RequestVote to :4
+2023/03/14 07:26:17 Index:5, send RequestVote to :0
+2023/03/14 07:26:17 Index:5, send RequestVote to :2
+2023/03/14 07:26:17 Index:3, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:17 Index:3, Accept vote to:5, term:8, current term:7
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:4, role:2 rcvd RequestVote from:5
+2023/03/14 07:26:17 Index:2, role:1 rcvd RequestVote from:5
+2023/03/14 07:26:17 Index:2, Accept vote to:5, term:8, current term:7
+2023/03/14 07:26:17 Index:2, change role from:1 to :2
+2023/03/14 07:26:17 Index:4, Accept vote to:5, term:8, current term:7
+2023/03/14 07:26:17 Index:5, send RequestVote to :3 Success
+2023/03/14 07:26:17 Index:5 RequestVote to :3  finish
+2023/03/14 07:26:17 Index:4, change role from:2 to :2
+2023/03/14 07:26:17 Index:5, send RequestVote to :2 Success
+2023/03/14 07:26:17 Index:5 RequestVote to :2  finish
+2023/03/14 07:26:17 Index:5, send RequestVote to :4 Success
+2023/03/14 07:26:17 Index:5, change role from:1 to :0
+2023/03/14 07:26:17 Index:5 RequestVote to :4  finish
+2023/03/14 07:26:17 Index:5 Out loop in processCandidate, sleep:0 ms
+2023/03/14 07:26:17 Index:5, Role:0, In loop
+2023/03/14 07:26:17 Index:5, change to leader
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:4, change role from:2 to :2
+2023/03/14 07:26:17 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:2, change role from:2 to :2
+2023/03/14 07:26:17 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:4, send RequestVote to :5 FAILED!
+2023/03/14 07:26:17 Index:4 RequestVote to :5  finish
+2023/03/14 07:26:17 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:1, Role:0, In loop
+2023/03/14 07:26:17 Index:1, change to leader
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:2, Role:2, In loop
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:1 Send AppendEntries to :6 Failed
+2023/03/14 07:26:17 Index:1 AppendEntries to :6  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :0 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:17 Index:6, change to follower
+2023/03/14 07:26:17 Index:6, Role:2, In loop
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:5, send RequestVote to :6 FAILED!
+2023/03/14 07:26:17 Index:5 RequestVote to :6  finish
+2023/03/14 07:26:17 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:5, Role:0, In loop
+2023/03/14 07:26:17 Index:5, change to leader
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:2, change role from:2 to :2
+2023/03/14 07:26:17 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:4, change role from:2 to :2
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:1, Role:0, In loop
+2023/03/14 07:26:17 Index:1, change to leader
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:6 Send AppendEntries to :1 Failed
+2023/03/14 07:26:17 Index:6 AppendEntries to :1  finish
+2023/03/14 07:26:17 Index:3, send RequestVote to :4 FAILED!
+2023/03/14 07:26:17 Index:3 RequestVote to :4  finish
+2023/03/14 07:26:17 Index:3, change to follower
+2023/03/14 07:26:17 Index:3, Role:2, In loop
+2023/03/14 07:26:17 Index:4, change to follower
+2023/03/14 07:26:17 Index:4, Role:2, In loop
+2023/03/14 07:26:17 Index:0, change to follower
+2023/03/14 07:26:17 Index:0, Role:2, In loop
+2023/03/14 07:26:17 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:5, Role:0, In loop
+2023/03/14 07:26:17 Index:5, change to leader
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:2, change role from:2 to :2
+2023/03/14 07:26:17 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:4, change role from:2 to :2
+2023/03/14 07:26:17 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:1, Role:0, In loop
+2023/03/14 07:26:17 Index:1, change to leader
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :5
+2023/03/14 07:26:17 Index:1 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:0 Send AppendEntries to :6 Failed
+2023/03/14 07:26:17 Index:0 AppendEntries to :6  finish
+2023/03/14 07:26:17 Index:2, role:2 GetState
+2023/03/14 07:26:17 Index:3, role:2 GetState
+2023/03/14 07:26:17 Index:4, role:2 GetState
+2023/03/14 07:26:17 Index:5, role:0 GetState
+2023/03/14 07:26:17 Index:0 Send AppendEntries to :3 Failed
+2023/03/14 07:26:17 Index:0 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:6, send RequestVote to :3 FAILED!
+2023/03/14 07:26:17 Index:6 RequestVote to :3  finish
+2023/03/14 07:26:17 Index:2, change to follower
+2023/03/14 07:26:17 Index:2, Role:2, In loop
+2023/03/14 07:26:17 Index:5 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:5, Role:0, In loop
+2023/03/14 07:26:17 Index:5, change to leader
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:17 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:17 Index:1, role:0 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:1, change role from:0 to :2
+2023/03/14 07:26:17 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:2, change role from:2 to :2
+2023/03/14 07:26:17 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:4, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:17 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:3, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:17 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:0, change role from:2 to :2
+2023/03/14 07:26:17 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:17 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:17 Index:6, change role from:2 to :2
+2023/03/14 07:26:17 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:17 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:17 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:17 Index:1 Out loop in processLeader, sleep:150 ms
+2023/03/14 07:26:17 Index:1, Role:2, In loop
+2023/03/14 07:26:17 Index:5 Send AppendEntries to :1 Failed
+2023/03/14 07:26:17 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:17 Index:6, change to follower
+2023/03/14 07:26:17 Index:6, Role:2, In loop
+2023/03/14 07:26:17 Index:1 Send AppendEntries to :5 Failed
+2023/03/14 07:26:17 Index:1 AppendEntries to :5  finish
+2023/03/14 07:26:18 Index:5, Role:0, In loop
+2023/03/14 07:26:18 Index:5, change to leader
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:18 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:0, change role from:2 to :2
+2023/03/14 07:26:18 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:1, change role from:2 to :2
+2023/03/14 07:26:18 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:3, change role from:2 to :2
+2023/03/14 07:26:18 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:2, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:18 Index:6, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:18 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:4, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:18 Index:1, send RequestVote to :5 FAILED!
+2023/03/14 07:26:18 Index:1 RequestVote to :5  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:18 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:18 Index:0, send RequestVote to :5 FAILED!
+2023/03/14 07:26:18 Index:0 RequestVote to :5  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :6 Failed
+2023/03/14 07:26:18 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:18 Index:5, send RequestVote to :2 FAILED!
+2023/03/14 07:26:18 Index:5 RequestVote to :2  finish
+2023/03/14 07:26:18 Index:6 Send AppendEntries to :1 Failed
+2023/03/14 07:26:18 Index:6 AppendEntries to :1  finish
+2023/03/14 07:26:18 Index:3, change to follower
+2023/03/14 07:26:18 Index:3, Role:2, In loop
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :2 Failed
+2023/03/14 07:26:18 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:18 Index:5, Role:0, In loop
+2023/03/14 07:26:18 Index:5, change to leader
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :0
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :1
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :2
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :3
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :4
+2023/03/14 07:26:18 Index:5 Try Send AppendEntries to :6
+2023/03/14 07:26:18 Index:1, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:1, change role from:2 to :2
+2023/03/14 07:26:18 Index:4, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:4, change role from:2 to :2
+2023/03/14 07:26:18 Index:3, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:3, change role from:2 to :2
+2023/03/14 07:26:18 Index:6, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:6, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :1 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:18 Index:0, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:0, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :4 Sucsicced
+2023/03/14 07:26:18 Index:2, role:2 rcvd AppendEntries,from:5
+2023/03/14 07:26:18 Index:5 AppendEntries to :4  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :3 Sucsicced
+2023/03/14 07:26:18 Index:2, change role from:2 to :2
+2023/03/14 07:26:18 Index:5 AppendEntries to :3  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :6 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :6  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :0 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :0  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :2 Sucsicced
+2023/03/14 07:26:18 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:18 Index:5 Out loop in processLeader, sleep:0 ms
+2023/03/14 07:26:18 Index:0 Send AppendEntries to :3 Failed
+2023/03/14 07:26:18 Index:0 AppendEntries to :3  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :2 Failed
+2023/03/14 07:26:18 Index:5 AppendEntries to :2  finish
+2023/03/14 07:26:18 Index:5 Send AppendEntries to :1 Failed
+2023/03/14 07:26:18 Index:5 AppendEntries to :1  finish
+2023/03/14 07:26:18 Index:4, change to follower
+2023/03/14 07:26:18 Index:4, Role:2, In loop
+2023/03/14 07:26:18 Index:0, role:2 GetState
+2023/03/14 07:26:18 Index:1, role:2 GetState
+2023/03/14 07:26:18 Index:2, role:2 GetState
+2023/03/14 07:26:18 Index:3, role:2 GetState
+2023/03/14 07:26:18 Index:4, role:2 GetState
+2023/03/14 07:26:18 Index:5, role:0 GetState
+2023/03/14 07:26:18 Index:6, role:2 GetState
+  ... Passed --   7.0  7  360   50796    0
+2023/03/14 07:26:18 Index:0, kill
+2023/03/14 07:26:18 Index:1, kill
+2023/03/14 07:26:18 Index:2, kill
+2023/03/14 07:26:18 Index:3, kill
+2023/03/14 07:26:18 Index:4, kill
+2023/03/14 07:26:18 Index:5, kill
+2023/03/14 07:26:18 Index:6, kill
+PASS
+2023/03/14 07:26:18 Index:6 Send AppendEntries to :0 Failed
+2023/03/14 07:26:18 Index:6 AppendEntries to :0  finish
+2023/03/14 07:26:18 Index:0, change to follower
+2023/03/14 07:26:18 Index:1 Send AppendEntries to :4 Failed
+2023/03/14 07:26:18 Index:1 AppendEntries to :4  finish
+ok  	6.824/raft	17.335s

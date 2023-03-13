@@ -102,6 +102,8 @@ type Raft struct {
 func (rf *Raft) GetState() (int, bool) {
 	// Your code here (2A).
 	DPrintf("Index:%d, role:%d GetState", rf.me, rf.role.Load())
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	return rf.currentTerm, rf.role.Load() == LEADER
 }
 
@@ -510,6 +512,8 @@ func (rf *Raft) processFollwer() {
 	}
 	time.Sleep(rf.getRandomTicker(ElectionBaseTime))
 	DPrintf("Index:%d, change to follower", rf.me)
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	if rf.currentLeader == -1 || !rf.rcvdHB.Load() {
 		rf.changeRole(CANDIDATE)
 		return
