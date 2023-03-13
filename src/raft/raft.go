@@ -192,6 +192,7 @@ type RequestVoteReply struct {
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+
 	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d", rf.me, rf.role.Load(), args.LeaderId)
 	if rf.role.Load() == CANDIDATE {
 		DPrintf("Index:%d, change me to follower", rf.me)
@@ -216,18 +217,17 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 	DPrintf("Index:%d, role:%d rcvd RequestVote from:%d", rf.me, rf.role.Load(), args.CandiddateID)
+	reply.Term = rf.currentTerm
 
 	if args.Term < rf.currentTerm {
 		DPrintf("Index:%d, Reject vote to:%d Req term:%d, currentTerm:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
 		reply.VoteGranted = false
-		reply.Term = rf.currentTerm
 		return
 	}
 
 	if args.Term == rf.currentTerm {
 		if rf.role.Load() != FOLLOWER {
 			DPrintf("Index:%d Reject vote to:%d same term but i'm not follower, role:%d", rf.me, args.CandiddateID, rf.role.Load())
-			reply.Term = rf.currentTerm
 			reply.VoteGranted = false
 			return
 		}
@@ -241,10 +241,13 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// todo check log index
 	DPrintf("Index:%d, Accept vote to:%d, term:%d, current term:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
 
-	reply.Term = rf.currentTerm
 	reply.VoteGranted = true
+
 	rf.voteFor = args.CandiddateID
 	rf.currentTerm = args.Term
+
+	rf.rcvdHB.Store(true)
+	rf.changeRole(FOLLOWER)
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -350,9 +353,6 @@ func (rf *Raft) processLeader() {
 	}
 	DPrintf("Index:%d, change to leader", rf.me)
 
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
 	wg := sync.WaitGroup{}
 	for j := 0; j < len(rf.peers); j++ {
 		if j == rf.me {
@@ -371,15 +371,16 @@ func (rf *Raft) processLeader() {
 			defer wg.Done()
 			ret := rf.sendAppendEntries(index, &appendReq, &appendRsp)
 			if ret {
+				rf.mu.Lock()
+				defer rf.mu.Unlock()
 				DPrintf("Index:%d Send AppendEntries to :%d Sucsicced", rf.me, index)
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
 					rf.changeRole(FOLLOWER)
-					return
 				}
-			} else {
-				DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
+				return
 			}
+			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
 		}(j)
 	}
 	wg.Wait()
@@ -407,50 +408,72 @@ func (rf *Raft) getVoteArgs() RequestVoteArgs {
 
 func (rf *Raft) processCandidate() {
 	rf.mu.Lock()
-	defer rf.mu.Unlock()
 	rf.currentTerm++
 	DPrintf("Index:%d, change to candidate, term:%d", rf.me, rf.currentTerm)
-	for rf.role.Load() == CANDIDATE {
-		rf.voteFor = rf.me
-		rf.voteNum = 1
+	rf.voteFor = rf.me
+	rf.voteNum = 1
+	rf.mu.Unlock()
 
-		reqVote := rf.getVoteArgs()
-		wg := sync.WaitGroup{}
-		for i := 0; i < len(rf.peers); i++ {
-			if i == rf.me {
-				continue
-			}
-			if rf.role.Load() != CANDIDATE {
+	reqVote := rf.getVoteArgs()
+	ch := make(chan bool, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me {
+			continue
+		}
+		if rf.role.Load() != CANDIDATE {
+			return
+		}
+
+		go func(index int) {
+			defer func() { ch <- false }()
+			var rsp RequestVoteReply
+			DPrintf("Index:%d, send RequestVote to :%d", rf.me, index)
+			ret := rf.sendRequestVote(index, &reqVote, &rsp)
+			if !ret {
+				DPrintf("Index:%d, send RequestVote to :%d FAILED!", rf.me, index)
 				return
 			}
-			wg.Add(1)
-			go func(index int) {
-				defer wg.Done()
-				var rsp RequestVoteReply
-				DPrintf("Index:%d, send RequestVote to :%d", rf.me, index)
-				ret := rf.sendRequestVote(index, &reqVote, &rsp)
-				if !ret {
-					DPrintf("Index:%d, send RequestVote to :%d FAILED!", rf.me, index)
+
+			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			DPrintf("Index:%d, send RequestVote to :%d Success", rf.me, index)
+			if rsp.Term > rf.currentTerm {
+				rf.currentTerm = rsp.Term
+				rf.changeRole(FOLLOWER) // how to return ?
+				ch <- true
+				return
+			}
+			if rsp.VoteGranted {
+				rf.voteNum++
+				if rf.voteNum > len(rf.peers)/2 {
+					rf.changeRole(LEADER) // how to return ?
+					ch <- true
 					return
 				}
-				DPrintf("Index:%d, send RequestVote to :%d Success", rf.me, index)
-				if rsp.Term > rf.currentTerm {
-					rf.currentTerm = rsp.Term
-					rf.changeRole(FOLLOWER) // how to return ?
-					return
-				}
-				if rsp.VoteGranted {
-					rf.voteNum++
-					if rf.voteNum > len(rf.peers)/2 {
-						rf.changeRole(LEADER) // how to return ?
-						return
-					}
-				}
-			}(i)
-		}
-		wg.Wait()
-		time.Sleep(rf.getRandomTicker(ElectionBaseTime))
+			}
+		}(i)
 	}
+	count := 0
+	var sleeped time.Duration = 0
+	for count != len(rf.peers) {
+		ret, ok := <-ch
+		if ok {
+			count++
+		} else {
+			time.Sleep(5 * time.Millisecond)
+			sleeped += (5 * time.Millisecond)
+			continue
+		}
+
+		if ret {
+			return
+		}
+	}
+	if sleeped > ElectionBaseTime {
+		return
+	}
+
+	time.Sleep(rf.getRandomTicker(ElectionBaseTime - sleeped))
 }
 
 func (rf *Raft) processFollwer() {
