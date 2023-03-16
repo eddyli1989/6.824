@@ -292,6 +292,22 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
+func (rf *Raft) syncLog(command interface{}) (int, int) {
+	rf.mu.Lock()
+	log2Append := LogEntries{Term: rf.currentTerm, Index: len(rf.log), Content: command}
+	rf.log = append(rf.log, log2Append)
+	rf.mu.Unlock()
+
+	appendReq := rf.getAppendEntrisArg()
+	ch := make(chan bool, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
+		appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex].Term
+		appendReq.Entries = rf.log[rf.nextIndex[i]:]
+	}
+	return log2Append.Term, log2Append.Index
+}
+
 // the service using Raft (e.g. a k/v server) wants to start
 // agreement on the next command to be appended to Raft's log. if this
 // server isn't the leader, returns false. otherwise start the
@@ -422,9 +438,11 @@ func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
 	var appendReq AppendEntriesArgs
 	appendReq.LeaderCommit = rf.commitIndex
 	appendReq.LeaderId = rf.me
-	appendReq.PrevLogIndex = 1
+	appendReq.Term = rf.currentTerm
+
+	appendReq.PrevLogIndex = 1             // todo:
 	appendReq.PrevLogTerm = rf.currentTerm // todo:
-	appendReq.Term = rf.currentTerm        // todo:
+
 	return appendReq
 }
 
