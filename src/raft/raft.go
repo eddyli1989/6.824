@@ -60,9 +60,10 @@ const ElectionBaseTime = 500 * time.Millisecond
 const ElectionRandTime = 100 // ms
 const HBInterval = 150 * time.Millisecond
 
-type LogContent struct {
+type LogEntries struct {
 	Term    int
-	Content string
+	Index   int
+	Content interface{}
 }
 
 // A Go object implementing a single Raft peer.
@@ -76,11 +77,12 @@ type Raft struct {
 	// Your data here (2A, 2B, 2C).
 	// Look at the paper's Figure 2 for a description of what
 	// state a Raft server must maintain.
+	applyCh chan ApplyMsg
 
 	// persistent state
 	currentTerm int
 	voteFor     int
-	// log[]
+	log         []LogEntries
 
 	// Volatile state 4 log
 	commitIndex int
@@ -174,7 +176,7 @@ type AppendEntriesArgs struct {
 	LeaderId     int
 	PrevLogIndex int
 	PrevLogTerm  int
-	//Entries []Log
+	Entries      []LogEntries
 	LeaderCommit int
 }
 
@@ -305,7 +307,10 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index := -1
 	term := -1
-	isLeader := true
+	isLeader := rf.role.Load() == LEADER
+	if !isLeader {
+		return index, term, isLeader
+	}
 
 	// Your code here (2B).
 
@@ -395,7 +400,7 @@ func (rf *Raft) processLeader() {
 	var waitTime = 5 * time.Millisecond
 	for count != (len(rf.peers)-1) && sleeped < HBInterval {
 		select {
-		case ret, _ := <-ch:
+		case ret := <-ch:
 			count++
 			// role changed
 			if ret {
@@ -487,7 +492,7 @@ func (rf *Raft) processCandidate() {
 	var waitTime = 5 * time.Millisecond
 	for count != (len(rf.peers)-1) && sleeped < ElectionBaseTime {
 		select {
-		case ret, _ := <-ch:
+		case ret := <-ch:
 			count++
 			if ret {
 				DPrintf("Index:%d Out loop in processCandidate, sleep:%d ms", rf.me, sleeped/time.Millisecond)
@@ -562,6 +567,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.role.Store(FOLLOWER)
 	rf.currentLeader = -1
 	rf.voteFor = -1
+
+	rf.log = make([]LogEntries, 0, 10)
+	rf.applyCh = applyCh
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
