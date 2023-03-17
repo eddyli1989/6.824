@@ -292,6 +292,58 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
+func (rf *Raft) waitChs() {
+	var count int = 0
+	var sleeped time.Duration = 0
+	var waitTime = 5 * time.Millisecond
+	for count != (len(rf.peers)-1) && sleeped < HBInterval {
+		select {
+		case ret := <-ch:
+			count++
+			// role changed
+			if ret {
+				DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+				return
+			}
+		case <-time.After(waitTime):
+			sleeped += waitTime
+		}
+	}
+}
+
+// 需要异步吗?
+func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan bool) {
+	go func(index int) {
+		defer func() {
+			ch <- false
+			DPrintf("Index:%d AppendEntries to :%d  finish", rf.me, index)
+		}()
+		var appendRsp AppendEntriesReply
+		var failedCount int
+		for true {
+			ret := rf.sendAppendEntries(index, args, &appendRsp)
+			if ret {
+				rf.mu.Lock()
+				defer rf.mu.Unlock()
+				DPrintf("Index:%d Send AppendEntries to :%d Successed", rf.me, index)
+				if appendRsp.Term > rf.currentTerm {
+					rf.currentTerm = appendRsp.Term
+					rf.changeRole(FOLLOWER)
+					ch <- true
+				}
+				if !appendRsp.Success {
+					failedCount++
+					args.PrevLogIndex -= failedCount
+					args.PrevLogTerm = rf.log[args.PrevLogIndex].Term
+					args.Entries = rf.log[args.PrevLogIndex:]
+				}
+				return
+			}
+		}
+		DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
+	}(server)
+}
+
 func (rf *Raft) syncLog(command interface{}) (int, int) {
 	rf.mu.Lock()
 	log2Append := LogEntries{Term: rf.currentTerm, Index: len(rf.log), Content: command}
