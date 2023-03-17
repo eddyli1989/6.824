@@ -292,53 +292,45 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
-func (rf *Raft) waitChs() {
-	var count int = 0
-	var sleeped time.Duration = 0
-	var waitTime = 5 * time.Millisecond
-	for count != (len(rf.peers)-1) && sleeped < HBInterval {
-		select {
-		case ret := <-ch:
-			count++
-			// role changed
-			if ret {
-				DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
-				return
-			}
-		case <-time.After(waitTime):
-			sleeped += waitTime
-		}
-	}
-}
-
 // 需要异步吗?
 func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan bool) {
 	go func(index int) {
-		defer func() {
-			ch <- false
-			DPrintf("Index:%d AppendEntries to :%d  finish", rf.me, index)
-		}()
 		var appendRsp AppendEntriesReply
 		var failedCount int
+
 		for true {
 			ret := rf.sendAppendEntries(index, args, &appendRsp)
 			if ret {
 				rf.mu.Lock()
-				defer rf.mu.Unlock()
 				DPrintf("Index:%d Send AppendEntries to :%d Successed", rf.me, index)
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
 					rf.changeRole(FOLLOWER)
-					ch <- true
+					rf.mu.Unlock()
+					ch <- false
+					return
 				}
+
+				// if log not match, try again with minus PrevLogIndex
 				if !appendRsp.Success {
+					DPrintf("Index:%d Send AppendEntries to :%d log not match, failedCount:%d", rf.me, index, failedCount)
 					failedCount++
 					args.PrevLogIndex -= failedCount
 					args.PrevLogTerm = rf.log[args.PrevLogIndex].Term
 					args.Entries = rf.log[args.PrevLogIndex:]
+					rf.mu.Unlock()
+					continue
 				}
+
+				DPrintf("Index:%d Sync log to :%d Successed", rf.me, index)
+				// success
+				rf.mu.Unlock()
+				ch <- true
 				return
 			}
+			// network failed
+			ch <- false
+			break
 		}
 		DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
 	}(server)
@@ -356,6 +348,16 @@ func (rf *Raft) syncLog(command interface{}) (int, int) {
 		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
 		appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex].Term
 		appendReq.Entries = rf.log[rf.nextIndex[i]:]
+		rf.sendAppendLogAsync(i, &appendReq, ch)
+	}
+	successCount := 0
+	totalCount := 0
+	for successCount < len(rf.peers)/2 && totalCount < len(rf.peers)-1 {
+		ret := <-ch
+		if ret {
+			successCount++
+		}
+		totalCount++
 	}
 	return log2Append.Term, log2Append.Index
 }
@@ -420,6 +422,8 @@ func (rf *Raft) changeRole(role int) {
 	}
 	if role == LEADER {
 		rf.currentLeader = rf.me
+		rf.nextIndex = make([]int, 0, len(rf.peers))
+		rf.matchIndex = make([]int, 0, len(rf.peers))
 	}
 	rf.role.Store((int32)(role))
 }
