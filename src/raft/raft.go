@@ -292,13 +292,12 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
-// 需要异步吗?
 func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan bool) {
 	go func(index int) {
 		var appendRsp AppendEntriesReply
 		var failedCount int
 
-		for true {
+		for !rf.killed() {
 			ret := rf.sendAppendEntries(index, args, &appendRsp)
 			if ret {
 				rf.mu.Lock()
@@ -318,11 +317,14 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 					args.PrevLogIndex -= failedCount
 					args.PrevLogTerm = rf.log[args.PrevLogIndex].Term
 					args.Entries = rf.log[args.PrevLogIndex:]
+					rf.nextIndex[server] -= args.PrevLogIndex + 1
 					rf.mu.Unlock()
 					continue
 				}
 
 				DPrintf("Index:%d Sync log to :%d Successed", rf.me, index)
+				rf.nextIndex[server] += len(args.Entries)
+				rf.matchIndex[server] += len(args.Entries)
 				// success
 				rf.mu.Unlock()
 				ch <- true
@@ -336,18 +338,23 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 	}(server)
 }
 
-func (rf *Raft) syncLog(command interface{}) (int, int) {
+func (rf *Raft) appendLog(command interface{}) (int, int) {
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	log2Append := LogEntries{Term: rf.currentTerm, Index: len(rf.log), Content: command}
 	rf.log = append(rf.log, log2Append)
-	rf.mu.Unlock()
+	return len(rf.log), rf.currentTerm
+}
 
+func (rf *Raft) syncLog() {
 	appendReq := rf.getAppendEntrisArg()
 	ch := make(chan bool, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
+		rf.mu.Lock()
 		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
 		appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex].Term
 		appendReq.Entries = rf.log[rf.nextIndex[i]:]
+		rf.mu.Unlock()
 		rf.sendAppendLogAsync(i, &appendReq, ch)
 	}
 	successCount := 0
@@ -359,7 +366,6 @@ func (rf *Raft) syncLog(command interface{}) (int, int) {
 		}
 		totalCount++
 	}
-	return log2Append.Term, log2Append.Index
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -383,7 +389,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 
 	// Your code here (2B).
-
+	index, term = rf.appendLog(command)
 	return index, term, isLeader
 }
 
@@ -411,6 +417,14 @@ func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
 	return base + (time.Duration)(rand.Intn(ElectionRandTime))*time.Millisecond
 }
 
+func (rf *Raft) initLeaderData() {
+	rf.nextIndex = make([]int, 0, len(rf.peers))
+	rf.matchIndex = make([]int, 0, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		rf.nextIndex[i] = len(rf.log) + 1
+	}
+}
+
 func (rf *Raft) changeRole(role int) {
 	DPrintf("Index:%d, change role from:%d to :%d", rf.me, rf.role.Load(), role)
 	if role == FOLLOWER && rf.role.Load() != FOLLOWER {
@@ -422,8 +436,6 @@ func (rf *Raft) changeRole(role int) {
 	}
 	if role == LEADER {
 		rf.currentLeader = rf.me
-		rf.nextIndex = make([]int, 0, len(rf.peers))
-		rf.matchIndex = make([]int, 0, len(rf.peers))
 	}
 	rf.role.Store((int32)(role))
 }
@@ -459,6 +471,7 @@ func (rf *Raft) processLeader() {
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
 					rf.changeRole(FOLLOWER)
+					rf.initLeaderData()
 					ch <- true
 				}
 				return
