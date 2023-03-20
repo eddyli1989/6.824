@@ -315,16 +315,21 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 					DPrintf("Index:%d Send AppendEntries to :%d log not match, failedCount:%d", rf.me, index, failedCount)
 					failedCount++
 					args.PrevLogIndex -= failedCount
+					if args.PrevLogIndex < 0 {
+						args.PrevLogIndex = 0
+					}
 					args.PrevLogTerm = rf.log[args.PrevLogIndex].Term
 					args.Entries = rf.log[args.PrevLogIndex:]
-					rf.nextIndex[server] -= args.PrevLogIndex + 1
+					rf.nextIndex[server] = args.PrevLogIndex + 1
 					rf.mu.Unlock()
 					continue
 				}
 
-				DPrintf("Index:%d Sync log to :%d Successed", rf.me, index)
 				rf.nextIndex[server] += len(args.Entries)
 				rf.matchIndex[server] += len(args.Entries)
+
+				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server])
+
 				// success
 				rf.mu.Unlock()
 				ch <- true
@@ -352,20 +357,34 @@ func (rf *Raft) syncLog() {
 	for i := 0; i < len(rf.peers); i++ {
 		rf.mu.Lock()
 		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
-		appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex].Term
-		appendReq.Entries = rf.log[rf.nextIndex[i]:]
+		if appendReq.PrevLogIndex > 0 && appendReq.PrevLogIndex <= len(rf.log) {
+			appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex-1].Term
+		} else {
+			DPrintf("Index:%d prev log index invalid:%d", rf.me, appendReq.PrevLogIndex)
+			appendReq.PrevLogTerm = rf.currentTerm
+		}
+		appendReq.Entries = rf.log[appendReq.PrevLogIndex:]
 		rf.mu.Unlock()
 		rf.sendAppendLogAsync(i, &appendReq, ch)
 	}
 	successCount := 0
 	totalCount := 0
-	for successCount < len(rf.peers)/2 && totalCount < len(rf.peers)-1 {
+	for successCount <= len(rf.peers)/2 && totalCount < len(rf.peers)-1 {
 		ret := <-ch
+		if rf.killed() {
+			return
+		}
 		if ret {
 			successCount++
 		}
 		totalCount++
 	}
+
+	if successCount > len(rf.peers)/2 {
+		rf.commitIndex++
+	}
+
+	// todo: apply log
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -390,6 +409,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 
 	// Your code here (2B).
 	index, term = rf.appendLog(command)
+	go rf.syncLog()
 	return index, term, isLeader
 }
 
@@ -421,7 +441,8 @@ func (rf *Raft) initLeaderData() {
 	rf.nextIndex = make([]int, 0, len(rf.peers))
 	rf.matchIndex = make([]int, 0, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
-		rf.nextIndex[i] = len(rf.log) + 1
+		rf.nextIndex = append(rf.nextIndex, len(rf.log)+1)
+		rf.matchIndex = append(rf.matchIndex, 0)
 	}
 }
 
@@ -519,8 +540,12 @@ func (rf *Raft) getVoteArgs() RequestVoteArgs {
 	var req RequestVoteArgs
 	req.Term = rf.currentTerm
 	req.CandiddateID = rf.me
-	req.LastLogIndex = rf.commitIndex //?
-	req.LastLogTerm = rf.currentTerm  // ?
+	req.LastLogIndex = len(rf.log)
+	if len(rf.log) > 0 {
+		req.LastLogTerm = rf.log[len(rf.log)-1].Term
+	} else {
+		req.LastLogTerm = rf.currentTerm
+	}
 	return req
 }
 
@@ -656,6 +681,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.voteFor = -1
 
 	rf.log = make([]LogEntries, 0, 10)
+	rf.initLeaderData()
 	rf.applyCh = applyCh
 
 	// initialize from state persisted before a crash
