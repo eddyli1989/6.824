@@ -17,3 +17,12 @@
 - 这里打印出了上一个用例的日志，引起了混淆
 -   - [ ] 需要在接收到消息的时候先看一下Killed
 -   Index 0
+
+## Test 2A Passed
+
+## Test 2B
+
+- 收到AppendEntries时，需要判断PrevLogIndex，如果PrevLogIndex == 0 ,代表是第一条日志，此时应该无条件接受并覆盖自己的日志，如果<0那么非法返回，如果>0那么检查PrevLogIndex-1的Term与PrevLogTerm是否相等，如果不等于那么return false，否则接纳该消息并更新日志
+- appendReq := rf.getAppendEntrisArg()，这个应该放到for循环中，不然各个peers之间会互相影响
+- 考虑把sendAppendLogAsync改成同步函数，然后在外部改成go func()的调用方式
+- 
