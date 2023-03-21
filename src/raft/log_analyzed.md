@@ -20,9 +20,15 @@
 
 ## Test 2A Passed
 
-## Test 2B
+## Test 2B 1
 
 - 收到AppendEntries时，需要判断PrevLogIndex，如果PrevLogIndex == 0 ,代表是第一条日志，此时应该无条件接受并覆盖自己的日志，如果<0那么非法返回，如果>0那么检查PrevLogIndex-1的Term与PrevLogTerm是否相等，如果不等于那么return false，否则接纳该消息并更新日志
 - appendReq := rf.getAppendEntrisArg()，这个应该放到for循环中，不然各个peers之间会互相影响
 - 考虑把sendAppendLogAsync改成同步函数，然后在外部改成go func()的调用方式
 - 
+## Test 2B Test (2B): basic agreement 2
+- Index0 竞选胜利，开始同步日志，但是没有过滤自己，导致自己收到了自己同步的日志并且把自己改成了Folowwer
+- Index2 重新竞选变成主，开始发送心跳，由于在接受心跳的时候没有判断是否有内容，结果导致所有人把日志清理掉了
+- 之后就一直发送心跳
+
+
