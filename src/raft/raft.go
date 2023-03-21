@@ -19,6 +19,7 @@ package raft
 
 import (
 	//	"bytes"
+	"fmt"
 	"sync"
 	"sync/atomic"
 
@@ -205,6 +206,34 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		return
 	}
 
+	if args.PrevLogIndex < 0 {
+		DPrintf("Index:%d, Reject AppendEntries PrevLogIndex:%d is invalid", rf.me, args.PrevLogIndex)
+		return
+	}
+
+	if args.PrevLogIndex != 0 {
+		if len(rf.log) < args.PrevLogIndex {
+			DPrintf("Index:%d, Reject AppendEntries log length :%d is small than PrevLogindex:%d", rf.me, len(rf.log), args.PrevLogIndex)
+			reply.Success = false
+			reply.Term = rf.currentTerm
+			return
+		}
+
+		if rf.log[args.PrevLogIndex-1].Term != args.PrevLogTerm {
+			DPrintf("Index:%d, Reject AppendEntries PrevLogTerm is not equal :%d vs :%d,index:%d", rf.me, rf.log[args.PrevLogIndex-1].Term, args.PrevLogTerm, args.PrevLogIndex-1)
+			reply.Success = false
+			reply.Term = rf.currentTerm
+			return
+		}
+	}
+	if args.PrevLogIndex == 0 {
+		rf.log = make([]LogEntries, 0, len(args.Entries))
+		copy(rf.log, args.Entries)
+	} else {
+		rf.log = rf.log[args.PrevLogIndex-1:]
+		rf.log = append(rf.log, args.Entries...)
+	}
+
 	rf.currentTerm = args.Term
 	rf.rcvdHB.Store(true)
 	rf.changeRole(FOLLOWER)
@@ -212,8 +241,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	reply.Success = true
 	reply.Term = rf.currentTerm
-
-	//todo:process log
 }
 
 // example RequestVote RPC handler.
@@ -318,7 +345,11 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 					if args.PrevLogIndex < 0 {
 						args.PrevLogIndex = 0
 					}
-					args.PrevLogTerm = rf.log[args.PrevLogIndex].Term
+
+					if args.PrevLogIndex > 0 {
+						args.PrevLogTerm = rf.log[args.PrevLogIndex-1].Term
+					}
+
 					args.Entries = rf.log[args.PrevLogIndex:]
 					rf.nextIndex[server] = args.PrevLogIndex + 1
 					rf.mu.Unlock()
@@ -328,7 +359,7 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 				rf.nextIndex[server] += len(args.Entries)
 				rf.matchIndex[server] += len(args.Entries)
 
-				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server])
+				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d,len:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server], len(args.Entries))
 
 				// success
 				rf.mu.Unlock()
@@ -352,16 +383,16 @@ func (rf *Raft) appendLog(command interface{}) (int, int) {
 }
 
 func (rf *Raft) syncLog() {
-	appendReq := rf.getAppendEntrisArg()
 	ch := make(chan bool, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
 		rf.mu.Lock()
+		appendReq := rf.getAppendEntrisArg()
 		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
-		if appendReq.PrevLogIndex > 0 && appendReq.PrevLogIndex <= len(rf.log) {
+		if appendReq.PrevLogIndex > len(rf.log) || appendReq.PrevLogIndex < 0 {
+			panic(fmt.Sprintf("Invalid prev log index:%d, log length:%d", appendReq.PrevLogIndex, len(rf.log)))
+		}
+		if appendReq.PrevLogIndex > 0 {
 			appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex-1].Term
-		} else {
-			DPrintf("Index:%d prev log index invalid:%d", rf.me, appendReq.PrevLogIndex)
-			appendReq.PrevLogTerm = rf.currentTerm
 		}
 		appendReq.Entries = rf.log[appendReq.PrevLogIndex:]
 		rf.mu.Unlock()
@@ -530,7 +561,7 @@ func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
 	appendReq.LeaderId = rf.me
 	appendReq.Term = rf.currentTerm
 
-	appendReq.PrevLogIndex = 1             // todo:
+	appendReq.PrevLogIndex = 0             // todo:
 	appendReq.PrevLogTerm = rf.currentTerm // todo:
 
 	return appendReq
