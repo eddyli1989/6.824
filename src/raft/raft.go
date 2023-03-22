@@ -690,7 +690,8 @@ func (rf *Raft) ticker() {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
-		DPrintf("Index:%d, Role:%d, In loop", rf.me, rf.role.Load())
+
+		DPrintf("Index:%d, Role:%d, In loop, log len:%d", rf.me, rf.role.Load(), len(rf.log))
 		switch rf.role.Load() {
 		case FOLLOWER:
 			rf.processFollwer()
