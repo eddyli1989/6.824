@@ -198,7 +198,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d, log len:%d", rf.me, rf.role.Load(), args.LeaderId, len(args.Entries))
+	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d, log len:%d, Prev:%d", rf.me, rf.role.Load(), args.LeaderId, len(args.Entries), args.PrevLogIndex)
 	if args.Term < rf.currentTerm {
 		DPrintf("Index:%d, Reject AppendEntries term:%d is small", rf.me, args.Term)
 		reply.Success = false
@@ -230,12 +230,16 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if len(args.Entries) > 0 {
 		if args.PrevLogIndex == 0 {
 			DPrintf("Index:%d, copy all log from:%d", rf.me, args.LeaderId)
-			rf.log = make([]LogEntries, 0, len(args.Entries))
+			rf.log = make([]LogEntries, len(args.Entries))
 			copy(rf.log, args.Entries)
 		} else {
 			DPrintf("Index:%d, copy %d log , start point:%d, from:%d", rf.me, len(args.Entries), args.PrevLogIndex, args.LeaderId)
 			rf.log = rf.log[args.PrevLogIndex-1:]
 			rf.log = append(rf.log, args.Entries...)
+		}
+		DPrintf("Index:%d, apply from:%d to %d", rf.me, args.PrevLogIndex, len(rf.log))
+		for i := args.PrevLogIndex + 1; i <= len(rf.log); i++ {
+			rf.apply(i)
 		}
 	}
 
@@ -363,7 +367,6 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 				}
 
 				DPrintf("Index:%d change nextIndex:%d from %d to %d", rf.me, server, rf.nextIndex[server], rf.nextIndex[server]+len(args.Entries))
-				rf.nextIndex[server] += len(args.Entries)
 				rf.matchIndex[server] += len(args.Entries)
 
 				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d,len:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server], len(args.Entries))
@@ -390,7 +393,16 @@ func (rf *Raft) appendLog(command interface{}) (int, int) {
 	return len(rf.log), rf.currentTerm
 }
 
-func (rf *Raft) syncLog() {
+func (rf *Raft) apply(index int) {
+	DPrintf("Index:%d, apply msg :%d, role:%d", rf.me, index, rf.role.Load())
+	var msg ApplyMsg
+	msg.Command = rf.log[index-1].Content
+	msg.CommandValid = true
+	msg.CommandIndex = index
+	rf.applyCh <- msg
+}
+
+func (rf *Raft) syncLog(index int) {
 	ch := make(chan bool, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
@@ -406,14 +418,16 @@ func (rf *Raft) syncLog() {
 			appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex-1].Term
 		}
 		appendReq.Entries = rf.log[appendReq.PrevLogIndex:]
+		DPrintf("Index:%d Update next index:%d from %d to %d", rf.me, i, rf.nextIndex[i], len(rf.log)+1)
+		rf.nextIndex[i] = len(rf.log) + 1
 		rf.mu.Unlock()
 		rf.sendAppendLogAsync(i, &appendReq, ch)
 	}
-	successCount := 0
+	successCount := 1
 	totalCount := 0
 	for successCount <= len(rf.peers)/2 && totalCount < len(rf.peers)-1 {
 		ret := <-ch
-		if rf.killed() {
+		if rf.killed() || rf.role.Load() != LEADER {
 			return
 		}
 		if ret {
@@ -424,9 +438,10 @@ func (rf *Raft) syncLog() {
 
 	if successCount > len(rf.peers)/2 {
 		rf.commitIndex++
+		rf.mu.Lock()
+		rf.apply(index)
+		rf.mu.Unlock()
 	}
-
-	// todo: apply log
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -453,7 +468,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// Your code here (2B).
 	index, term = rf.appendLog(command)
 
-	go rf.syncLog()
+	go rf.syncLog(index)
 	return index, term, isLeader
 }
 
