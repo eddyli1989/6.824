@@ -273,19 +273,30 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	if args.Term == rf.currentTerm {
-		if rf.role.Load() != FOLLOWER {
-			DPrintf("Index:%d Reject vote to:%d same term but i'm not follower, role:%d", rf.me, args.CandiddateID, rf.role.Load())
-			reply.VoteGranted = false
-			return
-		}
-
-		if rf.voteFor != -1 {
-			DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
-			reply.VoteGranted = false
-			return
-		}
+	if args.LastLogIndex < len(rf.log) {
+		DPrintf("Index:%d Reject vote to:%d LastLogIndex :%d is smmal than me:%d", rf.me, args.CandiddateID, args.LastLogIndex, len(rf.log))
+		reply.VoteGranted = false
+		return
 	}
+
+	if args.LastLogIndex > 0 && len(rf.log) == args.LastLogIndex && rf.log[args.LastLogIndex-1].Term > args.LastLogTerm {
+		DPrintf("Index:%d Reject vote to:%d LastLogTerm :%d is small than me:%d", rf.me, args.CandiddateID, args.LastLogTerm, rf.log[args.LastLogIndex-1].Term)
+		reply.VoteGranted = false
+		return
+	}
+
+	// if rf.role.Load() != FOLLOWER {
+	// 	DPrintf("Index:%d Reject vote to:%d same term but i'm not follower, role:%d", rf.me, args.CandiddateID, rf.role.Load())
+	// 	reply.VoteGranted = false
+	// 	return
+	// }
+
+	if rf.voteFor != -1 {
+		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
+		reply.VoteGranted = false
+		return
+	}
+
 	// todo check log index
 	DPrintf("Index:%d, Accept vote to:%d, term:%d, current term:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
 

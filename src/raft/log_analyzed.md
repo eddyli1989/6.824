@@ -31,7 +31,19 @@
 - Index2 重新竞选变成主，开始发送心跳，由于在接受心跳的时候没有判断是否有内容，结果导致所有人把日志清理掉了
 - 之后就一直发送心跳
 
-##
+## est 2B Test (2B): basic agreement 2
 - 222行判断Term是多余的，只要PrevlogIndex有东西，就应该以Leader的为准
 - 237行切错了，应该从0切到PrevlogIndex
 - 369行删掉
+
+## Test 2B Test (2B): agreement after reconect
+- Index2 Leader，接受到append，同步到0和1成功，并且都应用到自动机
+- Index2 再次收到了两次appendLog，但是这次只同步到了1，0此时被割裂了，但是因为日志提交成功大于N/2，所以该日志也被提交到自动机
+- 此时log len为3，commitIndex=3,lastApplid=2
+- Index0 被割裂，变为Candidate
+- Index2 再次收到AppendLog 此时 LogLen=4,同步到1成功，同步到0失败
+- Index2 再次收到AppendLog 两次，此时LogLen=6，此时0上线，收到Append消息，PrevLogIndex=5
+- 由于0在被割裂以后变成了Candidate，因此Term比较大，回复的Term=2大于1，因此Index2直接变为Folowwer了
+- Index0 重新变为Candidate，Term 4，由于Term更大Index0变成Leader了！！！，但是Index0的Log长度是1！！！
+- [] 在收到RequestVote以后，除了校验Term之外还得看谁的日志长
+- Index0 收到AppendLog以后把Index1和Index2的日志全清了
