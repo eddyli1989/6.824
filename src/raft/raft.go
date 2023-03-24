@@ -198,7 +198,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d, log len:%d, Prev:%d", rf.me, rf.role.Load(), args.LeaderId, len(args.Entries), args.PrevLogIndex)
+	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d, log len:%d, Prev:%d, leaderCommit:%d", rf.me, rf.role.Load(), args.LeaderId, len(args.Entries), args.PrevLogIndex, args.LeaderCommit)
 	if args.Term < rf.currentTerm {
 		DPrintf("Index:%d, Reject AppendEntries term:%d is small", rf.me, args.Term)
 		reply.Success = false
@@ -234,15 +234,22 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			copy(rf.log, args.Entries)
 		} else {
 			DPrintf("Index:%d, copy %d log , start point:%d, from:%d", rf.me, len(args.Entries), args.PrevLogIndex, args.LeaderId)
-			rf.log = rf.log[args.PrevLogIndex-1:]
+			if len(rf.log) > args.PrevLogIndex {
+				DPrintf("Index:%d, log len:%d is bigger than PrevLogIndex:%d, cut", rf.me, len(rf.log), args.PrevLogIndex)
+				rf.log = rf.log[:args.PrevLogIndex]
+			}
 			rf.log = append(rf.log, args.Entries...)
 		}
-		DPrintf("Index:%d, apply from:%d to %d", rf.me, args.PrevLogIndex, len(rf.log))
-		for i := args.PrevLogIndex + 1; i <= len(rf.log); i++ {
-			rf.apply(i)
+	}
+	if args.LeaderCommit > rf.commitIndex {
+		DPrintf("Index:%d, update commit index :%d, leaderCommit:%d", rf.me, rf.commitIndex, args.LeaderCommit)
+		if args.LeaderCommit > len(rf.log) {
+			rf.commitIndex = len(rf.log)
+		} else {
+			rf.commitIndex = args.LeaderCommit
 		}
 	}
-
+	rf.apply()
 	rf.currentTerm = args.Term
 	rf.rcvdHB.Store(true)
 	rf.changeRole(FOLLOWER)
@@ -366,9 +373,7 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 					continue
 				}
 
-				DPrintf("Index:%d change nextIndex:%d from %d to %d", rf.me, server, rf.nextIndex[server], rf.nextIndex[server]+len(args.Entries))
 				rf.matchIndex[server] += len(args.Entries)
-
 				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d,len:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server], len(args.Entries))
 
 				// success
@@ -393,13 +398,16 @@ func (rf *Raft) appendLog(command interface{}) (int, int) {
 	return len(rf.log), rf.currentTerm
 }
 
-func (rf *Raft) apply(index int) {
-	DPrintf("Index:%d, apply msg :%d, role:%d", rf.me, index, rf.role.Load())
-	var msg ApplyMsg
-	msg.Command = rf.log[index-1].Content
-	msg.CommandValid = true
-	msg.CommandIndex = index
-	rf.applyCh <- msg
+func (rf *Raft) apply() {
+	for i := rf.lastApplied; i < rf.commitIndex; i++ {
+		DPrintf("Index:%d, apply msg :%d, role:%d", rf.me, i, rf.role.Load())
+		var msg ApplyMsg
+		msg.Command = rf.log[i].Content
+		msg.CommandValid = true
+		msg.CommandIndex = rf.log[i].Index
+		rf.applyCh <- msg
+		rf.lastApplied++
+	}
 }
 
 func (rf *Raft) syncLog(index int) {
@@ -437,9 +445,10 @@ func (rf *Raft) syncLog(index int) {
 	}
 
 	if successCount > len(rf.peers)/2 {
+		DPrintf("Index:%d Inc commit index:%d", rf.me, rf.commitIndex)
 		rf.commitIndex++
 		rf.mu.Lock()
-		rf.apply(index)
+		rf.apply()
 		rf.mu.Unlock()
 	}
 }

@@ -1,0 +1,1188 @@
+2023/03/24 08:13:30 Index:0, we have 3 peers
+2023/03/24 08:13:30 Index:0, Role:2, In loop, log len:0
+2023/03/24 08:13:30 Index:1, we have 3 peers
+2023/03/24 08:13:30 Index:1, Role:2, In loop, log len:0
+2023/03/24 08:13:30 Index:2, we have 3 peers
+2023/03/24 08:13:30 Index:2, Role:2, In loop, log len:0
+Test (2B): basic agreement ...
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1 Recv Start, rold:2
+2023/03/24 08:13:30 Index:2 Recv Start, rold:2
+2023/03/24 08:13:30 Index:0 Recv Start, rold:2
+2023/03/24 08:13:30 Index:1, change to follower
+2023/03/24 08:13:30 Index:1, change role from:2 to :1
+2023/03/24 08:13:30 Index:1, Role:1, In loop, log len:0
+2023/03/24 08:13:30 Index:1, change to candidate, term:1
+2023/03/24 08:13:30 Index:1, send RequestVote to :2
+2023/03/24 08:13:30 Index:1, send RequestVote to :0
+2023/03/24 08:13:30 Index:0, role:2 rcvd RequestVote from:1
+2023/03/24 08:13:30 Index:0, Accept vote to:1, term:1, current term:0
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:2, role:2 rcvd RequestVote from:1
+2023/03/24 08:13:30 Index:2, Accept vote to:1, term:1, current term:0
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1, send RequestVote to :0 Success
+2023/03/24 08:13:30 Index:1, change role from:1 to :0
+2023/03/24 08:13:30 Index:1 RequestVote to :0  finish
+2023/03/24 08:13:30 Index:1 Out loop in processCandidate, sleep:0 ms
+2023/03/24 08:13:30 Index:1, Role:0, In loop, log len:0
+2023/03/24 08:13:30 Index:1, change to leader
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :0
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :2
+2023/03/24 08:13:30 Index:1, send RequestVote to :2 Success
+2023/03/24 08:13:30 Index:1, change role from:0 to :0
+2023/03/24 08:13:30 Index:1 RequestVote to :2  finish
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :2  finish
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :0  finish
+2023/03/24 08:13:30 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:30 Index:1 Recv Start, rold:0
+2023/03/24 08:13:30 Index:1, appendLog index:1 , term:1 ,log len:1
+2023/03/24 08:13:30 Index:1 Update next index:0 from 1 to 2
+2023/03/24 08:13:30 Index:1 Update next index:2 from 1 to 2
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:30 Index:0, copy all log from:1
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:30 Index:2, copy all log from:1
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :0 Successed, next:2,match:1,len:1
+2023/03/24 08:13:30 Index:1 Inc commit index:0
+2023/03/24 08:13:30 Index:1, apply msg :0, role:0
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :2 Successed, next:2,match:1,len:1
+2023/03/24 08:13:30 Index:0, change to follower
+2023/03/24 08:13:30 Index:0, Role:2, In loop, log len:1
+2023/03/24 08:13:30 Index:2, change to follower
+2023/03/24 08:13:30 Index:2, Role:2, In loop, log len:1
+2023/03/24 08:13:30 Index:1, Role:0, In loop, log len:1
+2023/03/24 08:13:30 Index:1, change to leader
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :0
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :2
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:30 Index:0, update commit index :0, leaderCommit:1
+2023/03/24 08:13:30 Index:0, apply msg :0, role:2
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:30 Index:2, update commit index :0, leaderCommit:1
+2023/03/24 08:13:30 Index:2, apply msg :0, role:2
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :0  finish
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :2  finish
+2023/03/24 08:13:30 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:30 Index:1 Recv Start, rold:0
+2023/03/24 08:13:30 Index:1, appendLog index:2 , term:1 ,log len:2
+2023/03/24 08:13:30 Index:1 Update next index:0 from 2 to 3
+2023/03/24 08:13:30 Index:1 Update next index:2 from 2 to 3
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:1, Prev:1, leaderCommit:1
+2023/03/24 08:13:30 Index:2, copy 1 log , start point:1, from:1
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:1, Prev:1, leaderCommit:1
+2023/03/24 08:13:30 Index:0, copy 1 log , start point:1, from:1
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :2 Successed, next:3,match:2,len:1
+2023/03/24 08:13:30 Index:1 Inc commit index:1
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :0 Successed, next:3,match:2,len:1
+2023/03/24 08:13:30 Index:1, apply msg :1, role:0
+2023/03/24 08:13:30 Index:1, Role:0, In loop, log len:2
+2023/03/24 08:13:30 Index:1, change to leader
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :0
+2023/03/24 08:13:30 Index:1 Try Send AppendEntries to :2
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:2
+2023/03/24 08:13:30 Index:0, update commit index :1, leaderCommit:2
+2023/03/24 08:13:30 Index:0, apply msg :1, role:2
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:2
+2023/03/24 08:13:30 Index:2, update commit index :1, leaderCommit:2
+2023/03/24 08:13:30 Index:2, apply msg :1, role:2
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :0  finish
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:30 Index:1 AppendEntries to :2  finish
+2023/03/24 08:13:30 Index:1 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:30 Index:1 Recv Start, rold:0
+2023/03/24 08:13:30 Index:1, appendLog index:3 , term:1 ,log len:3
+2023/03/24 08:13:30 Index:1 Update next index:0 from 3 to 4
+2023/03/24 08:13:30 Index:1 Update next index:2 from 3 to 4
+2023/03/24 08:13:30 Index:2, role:2 rcvd AppendEntries,from:1, log len:1, Prev:2, leaderCommit:2
+2023/03/24 08:13:30 Index:2, copy 1 log , start point:2, from:1
+2023/03/24 08:13:30 Index:2, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :2 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :2 Successed, next:4,match:3,len:1
+2023/03/24 08:13:30 Index:1 Inc commit index:2
+2023/03/24 08:13:30 Index:1, apply msg :2, role:0
+2023/03/24 08:13:30 Index:0, role:2 rcvd AppendEntries,from:1, log len:1, Prev:2, leaderCommit:2
+2023/03/24 08:13:30 Index:0, copy 1 log , start point:2, from:1
+2023/03/24 08:13:30 Index:0, change role from:2 to :2
+2023/03/24 08:13:30 Index:1 Send AppendEntries to :0 Successed
+2023/03/24 08:13:30 Index:1 Sync log to :0 Successed, next:4,match:3,len:1
+2023/03/24 08:13:31 Index:1, Role:0, In loop, log len:3
+2023/03/24 08:13:31 Index:1, change to leader
+2023/03/24 08:13:31 Index:1 Try Send AppendEntries to :0
+2023/03/24 08:13:31 Index:1 Try Send AppendEntries to :2
+2023/03/24 08:13:31 Index:2, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:31 Index:2, update commit index :2, leaderCommit:3
+2023/03/24 08:13:31 Index:2, apply msg :2, role:2
+2023/03/24 08:13:31 Index:2, change role from:2 to :2
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:1, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:31 Index:0, update commit index :2, leaderCommit:3
+2023/03/24 08:13:31 Index:0, apply msg :2, role:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:1 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:31 Index:1 AppendEntries to :2  finish
+2023/03/24 08:13:31 Index:1 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:31 Index:1 AppendEntries to :0  finish
+2023/03/24 08:13:31 Index:1 Out loop in processLeader, sleep:0 ms
+  ... Passed --   1.0  3   16    4348    3
+2023/03/24 08:13:31 Index:0, kill
+2023/03/24 08:13:31 Index:1, kill
+2023/03/24 08:13:31 Index:2, kill
+2023/03/24 08:13:31 Index:0, we have 3 peers
+2023/03/24 08:13:31 Index:1, we have 3 peers
+2023/03/24 08:13:31 Index:0, Role:2, In loop, log len:0
+2023/03/24 08:13:31 Index:1, Role:2, In loop, log len:0
+2023/03/24 08:13:31 Index:2, we have 3 peers
+2023/03/24 08:13:31 Index:2, Role:2, In loop, log len:0
+Test (2B): RPC byte count ...
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2, change to follower
+2023/03/24 08:13:31 Index:0, change to follower
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:2
+2023/03/24 08:13:31 Index:0 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2, change to follower
+2023/03/24 08:13:31 Index:2, change role from:2 to :1
+2023/03/24 08:13:31 Index:2, Role:1, In loop, log len:0
+2023/03/24 08:13:31 Index:2, change to candidate, term:1
+2023/03/24 08:13:31 Index:2, send RequestVote to :1
+2023/03/24 08:13:31 Index:2, send RequestVote to :0
+2023/03/24 08:13:31 Index:0, role:2 rcvd RequestVote from:2
+2023/03/24 08:13:31 Index:0, Accept vote to:2, term:1, current term:0
+2023/03/24 08:13:31 Index:1, role:2 rcvd RequestVote from:2
+2023/03/24 08:13:31 Index:1, Accept vote to:2, term:1, current term:0
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2, send RequestVote to :1 Success
+2023/03/24 08:13:31 Index:2, change role from:1 to :0
+2023/03/24 08:13:31 Index:2 Out loop in processCandidate, sleep:0 ms
+2023/03/24 08:13:31 Index:2, Role:0, In loop, log len:0
+2023/03/24 08:13:31 Index:2, change to leader
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:31 Index:2 RequestVote to :1  finish
+2023/03/24 08:13:31 Index:2, send RequestVote to :0 Success
+2023/03/24 08:13:31 Index:2, change role from:0 to :0
+2023/03/24 08:13:31 Index:2 RequestVote to :0  finish
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:31 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:0
+2023/03/24 08:13:31 Index:2, appendLog index:1 , term:1 ,log len:1
+2023/03/24 08:13:31 Index:2 Update next index:0 from 1 to 2
+2023/03/24 08:13:31 Index:2 Update next index:1 from 1 to 2
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:31 Index:1, copy all log from:2
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:31 Index:0, copy all log from:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :1 Successed, next:2,match:1,len:1
+2023/03/24 08:13:31 Index:2 Inc commit index:0
+2023/03/24 08:13:31 Index:2, apply msg :0, role:0
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :0 Successed, next:2,match:1,len:1
+2023/03/24 08:13:31 Index:0, change to follower
+2023/03/24 08:13:31 Index:0, Role:2, In loop, log len:1
+2023/03/24 08:13:31 Index:1, change to follower
+2023/03/24 08:13:31 Index:1, Role:2, In loop, log len:1
+2023/03/24 08:13:31 Index:2, Role:0, In loop, log len:1
+2023/03/24 08:13:31 Index:2, change to leader
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:31 Index:1, update commit index :0, leaderCommit:1
+2023/03/24 08:13:31 Index:1, apply msg :0, role:2
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:31 Index:0, update commit index :0, leaderCommit:1
+2023/03/24 08:13:31 Index:0, apply msg :0, role:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:31 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:0
+2023/03/24 08:13:31 Index:2, appendLog index:2 , term:1 ,log len:2
+2023/03/24 08:13:31 Index:2 Update next index:0 from 2 to 3
+2023/03/24 08:13:31 Index:2 Update next index:1 from 2 to 3
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:1, leaderCommit:1
+2023/03/24 08:13:31 Index:1, copy 1 log , start point:1, from:2
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :1 Successed, next:3,match:2,len:1
+2023/03/24 08:13:31 Index:2 Inc commit index:1
+2023/03/24 08:13:31 Index:2, apply msg :1, role:0
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:1, leaderCommit:1
+2023/03/24 08:13:31 Index:0, copy 1 log , start point:1, from:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :0 Successed, next:3,match:2,len:1
+2023/03/24 08:13:31 Index:2, Role:0, In loop, log len:2
+2023/03/24 08:13:31 Index:2, change to leader
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:2
+2023/03/24 08:13:31 Index:1, update commit index :1, leaderCommit:2
+2023/03/24 08:13:31 Index:1, apply msg :1, role:2
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:2
+2023/03/24 08:13:31 Index:0, update commit index :1, leaderCommit:2
+2023/03/24 08:13:31 Index:0, apply msg :1, role:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:31 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:31 Index:1 Recv Start, rold:2
+2023/03/24 08:13:31 Index:2 Recv Start, rold:0
+2023/03/24 08:13:31 Index:2, appendLog index:3 , term:1 ,log len:3
+2023/03/24 08:13:31 Index:2 Update next index:0 from 3 to 4
+2023/03/24 08:13:31 Index:2 Update next index:1 from 3 to 4
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:2, leaderCommit:2
+2023/03/24 08:13:31 Index:0, copy 1 log , start point:2, from:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:2, leaderCommit:2
+2023/03/24 08:13:31 Index:1, copy 1 log , start point:2, from:2
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :0 Successed, next:4,match:3,len:1
+2023/03/24 08:13:31 Index:2 Inc commit index:2
+2023/03/24 08:13:31 Index:2, apply msg :2, role:0
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:31 Index:2 Sync log to :1 Successed, next:4,match:3,len:1
+2023/03/24 08:13:31 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:31 Index:2, change to leader
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:31 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:31 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:31 Index:1, update commit index :2, leaderCommit:3
+2023/03/24 08:13:31 Index:1, apply msg :2, role:2
+2023/03/24 08:13:31 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:31 Index:0, update commit index :2, leaderCommit:3
+2023/03/24 08:13:31 Index:0, apply msg :2, role:2
+2023/03/24 08:13:31 Index:0, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:31 Index:1, change role from:2 to :2
+2023/03/24 08:13:31 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:31 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:31 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:4 , term:1 ,log len:4
+2023/03/24 08:13:32 Index:2 Update next index:0 from 4 to 5
+2023/03/24 08:13:32 Index:2 Update next index:1 from 4 to 5
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:3, leaderCommit:3
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:3, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:3, leaderCommit:3
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:3, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:5,match:4,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:3
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:5,match:4,len:1
+2023/03/24 08:13:32 Index:2, apply msg :3, role:0
+2023/03/24 08:13:32 Index:0, change to follower
+2023/03/24 08:13:32 Index:0, Role:2, In loop, log len:4
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:4
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:4
+2023/03/24 08:13:32 Index:0, update commit index :3, leaderCommit:4
+2023/03/24 08:13:32 Index:0, apply msg :3, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:4
+2023/03/24 08:13:32 Index:1, update commit index :3, leaderCommit:4
+2023/03/24 08:13:32 Index:1, apply msg :3, role:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1, change to follower
+2023/03/24 08:13:32 Index:1, Role:2, In loop, log len:4
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:5 , term:1 ,log len:5
+2023/03/24 08:13:32 Index:2 Update next index:0 from 5 to 6
+2023/03/24 08:13:32 Index:2 Update next index:1 from 5 to 6
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:4, leaderCommit:4
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:4, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:4, leaderCommit:4
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:4, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:6,match:5,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:4
+2023/03/24 08:13:32 Index:2, apply msg :4, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:6,match:5,len:1
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:5
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:5
+2023/03/24 08:13:32 Index:0, update commit index :4, leaderCommit:5
+2023/03/24 08:13:32 Index:0, apply msg :4, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:5
+2023/03/24 08:13:32 Index:1, update commit index :4, leaderCommit:5
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:1, apply msg :4, role:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:6 , term:1 ,log len:6
+2023/03/24 08:13:32 Index:2 Update next index:0 from 6 to 7
+2023/03/24 08:13:32 Index:2 Update next index:1 from 6 to 7
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:5, leaderCommit:5
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:5, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:5, leaderCommit:5
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:5, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:7,match:6,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:5
+2023/03/24 08:13:32 Index:2, apply msg :5, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:7,match:6,len:1
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:6
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:6
+2023/03/24 08:13:32 Index:0, update commit index :5, leaderCommit:6
+2023/03/24 08:13:32 Index:0, apply msg :5, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:6
+2023/03/24 08:13:32 Index:1, update commit index :5, leaderCommit:6
+2023/03/24 08:13:32 Index:1, apply msg :5, role:2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:7 , term:1 ,log len:7
+2023/03/24 08:13:32 Index:2 Update next index:0 from 7 to 8
+2023/03/24 08:13:32 Index:2 Update next index:1 from 7 to 8
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:6, leaderCommit:6
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:6, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:6, leaderCommit:6
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:6, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:8,match:7,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:6
+2023/03/24 08:13:32 Index:2, apply msg :6, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:8,match:7,len:1
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:7
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:7
+2023/03/24 08:13:32 Index:1, update commit index :6, leaderCommit:7
+2023/03/24 08:13:32 Index:1, apply msg :6, role:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:7
+2023/03/24 08:13:32 Index:0, update commit index :6, leaderCommit:7
+2023/03/24 08:13:32 Index:0, apply msg :6, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:8 , term:1 ,log len:8
+2023/03/24 08:13:32 Index:2 Update next index:0 from 8 to 9
+2023/03/24 08:13:32 Index:2 Update next index:1 from 8 to 9
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:7, leaderCommit:7
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:7, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:7, leaderCommit:7
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:7, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:9,match:8,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:7
+2023/03/24 08:13:32 Index:2, apply msg :7, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:9,match:8,len:1
+2023/03/24 08:13:32 Index:0, change to follower
+2023/03/24 08:13:32 Index:0, Role:2, In loop, log len:8
+2023/03/24 08:13:32 Index:1, change to follower
+2023/03/24 08:13:32 Index:1, Role:2, In loop, log len:8
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:8
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:8
+2023/03/24 08:13:32 Index:1, update commit index :7, leaderCommit:8
+2023/03/24 08:13:32 Index:1, apply msg :7, role:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:8
+2023/03/24 08:13:32 Index:0, update commit index :7, leaderCommit:8
+2023/03/24 08:13:32 Index:0, apply msg :7, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:9 , term:1 ,log len:9
+2023/03/24 08:13:32 Index:2 Update next index:0 from 9 to 10
+2023/03/24 08:13:32 Index:2 Update next index:1 from 9 to 10
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:8, leaderCommit:8
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:8, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:8, leaderCommit:8
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:8, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:10,match:9,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:8
+2023/03/24 08:13:32 Index:2, apply msg :8, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:10,match:9,len:1
+2023/03/24 08:13:32 Index:2, Role:0, In loop, log len:9
+2023/03/24 08:13:32 Index:2, change to leader
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:32 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:9
+2023/03/24 08:13:32 Index:1, update commit index :8, leaderCommit:9
+2023/03/24 08:13:32 Index:1, apply msg :8, role:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:9
+2023/03/24 08:13:32 Index:0, update commit index :8, leaderCommit:9
+2023/03/24 08:13:32 Index:0, apply msg :8, role:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:32 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:32 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:32 Index:1 Recv Start, rold:2
+2023/03/24 08:13:32 Index:2 Recv Start, rold:0
+2023/03/24 08:13:32 Index:2, appendLog index:10 , term:1 ,log len:10
+2023/03/24 08:13:32 Index:2 Update next index:0 from 10 to 11
+2023/03/24 08:13:32 Index:2 Update next index:1 from 10 to 11
+2023/03/24 08:13:32 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:9, leaderCommit:9
+2023/03/24 08:13:32 Index:1, copy 1 log , start point:9, from:2
+2023/03/24 08:13:32 Index:1, change role from:2 to :2
+2023/03/24 08:13:32 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:9, leaderCommit:9
+2023/03/24 08:13:32 Index:0, copy 1 log , start point:9, from:2
+2023/03/24 08:13:32 Index:0, change role from:2 to :2
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :1 Successed, next:11,match:10,len:1
+2023/03/24 08:13:32 Index:2 Inc commit index:9
+2023/03/24 08:13:32 Index:2, apply msg :9, role:0
+2023/03/24 08:13:32 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:32 Index:2 Sync log to :0 Successed, next:11,match:10,len:1
+2023/03/24 08:13:33 Index:2, Role:0, In loop, log len:10
+2023/03/24 08:13:33 Index:2, change to leader
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:10
+2023/03/24 08:13:33 Index:1, update commit index :9, leaderCommit:10
+2023/03/24 08:13:33 Index:1, apply msg :9, role:2
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:10
+2023/03/24 08:13:33 Index:0, update commit index :9, leaderCommit:10
+2023/03/24 08:13:33 Index:0, apply msg :9, role:2
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:33 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:0
+2023/03/24 08:13:33 Index:2, appendLog index:11 , term:1 ,log len:11
+2023/03/24 08:13:33 Index:2 Update next index:0 from 11 to 12
+2023/03/24 08:13:33 Index:2 Update next index:1 from 11 to 12
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:10, leaderCommit:10
+2023/03/24 08:13:33 Index:1, copy 1 log , start point:10, from:2
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:10, leaderCommit:10
+2023/03/24 08:13:33 Index:0, copy 1 log , start point:10, from:2
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:33 Index:2 Sync log to :1 Successed, next:12,match:11,len:1
+2023/03/24 08:13:33 Index:2 Inc commit index:10
+2023/03/24 08:13:33 Index:2, apply msg :10, role:0
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:33 Index:2 Sync log to :0 Successed, next:12,match:11,len:1
+2023/03/24 08:13:33 Index:1, change to follower
+2023/03/24 08:13:33 Index:1, Role:2, In loop, log len:11
+2023/03/24 08:13:33 Index:0, change to follower
+2023/03/24 08:13:33 Index:0, Role:2, In loop, log len:11
+2023/03/24 08:13:33 Index:2, Role:0, In loop, log len:11
+2023/03/24 08:13:33 Index:2, change to leader
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:11
+2023/03/24 08:13:33 Index:1, update commit index :10, leaderCommit:11
+2023/03/24 08:13:33 Index:1, apply msg :10, role:2
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:11
+2023/03/24 08:13:33 Index:0, update commit index :10, leaderCommit:11
+2023/03/24 08:13:33 Index:0, apply msg :10, role:2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:33 Index:2 Out loop in processLeader, sleep:0 ms
+  ... Passed --   2.2  3   48  113768   11
+2023/03/24 08:13:33 Index:0, kill
+2023/03/24 08:13:33 Index:1, kill
+2023/03/24 08:13:33 Index:2, kill
+2023/03/24 08:13:33 Index:0, we have 3 peers
+2023/03/24 08:13:33 Index:0, Role:2, In loop, log len:0
+2023/03/24 08:13:33 Index:1, we have 3 peers
+2023/03/24 08:13:33 Index:1, Role:2, In loop, log len:0
+2023/03/24 08:13:33 Index:2, we have 3 peers
+Test (2B): agreement after follower reconnects ...
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2, Role:2, In loop, log len:0
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:2
+2023/03/24 08:13:33 Index:0 Recv Start, rold:2
+2023/03/24 08:13:33 Index:1, change to follower
+2023/03/24 08:13:33 Index:0, change to follower
+2023/03/24 08:13:33 Index:2, change to follower
+2023/03/24 08:13:33 Index:2, change role from:2 to :1
+2023/03/24 08:13:33 Index:2, Role:1, In loop, log len:0
+2023/03/24 08:13:33 Index:2, change to candidate, term:1
+2023/03/24 08:13:33 Index:2, send RequestVote to :1
+2023/03/24 08:13:33 Index:2, send RequestVote to :0
+2023/03/24 08:13:33 Index:1, role:2 rcvd RequestVote from:2
+2023/03/24 08:13:33 Index:1, Accept vote to:2, term:1, current term:0
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd RequestVote from:2
+2023/03/24 08:13:33 Index:0, Accept vote to:2, term:1, current term:0
+2023/03/24 08:13:33 Index:2, send RequestVote to :1 Success
+2023/03/24 08:13:33 Index:2, change role from:1 to :0
+2023/03/24 08:13:33 Index:2 RequestVote to :1  finish
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Out loop in processCandidate, sleep:0 ms
+2023/03/24 08:13:33 Index:2, Role:0, In loop, log len:0
+2023/03/24 08:13:33 Index:2, change to leader
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:33 Index:2, send RequestVote to :0 Success
+2023/03/24 08:13:33 Index:2, change role from:0 to :0
+2023/03/24 08:13:33 Index:2 RequestVote to :0  finish
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:0
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:33 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:33 Index:1 Recv Start, rold:2
+2023/03/24 08:13:33 Index:2 Recv Start, rold:0
+2023/03/24 08:13:33 Index:2, appendLog index:1 , term:1 ,log len:1
+2023/03/24 08:13:33 Index:2 Update next index:0 from 1 to 2
+2023/03/24 08:13:33 Index:2 Update next index:1 from 1 to 2
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:33 Index:1, copy all log from:2
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:1, Prev:0, leaderCommit:0
+2023/03/24 08:13:33 Index:0, copy all log from:2
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:33 Index:2 Sync log to :1 Successed, next:2,match:1,len:1
+2023/03/24 08:13:33 Index:2 Inc commit index:0
+2023/03/24 08:13:33 Index:2, apply msg :0, role:0
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:33 Index:2 Sync log to :0 Successed, next:2,match:1,len:1
+2023/03/24 08:13:33 Index:0, change to follower
+2023/03/24 08:13:33 Index:0, Role:2, In loop, log len:1
+2023/03/24 08:13:33 Index:1, change to follower
+2023/03/24 08:13:33 Index:1, Role:2, In loop, log len:1
+2023/03/24 08:13:33 Index:2, Role:0, In loop, log len:1
+2023/03/24 08:13:33 Index:2, change to leader
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:33 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:33 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:33 Index:0, update commit index :0, leaderCommit:1
+2023/03/24 08:13:33 Index:0, apply msg :0, role:2
+2023/03/24 08:13:33 Index:0, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:33 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:33 Index:1, update commit index :0, leaderCommit:1
+2023/03/24 08:13:33 Index:1, apply msg :0, role:2
+2023/03/24 08:13:33 Index:1, change role from:2 to :2
+2023/03/24 08:13:33 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:33 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:33 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:1
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:0, change role from:2 to :2
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:1
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:0, change role from:2 to :2
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:1
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:0, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:34 Index:0, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :0 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:34 Index:2 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:34 Index:0, change to follower
+2023/03/24 08:13:34 Index:0, Role:2, In loop, log len:1
+2023/03/24 08:13:34 Index:1, change to follower
+2023/03/24 08:13:34 Index:1, Role:2, In loop, log len:1
+2023/03/24 08:13:34 Index:0, role:2 GetState
+2023/03/24 08:13:34 Index:1, role:2 GetState
+2023/03/24 08:13:34 Index:2, role:0 GetState
+2023/03/24 08:13:34 Index:1 Recv Start, rold:2
+2023/03/24 08:13:34 Index:2 Recv Start, rold:0
+2023/03/24 08:13:34 Index:2, appendLog index:2 , term:1 ,log len:2
+2023/03/24 08:13:34 Index:2 Update next index:0 from 2 to 3
+2023/03/24 08:13:34 Index:2 Update next index:1 from 2 to 3
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:1, leaderCommit:1
+2023/03/24 08:13:34 Index:1, copy 1 log , start point:1, from:2
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:34 Index:2 Sync log to :1 Successed, next:3,match:2,len:1
+2023/03/24 08:13:34 Index:2 Inc commit index:1
+2023/03/24 08:13:34 Index:2, apply msg :1, role:0
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:2
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:2
+2023/03/24 08:13:34 Index:1, update commit index :1, leaderCommit:2
+2023/03/24 08:13:34 Index:1, apply msg :1, role:2
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:1 Recv Start, rold:2
+2023/03/24 08:13:34 Index:2 Recv Start, rold:0
+2023/03/24 08:13:34 Index:2, appendLog index:3 , term:1 ,log len:3
+2023/03/24 08:13:34 Index:2 Update next index:0 from 3 to 4
+2023/03/24 08:13:34 Index:2 Update next index:1 from 3 to 4
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:2, leaderCommit:2
+2023/03/24 08:13:34 Index:1, copy 1 log , start point:2, from:2
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:34 Index:2 Sync log to :1 Successed, next:4,match:3,len:1
+2023/03/24 08:13:34 Index:2 Inc commit index:2
+2023/03/24 08:13:34 Index:2, apply msg :2, role:0
+2023/03/24 08:13:34 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:34 Index:1, update commit index :2, leaderCommit:3
+2023/03/24 08:13:34 Index:1, apply msg :2, role:2
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:34 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:34 Index:2, change to leader
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:34 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:34 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:34 Index:1, change role from:2 to :2
+2023/03/24 08:13:34 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:34 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:34 Index:0, change to follower
+2023/03/24 08:13:34 Index:0, change role from:2 to :1
+2023/03/24 08:13:34 Index:0, Role:1, In loop, log len:1
+2023/03/24 08:13:34 Index:0, change to candidate, term:2
+2023/03/24 08:13:34 Index:0, send RequestVote to :2
+2023/03/24 08:13:34 Index:0, send RequestVote to :1
+2023/03/24 08:13:34 Index:1, change to follower
+2023/03/24 08:13:34 Index:1, Role:2, In loop, log len:3
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:0 Out loop in processCandidate, sleep:500 ms
+2023/03/24 08:13:35 Index:0, Role:1, In loop, log len:1
+2023/03/24 08:13:35 Index:0, change to candidate, term:3
+2023/03/24 08:13:35 Index:0, send RequestVote to :2
+2023/03/24 08:13:35 Index:0, send RequestVote to :1
+2023/03/24 08:13:35 Index:1, change to follower
+2023/03/24 08:13:35 Index:1, Role:2, In loop, log len:3
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:3
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:3
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:1 Recv Start, rold:2
+2023/03/24 08:13:35 Index:2 Recv Start, rold:0
+2023/03/24 08:13:35 Index:2, appendLog index:4 , term:1 ,log len:4
+2023/03/24 08:13:35 Index:2 Update next index:0 from 4 to 5
+2023/03/24 08:13:35 Index:2 Update next index:1 from 4 to 5
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:3, leaderCommit:3
+2023/03/24 08:13:35 Index:1, copy 1 log , start point:3, from:2
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:35 Index:2 Sync log to :1 Successed, next:5,match:4,len:1
+2023/03/24 08:13:35 Index:2 Inc commit index:3
+2023/03/24 08:13:35 Index:2, apply msg :3, role:0
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:35 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:4
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:4
+2023/03/24 08:13:35 Index:1, update commit index :3, leaderCommit:4
+2023/03/24 08:13:35 Index:1, apply msg :3, role:2
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:1 Recv Start, rold:2
+2023/03/24 08:13:35 Index:2 Recv Start, rold:0
+2023/03/24 08:13:35 Index:2, appendLog index:5 , term:1 ,log len:5
+2023/03/24 08:13:35 Index:2 Update next index:0 from 5 to 6
+2023/03/24 08:13:35 Index:2 Update next index:1 from 5 to 6
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:4, leaderCommit:4
+2023/03/24 08:13:35 Index:1, copy 1 log , start point:4, from:2
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:35 Index:2 Sync log to :1 Successed, next:6,match:5,len:1
+2023/03/24 08:13:35 Index:2 Inc commit index:4
+2023/03/24 08:13:35 Index:2, apply msg :4, role:0
+2023/03/24 08:13:35 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:35 Index:2, Role:0, In loop, log len:5
+2023/03/24 08:13:35 Index:2, change to leader
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :0
+2023/03/24 08:13:35 Index:2 Try Send AppendEntries to :1
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:0, Prev:0, leaderCommit:5
+2023/03/24 08:13:35 Index:1, update commit index :4, leaderCommit:5
+2023/03/24 08:13:35 Index:1, apply msg :4, role:2
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:35 Index:2 AppendEntries to :1  finish
+2023/03/24 08:13:35 Index:1 Recv Start, rold:2
+2023/03/24 08:13:35 Index:2 Recv Start, rold:0
+2023/03/24 08:13:35 Index:2, appendLog index:6 , term:1 ,log len:6
+2023/03/24 08:13:35 Index:2 Update next index:0 from 6 to 7
+2023/03/24 08:13:35 Index:2 Update next index:1 from 6 to 7
+2023/03/24 08:13:35 Index:0, role:1 rcvd AppendEntries,from:2, log len:1, Prev:5, leaderCommit:5
+2023/03/24 08:13:35 Index:0, Reject AppendEntries term:1 is small
+2023/03/24 08:13:35 Index:1, role:2 rcvd AppendEntries,from:2, log len:1, Prev:5, leaderCommit:5
+2023/03/24 08:13:35 Index:1, copy 1 log , start point:5, from:2
+2023/03/24 08:13:35 Index:1, change role from:2 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :0 Successed
+2023/03/24 08:13:35 Index:2, change role from:0 to :2
+2023/03/24 08:13:35 Index:2 Send AppendEntries to :1 Successed
+2023/03/24 08:13:35 Index:2 Sync log to :1 Successed, next:7,match:6,len:1
+2023/03/24 08:13:36 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:36 Index:1, change to follower
+2023/03/24 08:13:36 Index:1, Role:2, In loop, log len:6
+2023/03/24 08:13:36 Index:0 Out loop in processCandidate, sleep:500 ms
+2023/03/24 08:13:36 Index:2 Out loop in processLeader, sleep:150 ms
+2023/03/24 08:13:36 Index:2, Role:2, In loop, log len:6
+2023/03/24 08:13:36 Index:0, Role:1, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to candidate, term:4
+2023/03/24 08:13:36 Index:0, send RequestVote to :2
+2023/03/24 08:13:36 Index:0, send RequestVote to :1
+2023/03/24 08:13:36 Index:1, role:2 rcvd RequestVote from:0
+2023/03/24 08:13:36 Index:1, Accept vote to:0, term:4, current term:1
+2023/03/24 08:13:36 Index:2, role:2 rcvd RequestVote from:0
+2023/03/24 08:13:36 Index:2, Accept vote to:0, term:4, current term:3
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0, send RequestVote to :1 Success
+2023/03/24 08:13:36 Index:0, change role from:1 to :0
+2023/03/24 08:13:36 Index:0 RequestVote to :1  finish
+2023/03/24 08:13:36 Index:0 Out loop in processCandidate, sleep:0 ms
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0, send RequestVote to :2 Success
+2023/03/24 08:13:36 Index:0, change role from:0 to :0
+2023/03/24 08:13:36 Index:0 RequestVote to :2  finish
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:1, change to follower
+2023/03/24 08:13:36 Index:1, Role:2, In loop, log len:6
+2023/03/24 08:13:36 Index:2, change to follower
+2023/03/24 08:13:36 Index:2, Role:2, In loop, log len:6
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:36 Index:0, change to leader
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:36 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:36 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:2, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:36 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:36 Index:1, change role from:2 to :2
+2023/03/24 08:13:36 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:36 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:36 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:36 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:36 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:37 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:37 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:37 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:37 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:37 Index:1, change to follower
+2023/03/24 08:13:37 Index:1, Role:2, In loop, log len:6
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:37 Index:2, change to follower
+2023/03/24 08:13:37 Index:2, Role:2, In loop, log len:6
+2023/03/24 08:13:37 Index:0, send RequestVote to :1 FAILED!
+2023/03/24 08:13:37 Index:0 RequestVote to :1  finish
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:0, send RequestVote to :2 FAILED!
+2023/03/24 08:13:37 Index:0 RequestVote to :2  finish
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:5 ms
+2023/03/24 08:13:37 Index:1, change to follower
+2023/03/24 08:13:37 Index:1, Role:2, In loop, log len:6
+2023/03/24 08:13:37 Index:2 Send AppendEntries to :0 Failed
+2023/03/24 08:13:37 Index:2 AppendEntries to :0  finish
+2023/03/24 08:13:37 Index:0, Role:0, In loop, log len:1
+2023/03/24 08:13:37 Index:0, change to leader
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :1
+2023/03/24 08:13:37 Index:0 Try Send AppendEntries to :2
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:0, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :1  finish
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Sucsicced
+2023/03/24 08:13:37 Index:0 AppendEntries to :2  finish
+2023/03/24 08:13:37 Index:0 Out loop in processLeader, sleep:0 ms
+2023/03/24 08:13:37 Index:2, change to follower
+2023/03/24 08:13:37 Index:2, Role:2, In loop, log len:6
+2023/03/24 08:13:37 Index:0 Recv Start, rold:0
+2023/03/24 08:13:37 Index:0, appendLog index:2 , term:4 ,log len:2
+2023/03/24 08:13:37 Index:0 Update next index:1 from 1 to 3
+2023/03/24 08:13:37 Index:0 Update next index:2 from 1 to 3
+2023/03/24 08:13:37 Index:1, role:2 rcvd AppendEntries,from:0, log len:2, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:1, copy all log from:0
+2023/03/24 08:13:37 Index:2, role:2 rcvd AppendEntries,from:0, log len:2, Prev:0, leaderCommit:1
+2023/03/24 08:13:37 Index:2, copy all log from:0
+2023/03/24 08:13:37 Index:2, change role from:2 to :2
+2023/03/24 08:13:37 Index:1, change role from:2 to :2
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :1 Successed
+2023/03/24 08:13:37 Index:0 Sync log to :1 Successed, next:3,match:2,len:2
+2023/03/24 08:13:37 Index:0 Inc commit index:1
+2023/03/24 08:13:37 Index:0, apply msg :1, role:0
+2023/03/24 08:13:37 Index:0 Send AppendEntries to :2 Successed
+2023/03/24 08:13:37 Index:0 Sync log to :2 Successed, next:3,match:2,len:2
+2023/03/24 08:13:37 0: log map[1:101]; server map[1:101 2:102 3:103 4:104 5:105]
+2023/03/24 08:13:37 0: log map[1:101]; server map[1:101 2:102 3:103 4:104 5:105]
+2023/03/24 08:13:37 apply error: commit index=2 server=0 106 != server=2 102
+exit status 1
+FAIL	6.824/raft	9.334s
