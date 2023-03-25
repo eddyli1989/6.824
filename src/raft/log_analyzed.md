@@ -53,3 +53,7 @@
 
 — Index1在重新进行选举的时候，由于Index0是follower,此时VoteFor的取值是1，新一轮开始以后index1请求投票，竟然被0拒绝了
 - 在重试Log同步时，leader commit字段也得重新赋值
+- 重试同步log成功时，nextIndex是老的，没有更新
+- Match算的是错的
+- Success Count变化后应该立即Commit
+- Commit Index的计算需要根据Log长度和match数组进行计算，不然有可能有的日志永远不会被提交。
