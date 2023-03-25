@@ -52,3 +52,4 @@
 2B Test (2B): agreement after reconect
 
 — Index1在重新进行选举的时候，由于Index0是follower,此时VoteFor的取值是1，新一轮开始以后index1请求投票，竟然被0拒绝了
+- 在重试Log同步时，leader commit字段也得重新赋值
