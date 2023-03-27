@@ -45,15 +45,14 @@
 - Index2 再次收到AppendLog 两次，此时LogLen=6，此时0上线，收到Append消息，PrevLogIndex=5
 - 由于0在被割裂以后变成了Candidate，因此Term比较大，回复的Term=2大于1，因此Index2直接变为Folowwer了
 - Index0 重新变为Candidate，Term 4，由于Term更大Index0变成Leader了！！！，但是Index0的Log长度是1！！！
-- [] 在收到RequestVote以后，除了校验Term之外还得看谁的日志长
+- - [x] 在收到RequestVote以后，除了校验Term之外还得看谁的日志长
 - Index0 收到AppendLog以后把Index1和Index2的日志全清Test 
 
 
-2B Test (2B): agreement after reconect
-
-— Index1在重新进行选举的时候，由于Index0是follower,此时VoteFor的取值是1，新一轮开始以后index1请求投票，竟然被0拒绝了
-- 在重试Log同步时，leader commit字段也得重新赋值
-- 重试同步log成功时，nextIndex是老的，没有更新
-- Match算的是错的
-- Success Count变化后应该立即Commit
+## Test 2B Test (2B): agreement after reconect
+— - [x] Index1在重新进行选举的时候，由于Index0是follower,此时VoteFor的取值是1，新一轮开始以后index1请求投票，竟然被0拒绝了
+- - [x] 在重试Log同步时，leader commit字段也得重新赋值
+- - [x] 重试同步log成功时，nextIndex是老的，没有更新
+- - [x] Match算的是错的
+- - [x] Success Count变化后应该立即Commit
 - Commit Index的计算需要根据Log长度和match数组进行计算，不然有可能有的日志永远不会被提交。

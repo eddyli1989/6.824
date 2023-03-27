@@ -291,7 +291,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// 	return
 	// }
 
-	if rf.voteFor != -1 {
+	if rf.voteFor != -1 && rf.voteFor != args.CandiddateID {
 		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
 		reply.VoteGranted = false
 		return
@@ -378,13 +378,12 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 					}
 
 					args.Entries = rf.log[args.PrevLogIndex:]
-					DPrintf("Index:%d change nextIndex:%d from %d to %d", rf.me, server, rf.nextIndex[server], args.PrevLogIndex+1)
-					rf.nextIndex[server] = args.PrevLogIndex + 1
+					args.LeaderCommit = rf.commitIndex
 					rf.mu.Unlock()
 					continue
 				}
 
-				rf.matchIndex[server] += len(args.Entries)
+				rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
 				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d,len:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server], len(args.Entries))
 
 				// success
@@ -400,6 +399,31 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 	}(server)
 }
 
+func (rf *Raft) caculateCommitIndex() {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	if rf.role.Load() != LEADER {
+		return
+	}
+	if rf.commitIndex == len(rf.log) {
+		return
+	}
+	DPrintf("Index:%d commitIndex:%d is not up to log len:%d,try to update", rf.me, rf.commitIndex, len(rf.log))
+	for N := len(rf.log); N > rf.commitIndex; N-- {
+		match := 0
+		for i := 0; i < len(rf.peers); i++ {
+			if rf.matchIndex[i] >= N {
+				match++
+			}
+		}
+		if match > len(rf.peers)/2 {
+			DPrintf("Index:%d Found and update commitIndex to :%d", rf.me, N)
+			rf.commitIndex = N
+			rf.apply()
+			return
+		}
+	}
+}
 func (rf *Raft) appendLog(command interface{}) (int, int) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
@@ -411,13 +435,13 @@ func (rf *Raft) appendLog(command interface{}) (int, int) {
 
 func (rf *Raft) apply() {
 	for i := rf.lastApplied; i < rf.commitIndex; i++ {
-		DPrintf("Index:%d, apply msg :%d, role:%d", rf.me, i, rf.role.Load())
 		var msg ApplyMsg
 		msg.Command = rf.log[i].Content
 		msg.CommandValid = true
 		msg.CommandIndex = rf.log[i].Index
 		rf.applyCh <- msg
 		rf.lastApplied++
+		DPrintf("Index:%d, apply msg :%d, role:%d,lastApplied:%d,commitIndex:%d", rf.me, i, rf.role.Load(), rf.lastApplied, rf.commitIndex)
 	}
 }
 
@@ -446,22 +470,25 @@ func (rf *Raft) syncLog(index int) {
 	totalCount := 0
 	for successCount <= len(rf.peers)/2 && totalCount < len(rf.peers)-1 {
 		ret := <-ch
+		if ret {
+			successCount++
+			if successCount > len(rf.peers)/2 {
+				rf.mu.Lock()
+				DPrintf("Index:%d Inc commit index to:%d", rf.me, rf.commitIndex+1)
+				rf.commitIndex++
+				rf.apply()
+				rf.mu.Unlock()
+				return
+			}
+		}
+		totalCount++
 		if rf.killed() || rf.role.Load() != LEADER {
 			return
 		}
-		if ret {
-			successCount++
-		}
-		totalCount++
 	}
 
-	if successCount > len(rf.peers)/2 {
-		DPrintf("Index:%d Inc commit index:%d", rf.me, rf.commitIndex)
-		rf.commitIndex++
-		rf.mu.Lock()
-		rf.apply()
-		rf.mu.Unlock()
-	}
+	DPrintf("Index:%d Log index:%d commit failed", rf.me, index)
+
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -480,10 +507,10 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index := -1
 	term := -1
 	isLeader := rf.role.Load() == LEADER
-	DPrintf("Index:%d Recv Start, rold:%d", rf.me, rf.role.Load())
 	if !isLeader {
 		return index, term, isLeader
 	}
+	DPrintf("Index:%d Recv Start, role,:%d, command:%+v", rf.me, rf.role.Load(), command)
 
 	// Your code here (2B).
 	index, term = rf.appendLog(command)
@@ -566,7 +593,6 @@ func (rf *Raft) processLeader() {
 			ret := rf.sendAppendEntries(index, &appendReq, &appendRsp)
 			if ret {
 				rf.mu.Lock()
-				defer rf.mu.Unlock()
 				DPrintf("Index:%d Send AppendEntries to :%d Sucsicced", rf.me, index)
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
@@ -574,6 +600,7 @@ func (rf *Raft) processLeader() {
 					rf.initLeaderData()
 					ch <- true
 				}
+				rf.mu.Unlock()
 				return
 			}
 			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
@@ -601,6 +628,7 @@ func (rf *Raft) processLeader() {
 	if sleeped < HBInterval {
 		time.Sleep(HBInterval - sleeped)
 	}
+	rf.caculateCommitIndex()
 }
 
 func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
