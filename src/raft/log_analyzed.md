@@ -56,3 +56,7 @@
 - - [x] Match算的是错的
 - - [x] Success Count变化后应该立即Commit
 - Commit Index的计算需要根据Log长度和match数组进行计算，不然有可能有的日志永远不会被提交。
+
+## TestFailNoAgree2B
+- 每个人都投给自己，结果无法选出Leader，每个人每一轮只能投一个人，因此VoteFor是和Term绑定的，如果Term变了，那么VoteFor应该变为无效
+- log在重试同步的时候似乎忘记填Term字段了
