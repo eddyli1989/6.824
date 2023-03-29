@@ -1,1241 +1,820 @@
 package raft
 
 //
-// Raft tests.
+// this is an outline of the API that raft must expose to
+// the service (or tester). see comments below for
+// each of these functions for more details.
 //
-// we will use the original test_test.go to test your code for grading.
-// so, while you can modify this code to help you debug, please
-// test with the original before submitting.
+// rf = Make(...)
+//   create a new Raft server.
+// rf.Start(command interface{}) (index, term, isleader)
+//   start agreement on a new log entry
+// rf.GetState() (term, isLeader)
+//   ask a Raft for its current term, and whether it thinks it is leader
+// ApplyMsg
+//   each time a new entry is committed to the log, each Raft peer
+//   should send an ApplyMsg to the service (or tester)
+//   in the same server.
 //
 
-import "testing"
-import "fmt"
-import "time"
-import "math/rand"
-import "sync/atomic"
-import "sync"
-
-// The tester generously allows solutions to complete elections in one second
-// (much more than the paper's range of timeouts).
-const RaftElectionTimeout = 1000 * time.Millisecond
-
-func TestInitialElection2A(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2A): initial election")
-
-	// is a leader elected?
-	cfg.checkOneLeader()
-
-	// sleep a bit to avoid racing with followers learning of the
-	// election, then check that all peers agree on the term.
-	time.Sleep(50 * time.Millisecond)
-	term1 := cfg.checkTerms()
-	if term1 < 1 {
-		t.Fatalf("term is %v, but should be at least 1", term1)
-	}
-
-	// does the leader+term stay the same if there is no network failure?
-	time.Sleep(2 * RaftElectionTimeout)
-	term2 := cfg.checkTerms()
-	if term1 != term2 {
-		fmt.Printf("warning: term changed even though there were no failures")
-	}
-
-	// there should still be a leader.
-	cfg.checkOneLeader()
-
-	cfg.end()
-}
-
-func TestReElection2A(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2A): election after network failure")
-
-	leader1 := cfg.checkOneLeader()
-	DPrintf("Test: now the leader is %d", leader1)
-	// if the leader disconnects, a new one should be elected.
-	cfg.disconnect(leader1)
-	DPrintf("Test: now leader %d disconnect", leader1)
-	cfg.checkOneLeader()
+import (
+	//	"bytes"
+	"fmt"
+	"sync"
+	"sync/atomic"
 	
-	DPrintf("Test: now select another leader success")
+	//	"6.824/labgob"
+	"6.824/labrpc"
+	
+	"math/rand"
+	"time"
+)
 
-	// if the old leader rejoins, that shouldn't
-	// disturb the new leader. and the old leader
-	// should switch to follower.
-	cfg.connect(leader1)
-	leader2 := cfg.checkOneLeader()
-	DPrintf("Test: now reconected leader %d becomes follower, new leader is:%d", leader1, leader2)
-
-	// if there's no quorum, no new leader should
-	// be elected.
-	cfg.disconnect(leader2)
-	cfg.disconnect((leader2 + 1) % servers)
-	DPrintf("Test: now disconnect leader:%d and %d, then wait 2 sec", leader2, (leader2 + 1) % servers)
-	time.Sleep(2 * RaftElectionTimeout)
-
-	// check that the one connected server
-	// does not think it is the leader.
-	cfg.checkNoLeader()
-
-	// if a quorum arises, it should elect a leader.
-	cfg.connect((leader2 + 1) % servers)
-	cfg.checkOneLeader()
-
-	// re-join of last node shouldn't prevent leader from existing.
-	cfg.connect(leader2)
-	cfg.checkOneLeader()
-
-	cfg.end()
-}
-
-func TestManyElections2A(t *testing.T) {
-	servers := 7
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2A): multiple elections")
-
-	cfg.checkOneLeader()
-
-	iters := 10
-	for ii := 1; ii < iters; ii++ {
-		// disconnect three nodes
-		i1 := rand.Int() % servers
-		i2 := rand.Int() % servers
-		i3 := rand.Int() % servers
-		cfg.disconnect(i1)
-		cfg.disconnect(i2)
-		cfg.disconnect(i3)
-
-		// either the current leader should still be alive,
-		// or the remaining four should elect a new one.
-		cfg.checkOneLeader()
-
-		cfg.connect(i1)
-		cfg.connect(i2)
-		cfg.connect(i3)
-	}
-
-	cfg.checkOneLeader()
-
-	cfg.end()
-}
-
-func TestBasicAgree2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): basic agreement")
-
-	iters := 3
-	for index := 1; index < iters+1; index++ {
-		nd, _ := cfg.nCommitted(index)
-		if nd > 0 {
-			t.Fatalf("some have committed before Start()")
-		}
-
-		xindex := cfg.one(index*100, servers, false)
-		if xindex != index {
-			t.Fatalf("got index %v but expected %v", xindex, index)
-		}
-	}
-
-	cfg.end()
-}
-
+// as each Raft peer becomes aware that successive log entries are
+// committed, the peer should send an ApplyMsg to the service (or
+// tester) on the same server, via the applyCh passed to Make(). set
+// CommandValid to true to indicate that the ApplyMsg contains a newly
+// committed log entry.
 //
-// check, based on counting bytes of RPCs, that
-// each command is sent to each peer just once.
-//
-func TestRPCBytes2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): RPC byte count")
-
-	cfg.one(99, servers, false)
-	bytes0 := cfg.bytesTotal()
-
-	iters := 10
-	var sent int64 = 0
-	for index := 2; index < iters+2; index++ {
-		cmd := randstring(5000)
-		xindex := cfg.one(cmd, servers, false)
-		if xindex != index {
-			t.Fatalf("got index %v but expected %v", xindex, index)
-		}
-		sent += int64(len(cmd))
-	}
-
-	bytes1 := cfg.bytesTotal()
-	got := bytes1 - bytes0
-	expected := int64(servers) * sent
-	if got > expected+50000 {
-		t.Fatalf("too many RPC bytes; got %v, expected %v", got, expected)
-	}
-
-	cfg.end()
+// in part 2D you'll want to send other kinds of messages (e.g.,
+// snapshots) on the applyCh, but set CommandValid to false for these
+// other uses.
+type ApplyMsg struct {
+	CommandValid bool
+	Command      interface{}
+	CommandIndex int
+	
+	// For 2D:
+	SnapshotValid bool
+	Snapshot      []byte
+	SnapshotTerm  int
+	SnapshotIndex int
 }
 
-//
-// test just failure of followers.
-//
-func For2023TestFollowerFailure2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
+const (
+	LEADER = iota
+	CANDIDATE
+	FOLLOWER
+)
 
-	cfg.begin("Test (2B): test progressive failure of followers")
+const ElectionBaseTime = 500 * time.Millisecond
+const ElectionRandTime = 100 // ms
+const HBInterval = 150 * time.Millisecond
 
-	cfg.one(101, servers, false)
-
-	// disconnect one follower from the network.
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect((leader1 + 1) % servers)
-
-	// the leader and remaining follower should be
-	// able to agree despite the disconnected follower.
-	cfg.one(102, servers-1, false)
-	time.Sleep(RaftElectionTimeout)
-	cfg.one(103, servers-1, false)
-
-	// disconnect the remaining follower
-	leader2 := cfg.checkOneLeader()
-	cfg.disconnect((leader2 + 1) % servers)
-	cfg.disconnect((leader2 + 2) % servers)
-
-	// submit a command.
-	index, _, ok := cfg.rafts[leader2].Start(104)
-	if ok != true {
-		t.Fatalf("leader rejected Start()")
-	}
-	if index != 4 {
-		t.Fatalf("expected index 4, got %v", index)
-	}
-
-	time.Sleep(2 * RaftElectionTimeout)
-
-	// check that command 104 did not commit.
-	n, _ := cfg.nCommitted(index)
-	if n > 0 {
-		t.Fatalf("%v committed but no majority", n)
-	}
-
-	cfg.end()
+type LogEntries struct {
+	Term    int
+	Index   int
+	Content interface{}
 }
 
-//
-// test just failure of leaders.
-//
-func For2023TestLeaderFailure2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): test failure of leaders")
-
-	cfg.one(101, servers, false)
-
-	// disconnect the first leader.
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect(leader1)
-
-	// the remaining followers should elect
-	// a new leader.
-	cfg.one(102, servers-1, false)
-	time.Sleep(RaftElectionTimeout)
-	cfg.one(103, servers-1, false)
-
-	// disconnect the new leader.
-	leader2 := cfg.checkOneLeader()
-	cfg.disconnect(leader2)
-
-	// submit a command to each server.
-	for i := 0; i < servers; i++ {
-		cfg.rafts[i].Start(104)
-	}
-
-	time.Sleep(2 * RaftElectionTimeout)
-
-	// check that command 104 did not commit.
-	n, _ := cfg.nCommitted(4)
-	if n > 0 {
-		t.Fatalf("%v committed but no majority", n)
-	}
-
-	cfg.end()
+// A Go object implementing a single Raft peer.
+type Raft struct {
+	mu        sync.Mutex          // Lock to protect shared access to this peer's state
+	peers     []*labrpc.ClientEnd // RPC end points of all peers
+	persister *Persister          // Object to hold this peer's persisted state
+	me        int                 // this peer's index into peers[]
+	dead      int32               // set by Kill()
+	
+	// Your data here (2A, 2B, 2C).
+	// Look at the paper's Figure 2 for a description of what
+	// state a Raft server must maintain.
+	applyCh chan ApplyMsg
+	
+	// persistent state
+	currentTerm int
+	voteFor     int
+	log         []LogEntries
+	
+	// Volatile state 4 log
+	commitIndex int
+	lastApplied int
+	
+	// leaders state
+	nextIndex  []int
+	matchIndex []int
+	
+	// added
+	role          atomic.Int32 // my role
+	currentLeader int          // currentLeader index
+	voteNum       int          // voteNum i got
+	rcvdHB        atomic.Bool  // rcvdHB or Not
 }
 
-//
-// test that a follower participates after
-// disconnect and re-connect.
-//
-func TestFailAgree2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): agreement after follower reconnects")
-
-	cfg.one(101, servers, false)
-
-	// disconnect one follower from the network.
-	leader := cfg.checkOneLeader()
-	cfg.disconnect((leader + 1) % servers)
-
-	// the leader and remaining follower should be
-	// able to agree despite the disconnected follower.
-	cfg.one(102, servers-1, false)
-	cfg.one(103, servers-1, false)
-	time.Sleep(RaftElectionTimeout)
-	cfg.one(104, servers-1, false)
-	cfg.one(105, servers-1, false)
-
-	// re-connect
-	cfg.connect((leader + 1) % servers)
-
-	// the full set of servers should preserve
-	// previous agreements, and be able to agree
-	// on new commands.
-	cfg.one(106, servers, true)
-	time.Sleep(RaftElectionTimeout)
-	cfg.one(107, servers, true)
-
-	cfg.end()
+// return currentTerm and whether this server
+// believes it is the leader.
+func (rf *Raft) GetState() (int, bool) {
+	// Your code here (2A).
+	DPrintf("Index:%d, role:%d GetState", rf.me, rf.role.Load())
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	return rf.currentTerm, rf.role.Load() == LEADER
 }
 
-func TestFailNoAgree2B(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): no agreement if too many followers disconnect")
-
-	cfg.one(10, servers, false)
-
-	// 3 of 5 followers disconnect
-	leader := cfg.checkOneLeader()
-	cfg.disconnect((leader + 1) % servers)
-	cfg.disconnect((leader + 2) % servers)
-	cfg.disconnect((leader + 3) % servers)
-
-	index, _, ok := cfg.rafts[leader].Start(20)
-	if ok != true {
-		t.Fatalf("leader rejected Start()")
-	}
-	if index != 2 {
-		t.Fatalf("expected index 2, got %v", index)
-	}
-
-	time.Sleep(2 * RaftElectionTimeout)
-
-	n, _ := cfg.nCommitted(index)
-	if n > 0 {
-		t.Fatalf("%v committed but no majority", n)
-	}
-
-	// repair
-	cfg.connect((leader + 1) % servers)
-	cfg.connect((leader + 2) % servers)
-	cfg.connect((leader + 3) % servers)
-
-	// the disconnected majority may have chosen a leader from
-	// among their own ranks, forgetting index 2.
-	leader2 := cfg.checkOneLeader()
-	index2, _, ok2 := cfg.rafts[leader2].Start(30)
-	if ok2 == false {
-		t.Fatalf("leader2 rejected Start()")
-	}
-	if index2 < 2 || index2 > 3 {
-		t.Fatalf("unexpected index %v", index2)
-	}
-
-	cfg.one(1000, servers, true)
-
-	cfg.end()
+// save Raft's persistent state to stable storage,
+// where it can later be retrieved after a crash and restart.
+// see paper's Figure 2 for a description of what should be persistent.
+func (rf *Raft) persist() {
+	// Your code here (2C).
+	// Example:
+	// w := new(bytes.Buffer)
+	// e := labgob.NewEncoder(w)
+	// e.Encode(rf.xxx)
+	// e.Encode(rf.yyy)
+	// data := w.Bytes()
+	// rf.persister.SaveRaftState(data)
 }
 
-func TestConcurrentStarts2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): concurrent Start()s")
-
-	var success bool
-loop:
-	for try := 0; try < 5; try++ {
-		if try > 0 {
-			// give solution some time to settle
-			time.Sleep(3 * time.Second)
-		}
-
-		leader := cfg.checkOneLeader()
-		_, term, ok := cfg.rafts[leader].Start(1)
-		if !ok {
-			// leader moved on really quickly
-			continue
-		}
-
-		iters := 5
-		var wg sync.WaitGroup
-		is := make(chan int, iters)
-		for ii := 0; ii < iters; ii++ {
-			wg.Add(1)
-			go func(i int) {
-				defer wg.Done()
-				i, term1, ok := cfg.rafts[leader].Start(100 + i)
-				if term1 != term {
-					return
-				}
-				if ok != true {
-					return
-				}
-				is <- i
-			}(ii)
-		}
-
-		wg.Wait()
-		close(is)
-
-		for j := 0; j < servers; j++ {
-			if t, _ := cfg.rafts[j].GetState(); t != term {
-				// term changed -- can't expect low RPC counts
-				continue loop
-			}
-		}
-
-		failed := false
-		cmds := []int{}
-		for index := range is {
-			cmd := cfg.wait(index, servers, term)
-			if ix, ok := cmd.(int); ok {
-				if ix == -1 {
-					// peers have moved on to later terms
-					// so we can't expect all Start()s to
-					// have succeeded
-					failed = true
-					break
-				}
-				cmds = append(cmds, ix)
-			} else {
-				t.Fatalf("value %v is not an int", cmd)
-			}
-		}
-
-		if failed {
-			// avoid leaking goroutines
-			go func() {
-				for range is {
-				}
-			}()
-			continue
-		}
-
-		for ii := 0; ii < iters; ii++ {
-			x := 100 + ii
-			ok := false
-			for j := 0; j < len(cmds); j++ {
-				if cmds[j] == x {
-					ok = true
-				}
-			}
-			if ok == false {
-				t.Fatalf("cmd %v missing in %v", x, cmds)
-			}
-		}
-
-		success = true
-		break
-	}
-
-	if !success {
-		t.Fatalf("term changed too often")
-	}
-
-	cfg.end()
-}
-
-func TestRejoin2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): rejoin of partitioned leader")
-
-	cfg.one(101, servers, true)
-
-	// leader network failure
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect(leader1)
-
-	// make old leader try to agree on some entries
-	cfg.rafts[leader1].Start(102)
-	cfg.rafts[leader1].Start(103)
-	cfg.rafts[leader1].Start(104)
-
-	// new leader commits, also for index=2
-	cfg.one(103, 2, true)
-
-	// new leader network failure
-	leader2 := cfg.checkOneLeader()
-	cfg.disconnect(leader2)
-
-	// old leader connected again
-	cfg.connect(leader1)
-
-	cfg.one(104, 2, true)
-
-	// all together now
-	cfg.connect(leader2)
-
-	cfg.one(105, servers, true)
-
-	cfg.end()
-}
-
-func TestBackup2B(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): leader backs up quickly over incorrect follower logs")
-
-	cfg.one(rand.Int(), servers, true)
-
-	// put leader and one follower in a partition
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect((leader1 + 2) % servers)
-	cfg.disconnect((leader1 + 3) % servers)
-	cfg.disconnect((leader1 + 4) % servers)
-
-	// submit lots of commands that won't commit
-	for i := 0; i < 50; i++ {
-		cfg.rafts[leader1].Start(rand.Int())
-	}
-
-	time.Sleep(RaftElectionTimeout / 2)
-
-	cfg.disconnect((leader1 + 0) % servers)
-	cfg.disconnect((leader1 + 1) % servers)
-
-	// allow other partition to recover
-	cfg.connect((leader1 + 2) % servers)
-	cfg.connect((leader1 + 3) % servers)
-	cfg.connect((leader1 + 4) % servers)
-
-	// lots of successful commands to new group.
-	for i := 0; i < 50; i++ {
-		cfg.one(rand.Int(), 3, true)
-	}
-
-	// now another partitioned leader and one follower
-	leader2 := cfg.checkOneLeader()
-	other := (leader1 + 2) % servers
-	if leader2 == other {
-		other = (leader2 + 1) % servers
-	}
-	cfg.disconnect(other)
-
-	// lots more commands that won't commit
-	for i := 0; i < 50; i++ {
-		cfg.rafts[leader2].Start(rand.Int())
-	}
-
-	time.Sleep(RaftElectionTimeout / 2)
-
-	// bring original leader back to life,
-	for i := 0; i < servers; i++ {
-		cfg.disconnect(i)
-	}
-	cfg.connect((leader1 + 0) % servers)
-	cfg.connect((leader1 + 1) % servers)
-	cfg.connect(other)
-
-	// lots of successful commands to new group.
-	for i := 0; i < 50; i++ {
-		cfg.one(rand.Int(), 3, true)
-	}
-
-	// now everyone
-	for i := 0; i < servers; i++ {
-		cfg.connect(i)
-	}
-	cfg.one(rand.Int(), servers, true)
-
-	cfg.end()
-}
-
-func TestCount2B(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2B): RPC counts aren't too high")
-
-	rpcs := func() (n int) {
-		for j := 0; j < servers; j++ {
-			n += cfg.rpcCount(j)
-		}
+// restore previously persisted state.
+func (rf *Raft) readPersist(data []byte) {
+	if data == nil || len(data) < 1 { // bootstrap without any state?
 		return
 	}
+	// Your code here (2C).
+	// Example:
+	// r := bytes.NewBuffer(data)
+	// d := labgob.NewDecoder(r)
+	// var xxx
+	// var yyy
+	// if d.Decode(&xxx) != nil ||
+	//    d.Decode(&yyy) != nil {
+	//   error...
+	// } else {
+	//   rf.xxx = xxx
+	//   rf.yyy = yyy
+	// }
+}
 
-	leader := cfg.checkOneLeader()
+// A service wants to switch to snapshot.  Only do so if Raft hasn't
+// have more recent info since it communicate the snapshot on applyCh.
+func (rf *Raft) CondInstallSnapshot(lastIncludedTerm int, lastIncludedIndex int, snapshot []byte) bool {
+	
+	// Your code here (2D).
+	
+	return true
+}
 
-	total1 := rpcs()
+// the service says it has created a snapshot that has
+// all info up to and including index. this means the
+// service no longer needs the log through (and including)
+// that index. Raft should now trim its log as much as possible.
+func (rf *Raft) Snapshot(index int, snapshot []byte) {
+	// Your code here (2D).
+	
+}
 
-	if total1 > 30 || total1 < 1 {
-		t.Fatalf("too many or few RPCs (%v) to elect initial leader\n", total1)
+// example RequestVote RPC arguments structure.
+// field names must start with capital letters!
+type RequestVoteArgs struct {
+	// Your data here (2A, 2B).
+	Term         int
+	CandiddateID int
+	LastLogIndex int
+	LastLogTerm  int
+}
+
+type AppendEntriesArgs struct {
+	Term         int
+	LeaderId     int
+	PrevLogIndex int
+	PrevLogTerm  int
+	Entries      []LogEntries
+	LeaderCommit int
+}
+
+type AppendEntriesReply struct {
+	Term    int
+	Success bool
+}
+
+// example RequestVote RPC reply structure.
+// field names must start with capital letters!
+type RequestVoteReply struct {
+	// Your data here (2A).
+	Term        int
+	VoteGranted bool // accept or not
+}
+
+func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	
+	DPrintf("Index:%d, role:%d rcvd AppendEntries,from:%d, log len:%d, Prev:%d, leaderCommit:%d", rf.me, rf.role.Load(), args.LeaderId, len(args.Entries), args.PrevLogIndex, args.LeaderCommit)
+	if args.Term < rf.currentTerm {
+		DPrintf("Index:%d, Reject AppendEntries term:%d is small", rf.me, args.Term)
+		reply.Success = false
+		reply.Term = rf.currentTerm
+		return
 	}
-
-	var total2 int
-	var success bool
-loop:
-	for try := 0; try < 5; try++ {
-		if try > 0 {
-			// give solution some time to settle
-			time.Sleep(3 * time.Second)
+	
+	if args.PrevLogIndex < 0 {
+		DPrintf("Index:%d, Reject AppendEntries PrevLogIndex:%d is invalid", rf.me, args.PrevLogIndex)
+		return
+	}
+	
+	if args.PrevLogIndex != 0 {
+		if len(rf.log) < args.PrevLogIndex {
+			DPrintf("Index:%d, Reject AppendEntries log length :%d is small than PrevLogindex:%d", rf.me, len(rf.log), args.PrevLogIndex)
+			reply.Success = false
+			reply.Term = rf.currentTerm
+			return
 		}
+		
+		if rf.log[args.PrevLogIndex-1].Term != args.PrevLogTerm {
+			DPrintf("Index:%d, Reject AppendEntries PrevLogTerm is not equal :%d vs :%d,index:%d", rf.me, rf.log[args.PrevLogIndex-1].Term, args.PrevLogTerm, args.PrevLogIndex-1)
+			reply.Success = false
+			reply.Term = rf.currentTerm
+			return
+		}
+	}
+	
+	if len(args.Entries) > 0 {
+		if args.PrevLogIndex == 0 {
+			DPrintf("Index:%d, copy all log from:%d", rf.me, args.LeaderId)
+			rf.log = make([]LogEntries, len(args.Entries))
+			copy(rf.log, args.Entries)
+		} else {
+			DPrintf("Index:%d, copy %d log , start point:%d, from:%d", rf.me, len(args.Entries), args.PrevLogIndex, args.LeaderId)
+			if len(rf.log) > args.PrevLogIndex {
+				DPrintf("Index:%d, log len:%d is bigger than PrevLogIndex:%d, cut", rf.me, len(rf.log), args.PrevLogIndex)
+				rf.log = rf.log[:args.PrevLogIndex]
+			}
+			rf.log = append(rf.log, args.Entries...)
+		}
+	}
+	if args.LeaderCommit > rf.commitIndex {
+		DPrintf("Index:%d, update commit index :%d, leaderCommit:%d", rf.me, rf.commitIndex, args.LeaderCommit)
+		if args.LeaderCommit > len(rf.log) {
+			rf.commitIndex = len(rf.log)
+		} else {
+			rf.commitIndex = args.LeaderCommit
+		}
+	}
+	rf.apply()
+	rf.currentTerm = args.Term
+	rf.rcvdHB.Store(true)
+	rf.changeRole(FOLLOWER)
+	rf.currentLeader = args.LeaderId
+	
+	reply.Success = true
+	reply.Term = rf.currentTerm
+}
 
-		leader = cfg.checkOneLeader()
-		total1 = rpcs()
+// example RequestVote RPC handler.
+func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
+	// Your code here (2A, 2B).
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	DPrintf("Index:%d, role:%d rcvd RequestVote from:%d", rf.me, rf.role.Load(), args.CandiddateID)
+	reply.Term = rf.currentTerm
+	
+	if args.Term < rf.currentTerm {
+		DPrintf("Index:%d, Reject vote to:%d Req term:%d, currentTerm:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
+		reply.VoteGranted = false
+		return
+	}
+	
+	// first check last log term,the bigger one is more up to date
+	if len(rf.log) > 0 && rf.log[len(rf.log)-1].Term > args.LastLogTerm {
+		DPrintf("Index:%d Reject vote to:%d LastLogTerm :%d is small than me:%d", rf.me, args.CandiddateID, args.LastLogTerm, rf.log[len(rf.log)-1].Term)
+		reply.VoteGranted = false
+		return
+	}
+	
+	// if same term, then which log is longer is more up to date
+	if args.LastLogIndex < len(rf.log) && len(rf.log) > 0 && rf.log[len(rf.log)-1].Term == args.LastLogTerm {
+		DPrintf("Index:%d Reject vote to:%d LastLogIndex :%d is small than me:%d", rf.me, args.CandiddateID, args.LastLogIndex, len(rf.log))
+		reply.VoteGranted = false
+		return
+	}
+	
+	if rf.voteFor != -1 && rf.voteFor != args.CandiddateID && rf.currentTerm == args.Term {
+		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
+		reply.VoteGranted = false
+		return
+	}
+	
+	DPrintf("Index:%d, Accept vote to:%d, term:%d, current term:%d", rf.me, args.CandiddateID, args.Term, rf.currentTerm)
+	
+	rf.changeRole(FOLLOWER)
+	reply.VoteGranted = true
+	
+	rf.voteFor = args.CandiddateID
+	rf.currentTerm = args.Term
+	
+	rf.rcvdHB.Store(true)
+}
 
-		iters := 10
-		starti, term, ok := cfg.rafts[leader].Start(1)
-		if !ok {
-			// leader moved on really quickly
+// example code to send a RequestVote RPC to a server.
+// server is the index of the target server in rf.peers[].
+// expects RPC arguments in args.
+// fills in *reply with RPC reply, so caller should
+// pass &reply.
+// the types of the args and reply passed to Call() must be
+// the same as the types of the arguments declared in the
+// handler function (including whether they are pointers).
+//
+// The labrpc package simulates a lossy network, in which servers
+// may be unreachable, and in which requests and replies may be lost.
+// Call() sends a request and waits for a reply. If a reply arrives
+// within a timeout interval, Call() returns true; otherwise
+// Call() returns false. Thus Call() may not return for a while.
+// A false return can be caused by a dead server, a live server that
+// can't be reached, a lost request, or a lost reply.
+//
+// Call() is guaranteed to return (perhaps after a delay) *except* if the
+// handler function on the server side does not return.  Thus there
+// is no need to implement your own timeouts around Call().
+//
+// look at the comments in ../labrpc/labrpc.go for more details.
+//
+// if you're having trouble getting RPC to work, check that you've
+// capitalized all field names in structs passed over RPC, and
+// that the caller passes the address of the reply struct with &, not
+// the struct itself.
+func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *RequestVoteReply) bool {
+	ok := rf.peers[server].Call("Raft.RequestVote", args, reply)
+	return ok
+}
+
+func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
+	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
+	return ok
+}
+
+func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan bool) {
+	go func(index int) {
+		var appendRsp AppendEntriesReply
+		var failedCount int
+		
+		for !rf.killed() {
+			DPrintf("Index:%d Try Send AppendEntries to:%d,log len:%d", rf.me, index, len(args.Entries))
+			ret := rf.sendAppendEntries(index, args, &appendRsp)
+			if ret {
+				rf.mu.Lock()
+				DPrintf("Index:%d Send AppendEntries to :%d Successed", rf.me, index)
+				if appendRsp.Term > rf.currentTerm {
+					rf.currentTerm = appendRsp.Term
+					rf.changeRole(FOLLOWER)
+					rf.initLeaderData()
+					rf.mu.Unlock()
+					ch <- false
+					return
+				}
+				
+				// if log not match, try again with minus PrevLogIndex
+				if !appendRsp.Success {
+					DPrintf("Index:%d Send AppendEntries to :%d log not match, failedCount:%d", rf.me, index, failedCount)
+					failedCount++
+					args.PrevLogIndex -= failedCount
+					if args.PrevLogIndex < 0 {
+						args.PrevLogIndex = 0
+					}
+					
+					if args.PrevLogIndex > 0 {
+						args.PrevLogTerm = rf.log[args.PrevLogIndex-1].Term
+					}
+					
+					args.Entries = rf.log[args.PrevLogIndex:]
+					args.LeaderCommit = rf.commitIndex
+					args.Term = rf.currentTerm
+					rf.mu.Unlock()
+					continue
+				}
+				
+				rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
+				DPrintf("Index:%d Sync log to :%d Successed, next:%d,match:%d,len:%d", rf.me, index, rf.nextIndex[server], rf.matchIndex[server], len(args.Entries))
+				
+				// success
+				rf.mu.Unlock()
+				ch <- true
+				return
+			}
+			// network failed
+			ch <- false
+			break
+		}
+		if rf.killed() {
+			return
+		}
+		DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
+	}(server)
+}
+
+func (rf *Raft) caculateCommitIndex() {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	if rf.role.Load() != LEADER {
+		return
+	}
+	if rf.commitIndex == len(rf.log) {
+		return
+	}
+	DPrintf("Index:%d commitIndex:%d is not up to log len:%d,try to update", rf.me, rf.commitIndex, len(rf.log))
+	for N := len(rf.log); N > rf.commitIndex; N-- {
+		match := 1
+		for i := 0; i < len(rf.peers); i++ {
+			if rf.matchIndex[i] >= N {
+				match++
+			}
+		}
+		if match > len(rf.peers)/2 {
+			DPrintf("Index:%d found and update commitIndex to :%d", rf.me, N)
+			rf.commitIndex = N
+			rf.apply()
+			return
+		}
+	}
+}
+func (rf *Raft) appendLog(command interface{}) (int, int) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	log2Append := LogEntries{Term: rf.currentTerm, Index: len(rf.log) + 1, Content: command}
+	rf.log = append(rf.log, log2Append)
+	DPrintf("Index:%d, appendLog index:%d , term:%d ,log len:%d", rf.me, len(rf.log), rf.currentTerm, len(rf.log))
+	return len(rf.log), rf.currentTerm
+}
+
+func (rf *Raft) apply() {
+	for i := rf.lastApplied; i < rf.commitIndex; i++ {
+		var msg ApplyMsg
+		msg.Command = rf.log[i].Content
+		msg.CommandValid = true
+		msg.CommandIndex = rf.log[i].Index
+		rf.applyCh <- msg
+		rf.lastApplied++
+		DPrintf("Index:%d, apply msg :%d, role:%d,lastApplied:%d,commitIndex:%d", rf.me, i, rf.role.Load(), rf.lastApplied, rf.commitIndex)
+	}
+}
+
+func (rf *Raft) syncLog() {
+	if rf.role.Load() != LEADER {
+		return
+	}
+	DPrintf("Index:%d, As Leader,Enter sync log or HB", rf.me)
+	ch := make(chan bool, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me {
 			continue
 		}
-		cmds := []int{}
-		for i := 1; i < iters+2; i++ {
-			x := int(rand.Int31())
-			cmds = append(cmds, x)
-			index1, term1, ok := cfg.rafts[leader].Start(x)
-			if term1 != term {
-				// Term changed while starting
-				continue loop
-			}
-			if !ok {
-				// No longer the leader, so term has changed
-				continue loop
-			}
-			if starti+i != index1 {
-				t.Fatalf("Start() failed")
-			}
+		rf.mu.Lock()
+		appendReq := rf.getAppendEntrisArg()
+		appendReq.PrevLogIndex = rf.nextIndex[i] - 1
+		if appendReq.PrevLogIndex > len(rf.log) || appendReq.PrevLogIndex < 0 {
+			panic(fmt.Sprintf("Invalid prev log index:%d, log length:%d", appendReq.PrevLogIndex, len(rf.log)))
 		}
-
-		for i := 1; i < iters+1; i++ {
-			cmd := cfg.wait(starti+i, servers, term)
-			if ix, ok := cmd.(int); ok == false || ix != cmds[i-1] {
-				if ix == -1 {
-					// term changed -- try again
-					continue loop
-				}
-				t.Fatalf("wrong value %v committed for index %v; expected %v\n", cmd, starti+i, cmds)
-			}
+		if appendReq.PrevLogIndex > 0 {
+			appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex-1].Term
 		}
-
-		failed := false
-		total2 = 0
-		for j := 0; j < servers; j++ {
-			if t, _ := cfg.rafts[j].GetState(); t != term {
-				// term changed -- can't expect low RPC counts
-				// need to keep going to update total2
-				failed = true
-			}
-			total2 += cfg.rpcCount(j)
-		}
-
-		if failed {
-			continue loop
-		}
-
-		if total2-total1 > (iters+1+3)*3 {
-			t.Fatalf("too many RPCs (%v) for %v entries\n", total2-total1, iters)
-		}
-
-		success = true
-		break
+		appendReq.Entries = rf.log[appendReq.PrevLogIndex:]
+		DPrintf("Index:%d Update next index:%d from %d to %d", rf.me, i, rf.nextIndex[i], len(rf.log)+1)
+		rf.nextIndex[i] = len(rf.log) + 1
+		rf.mu.Unlock()
+		rf.sendAppendLogAsync(i, &appendReq, ch)
 	}
-
-	if !success {
-		t.Fatalf("term changed too often")
-	}
-
-	time.Sleep(RaftElectionTimeout)
-
-	total3 := 0
-	for j := 0; j < servers; j++ {
-		total3 += cfg.rpcCount(j)
-	}
-
-	if total3-total2 > 3*20 {
-		t.Fatalf("too many RPCs (%v) for 1 second of idleness\n", total3-total2)
-	}
-
-	cfg.end()
-}
-
-func TestPersist12C(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): basic persistence")
-
-	cfg.one(11, servers, true)
-
-	// crash and re-start all
-	for i := 0; i < servers; i++ {
-		cfg.start1(i, cfg.applier)
-	}
-	for i := 0; i < servers; i++ {
-		cfg.disconnect(i)
-		cfg.connect(i)
-	}
-
-	cfg.one(12, servers, true)
-
-	leader1 := cfg.checkOneLeader()
-	cfg.disconnect(leader1)
-	cfg.start1(leader1, cfg.applier)
-	cfg.connect(leader1)
-
-	cfg.one(13, servers, true)
-
-	leader2 := cfg.checkOneLeader()
-	cfg.disconnect(leader2)
-	cfg.one(14, servers-1, true)
-	cfg.start1(leader2, cfg.applier)
-	cfg.connect(leader2)
-
-	cfg.wait(4, servers, -1) // wait for leader2 to join before killing i3
-
-	i3 := (cfg.checkOneLeader() + 1) % servers
-	cfg.disconnect(i3)
-	cfg.one(15, servers-1, true)
-	cfg.start1(i3, cfg.applier)
-	cfg.connect(i3)
-
-	cfg.one(16, servers, true)
-
-	cfg.end()
-}
-
-func TestPersist22C(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): more persistence")
-
-	index := 1
-	for iters := 0; iters < 5; iters++ {
-		cfg.one(10+index, servers, true)
-		index++
-
-		leader1 := cfg.checkOneLeader()
-
-		cfg.disconnect((leader1 + 1) % servers)
-		cfg.disconnect((leader1 + 2) % servers)
-
-		cfg.one(10+index, servers-2, true)
-		index++
-
-		cfg.disconnect((leader1 + 0) % servers)
-		cfg.disconnect((leader1 + 3) % servers)
-		cfg.disconnect((leader1 + 4) % servers)
-
-		cfg.start1((leader1+1)%servers, cfg.applier)
-		cfg.start1((leader1+2)%servers, cfg.applier)
-		cfg.connect((leader1 + 1) % servers)
-		cfg.connect((leader1 + 2) % servers)
-
-		time.Sleep(RaftElectionTimeout)
-
-		cfg.start1((leader1+3)%servers, cfg.applier)
-		cfg.connect((leader1 + 3) % servers)
-
-		cfg.one(10+index, servers-2, true)
-		index++
-
-		cfg.connect((leader1 + 4) % servers)
-		cfg.connect((leader1 + 0) % servers)
-	}
-
-	cfg.one(1000, servers, true)
-
-	cfg.end()
-}
-
-func TestPersist32C(t *testing.T) {
-	servers := 3
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): partitioned leader and one follower crash, leader restarts")
-
-	cfg.one(101, 3, true)
-
-	leader := cfg.checkOneLeader()
-	cfg.disconnect((leader + 2) % servers)
-
-	cfg.one(102, 2, true)
-
-	cfg.crash1((leader + 0) % servers)
-	cfg.crash1((leader + 1) % servers)
-	cfg.connect((leader + 2) % servers)
-	cfg.start1((leader+0)%servers, cfg.applier)
-	cfg.connect((leader + 0) % servers)
-
-	cfg.one(103, 2, true)
-
-	cfg.start1((leader+1)%servers, cfg.applier)
-	cfg.connect((leader + 1) % servers)
-
-	cfg.one(104, servers, true)
-
-	cfg.end()
-}
-
-//
-// Test the scenarios described in Figure 8 of the extended Raft paper. Each
-// iteration asks a leader, if there is one, to insert a command in the Raft
-// log.  If there is a leader, that leader will fail quickly with a high
-// probability (perhaps without committing the command), or crash after a while
-// with low probability (most likey committing the command).  If the number of
-// alive servers isn't enough to form a majority, perhaps start a new server.
-// The leader in a new term may try to finish replicating log entries that
-// haven't been committed yet.
-//
-func TestFigure82C(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, false, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): Figure 8")
-
-	cfg.one(rand.Int(), 1, true)
-
-	nup := servers
-	for iters := 0; iters < 1000; iters++ {
-		leader := -1
-		for i := 0; i < servers; i++ {
-			if cfg.rafts[i] != nil {
-				_, _, ok := cfg.rafts[i].Start(rand.Int())
-				if ok {
-					leader = i
+	
+	successCount := 1
+	totalCount := 0
+	var sleeped time.Duration = 0
+	waitTime := 5 * time.Millisecond
+	for sleeped < HBInterval && totalCount < len(rf.peers)-1 {
+		select {
+		case ret := <-ch:
+			if ret {
+				successCount++
+				if successCount > len(rf.peers)/2 {
+					break
 				}
 			}
+			totalCount++
+		case <-time.After(waitTime):
+			sleeped += waitTime
 		}
-
-		if (rand.Int() % 1000) < 100 {
-			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
-			time.Sleep(time.Duration(ms) * time.Millisecond)
-		} else {
-			ms := (rand.Int63() % 13)
-			time.Sleep(time.Duration(ms) * time.Millisecond)
-		}
-
-		if leader != -1 {
-			cfg.crash1(leader)
-			nup -= 1
-		}
-
-		if nup < 3 {
-			s := rand.Int() % servers
-			if cfg.rafts[s] == nil {
-				cfg.start1(s, cfg.applier)
-				cfg.connect(s)
-				nup += 1
-			}
+		
+		if rf.killed() || rf.role.Load() != LEADER {
+			return
 		}
 	}
-
-	for i := 0; i < servers; i++ {
-		if cfg.rafts[i] == nil {
-			cfg.start1(i, cfg.applier)
-			cfg.connect(i)
-		}
+	DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+	if sleeped < HBInterval {
+		time.Sleep(HBInterval - sleeped)
 	}
-
-	cfg.one(rand.Int(), servers, true)
-
-	cfg.end()
+	rf.caculateCommitIndex()
 }
 
-func TestUnreliableAgree2C(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, true, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): unreliable agreement")
-
-	var wg sync.WaitGroup
-
-	for iters := 1; iters < 50; iters++ {
-		for j := 0; j < 4; j++ {
-			wg.Add(1)
-			go func(iters, j int) {
-				defer wg.Done()
-				cfg.one((100*iters)+j, 1, true)
-			}(iters, j)
-		}
-		cfg.one(iters, 1, true)
+// the service using Raft (e.g. a k/v server) wants to start
+// agreement on the next command to be appended to Raft's log. if this
+// server isn't the leader, returns false. otherwise start the
+// agreement and return immediately. there is no guarantee that this
+// command will ever be committed to the Raft log, since the leader
+// may fail or lose an election. even if the Raft instance has been killed,
+// this function should return gracefully.
+//
+// the first return value is the index that the command will appear at
+// if it's ever committed. the second return value is the current
+// term. the third return value is true if this server believes it is
+// the leader.
+func (rf *Raft) Start(command interface{}) (int, int, bool) {
+	index := -1
+	term := -1
+	isLeader := rf.role.Load() == LEADER
+	if !isLeader {
+		return index, term, isLeader
 	}
-
-	cfg.setunreliable(false)
-
-	wg.Wait()
-
-	cfg.one(100, servers, true)
-
-	cfg.end()
+	DPrintf("Index:%d Recv Start, role,:%d, command:%+v", rf.me, rf.role.Load(), command)
+	
+	// Your code here (2B).
+	index, term = rf.appendLog(command)
+	go rf.syncLog()
+	return index, term, isLeader
 }
 
-func TestFigure8Unreliable2C(t *testing.T) {
-	servers := 5
-	cfg := make_config(t, servers, true, false)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2C): Figure 8 (unreliable)")
-
-	cfg.one(rand.Int()%10000, 1, true)
-
-	nup := servers
-	for iters := 0; iters < 1000; iters++ {
-		if iters == 200 {
-			cfg.setlongreordering(true)
-		}
-		leader := -1
-		for i := 0; i < servers; i++ {
-			_, _, ok := cfg.rafts[i].Start(rand.Int() % 10000)
-			if ok && cfg.connected[i] {
-				leader = i
-			}
-		}
-
-		if (rand.Int() % 1000) < 100 {
-			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
-			time.Sleep(time.Duration(ms) * time.Millisecond)
-		} else {
-			ms := (rand.Int63() % 13)
-			time.Sleep(time.Duration(ms) * time.Millisecond)
-		}
-
-		if leader != -1 && (rand.Int()%1000) < int(RaftElectionTimeout/time.Millisecond)/2 {
-			cfg.disconnect(leader)
-			nup -= 1
-		}
-
-		if nup < 3 {
-			s := rand.Int() % servers
-			if cfg.connected[s] == false {
-				cfg.connect(s)
-				nup += 1
-			}
-		}
-	}
-
-	for i := 0; i < servers; i++ {
-		if cfg.connected[i] == false {
-			cfg.connect(i)
-		}
-	}
-
-	cfg.one(rand.Int()%10000, servers, true)
-
-	cfg.end()
+// the tester doesn't halt goroutines created by Raft after each test,
+// but it does call the Kill() method. your code can use killed() to
+// check whether Kill() has been called. the use of atomic avoids the
+// need for a lock.
+//
+// the issue is that long-running goroutines use memory and may chew
+// up CPU time, perhaps causing later tests to fail and generating
+// confusing debug output. any goroutine with a long-running loop
+// should call killed() to check whether it should stop.
+func (rf *Raft) Kill() {
+	DPrintf("Index:%d, kill", rf.me)
+	atomic.StoreInt32(&rf.dead, 1)
+	// Your code here, if desired.
 }
 
-func internalChurn(t *testing.T, unreliable bool) {
+func (rf *Raft) killed() bool {
+	z := atomic.LoadInt32(&rf.dead)
+	return z == 1
+}
 
-	servers := 5
-	cfg := make_config(t, servers, unreliable, false)
-	defer cfg.cleanup()
+func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
+	return base + (time.Duration)(rand.Intn(ElectionRandTime))*time.Millisecond
+}
 
-	if unreliable {
-		cfg.begin("Test (2C): unreliable churn")
-	} else {
-		cfg.begin("Test (2C): churn")
+func (rf *Raft) initLeaderData() {
+	rf.nextIndex = make([]int, 0, len(rf.peers))
+	rf.matchIndex = make([]int, 0, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		rf.nextIndex = append(rf.nextIndex, len(rf.log)+1)
+		rf.matchIndex = append(rf.matchIndex, 0)
 	}
+}
 
-	stop := int32(0)
+func (rf *Raft) changeRole(role int) {
+	DPrintf("Index:%d, change role from:%d to :%d", rf.me, rf.role.Load(), role)
+	if role == FOLLOWER && rf.role.Load() != FOLLOWER {
+		rf.voteFor = -1
+		rf.rcvdHB.Store(false)
+	}
+	if role == CANDIDATE {
+		rf.voteNum = 0
+	}
+	if role == LEADER {
+		rf.currentLeader = rf.me
+	}
+	rf.role.Store((int32)(role))
+}
 
-	// create concurrent clients
-	cfn := func(me int, ch chan []int) {
-		var ret []int
-		ret = nil
-		defer func() { ch <- ret }()
-		values := []int{}
-		for atomic.LoadInt32(&stop) == 0 {
-			x := rand.Int()
-			index := -1
-			ok := false
-			for i := 0; i < servers; i++ {
-				// try them all, maybe one of them is a leader
-				cfg.mu.Lock()
-				rf := cfg.rafts[i]
-				cfg.mu.Unlock()
-				if rf != nil {
-					index1, _, ok1 := rf.Start(x)
-					if ok1 {
-						ok = ok1
-						index = index1
-					}
+func (rf *Raft) processLeader() {
+	if rf.role.Load() != LEADER {
+		return
+	}
+	DPrintf("Index:%d, change to leader", rf.me)
+	ch := make(chan bool, len(rf.peers))
+	for j := 0; j < len(rf.peers); j++ {
+		if j == rf.me {
+			continue
+		}
+		if rf.role.Load() != LEADER {
+			return
+		}
+		appendReq := rf.getAppendEntrisArg()
+		appendReq.PrevLogIndex = rf.nextIndex[j] - 1
+		if appendReq.PrevLogIndex > len(rf.log) || appendReq.PrevLogIndex < 0 {
+			panic(fmt.Sprintf("Invalid prev log index:%d, log length:%d", appendReq.PrevLogIndex, len(rf.log)))
+		}
+		if appendReq.PrevLogIndex > 0 {
+			appendReq.PrevLogTerm = rf.log[appendReq.PrevLogIndex-1].Term
+		}
+		var appendRsp AppendEntriesReply
+		
+		DPrintf("Index:%d Try Send AppendEntries HB to :%d", rf.me, j)
+		
+		go func(index int) {
+			defer func() {
+				ch <- false
+				DPrintf("Index:%d AppendEntries HB to :%d  finish", rf.me, index)
+			}()
+			ret := rf.sendAppendEntries(index, &appendReq, &appendRsp)
+			if ret {
+				rf.mu.Lock()
+				DPrintf("Index:%d Send AppendEntries to :%d success", rf.me, index)
+				if appendRsp.Term > rf.currentTerm {
+					rf.currentTerm = appendRsp.Term
+					rf.changeRole(FOLLOWER)
+					rf.initLeaderData()
+					ch <- true
+				}
+				rf.mu.Unlock()
+				return
+			}
+			if rf.killed() {
+				return
+			}
+			DPrintf("Index:%d Send AppendEntries to :%d Failed", rf.me, index)
+		}(j)
+	}
+	
+	var count int = 0
+	var sleeped time.Duration = 0
+	var waitTime = 5 * time.Millisecond
+	for count != (len(rf.peers)-1) && sleeped < HBInterval {
+		select {
+		case ret := <-ch:
+			count++
+			// role changed
+			if ret {
+				DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+				return
+			}
+		case <-time.After(waitTime):
+			sleeped += waitTime
+		}
+	}
+	
+	DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+	if sleeped < HBInterval {
+		time.Sleep(HBInterval - sleeped)
+	}
+	rf.caculateCommitIndex()
+}
+
+func (rf *Raft) getAppendEntrisArg() AppendEntriesArgs {
+	var appendReq AppendEntriesArgs
+	appendReq.LeaderCommit = rf.commitIndex
+	appendReq.LeaderId = rf.me
+	appendReq.Term = rf.currentTerm
+	
+	appendReq.PrevLogIndex = 0             // todo:
+	appendReq.PrevLogTerm = rf.currentTerm // todo:
+	
+	return appendReq
+}
+
+func (rf *Raft) getVoteArgs() RequestVoteArgs {
+	var req RequestVoteArgs
+	req.Term = rf.currentTerm
+	req.CandiddateID = rf.me
+	req.LastLogIndex = len(rf.log)
+	req.LastLogTerm = 0
+	if len(rf.log) > 0 {
+		req.LastLogTerm = rf.log[len(rf.log)-1].Term
+	}
+	return req
+}
+
+func (rf *Raft) processCandidate() {
+	rf.mu.Lock()
+	rf.currentTerm++
+	DPrintf("Index:%d, change to candidate, term:%d", rf.me, rf.currentTerm)
+	rf.voteFor = rf.me
+	rf.voteNum = 1
+	rf.mu.Unlock()
+	
+	reqVote := rf.getVoteArgs()
+	ch := make(chan bool, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me {
+			continue
+		}
+		if rf.role.Load() != CANDIDATE {
+			return
+		}
+		
+		go func(index int) {
+			defer func() {
+				ch <- false
+				DPrintf("Index:%d RequestVote to :%d  finish", rf.me, index)
+			}()
+			var rsp RequestVoteReply
+			DPrintf("Index:%d, send RequestVote to :%d", rf.me, index)
+			ret := rf.sendRequestVote(index, &reqVote, &rsp)
+			if !ret {
+				DPrintf("Index:%d, send RequestVote to :%d FAILED!", rf.me, index)
+				return
+			}
+			
+			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			DPrintf("Index:%d, send RequestVote to :%d Success", rf.me, index)
+			if rsp.Term > rf.currentTerm {
+				rf.currentTerm = rsp.Term
+				rf.changeRole(FOLLOWER) // how to return ?
+				ch <- true
+				return
+			}
+			if rsp.VoteGranted {
+				rf.voteNum++
+				if rf.voteNum > len(rf.peers)/2 {
+					rf.changeRole(LEADER) // how to return ?
+					ch <- true
+					return
 				}
 			}
-			if ok {
-				// maybe leader will commit our value, maybe not.
-				// but don't wait forever.
-				for _, to := range []int{10, 20, 50, 100, 200} {
-					nd, cmd := cfg.nCommitted(index)
-					if nd > 0 {
-						if xx, ok := cmd.(int); ok {
-							if xx == x {
-								values = append(values, x)
-							}
-						} else {
-							cfg.t.Fatalf("wrong command type")
-						}
-						break
-					}
-					time.Sleep(time.Duration(to) * time.Millisecond)
-				}
-			} else {
-				time.Sleep(time.Duration(79+me*17) * time.Millisecond)
+		}(i)
+	}
+	count := 0
+	var sleeped time.Duration = 0
+	var waitTime = 5 * time.Millisecond
+	for count != (len(rf.peers)-1) && sleeped < ElectionBaseTime {
+		select {
+		case ret := <-ch:
+			count++
+			if ret {
+				DPrintf("Index:%d Out loop in processCandidate, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+				return
 			}
-		}
-		ret = values
-	}
-
-	ncli := 3
-	cha := []chan []int{}
-	for i := 0; i < ncli; i++ {
-		cha = append(cha, make(chan []int))
-		go cfn(i, cha[i])
-	}
-
-	for iters := 0; iters < 20; iters++ {
-		if (rand.Int() % 1000) < 200 {
-			i := rand.Int() % servers
-			cfg.disconnect(i)
-		}
-
-		if (rand.Int() % 1000) < 500 {
-			i := rand.Int() % servers
-			if cfg.rafts[i] == nil {
-				cfg.start1(i, cfg.applier)
-			}
-			cfg.connect(i)
-		}
-
-		if (rand.Int() % 1000) < 200 {
-			i := rand.Int() % servers
-			if cfg.rafts[i] != nil {
-				cfg.crash1(i)
-			}
-		}
-
-		// Make crash/restart infrequent enough that the peers can often
-		// keep up, but not so infrequent that everything has settled
-		// down from one change to the next. Pick a value smaller than
-		// the election timeout, but not hugely smaller.
-		time.Sleep((RaftElectionTimeout * 7) / 10)
-	}
-
-	time.Sleep(RaftElectionTimeout)
-	cfg.setunreliable(false)
-	for i := 0; i < servers; i++ {
-		if cfg.rafts[i] == nil {
-			cfg.start1(i, cfg.applier)
-		}
-		cfg.connect(i)
-	}
-
-	atomic.StoreInt32(&stop, 1)
-
-	values := []int{}
-	for i := 0; i < ncli; i++ {
-		vv := <-cha[i]
-		if vv == nil {
-			t.Fatal("client failed")
-		}
-		values = append(values, vv...)
-	}
-
-	time.Sleep(RaftElectionTimeout)
-
-	lastIndex := cfg.one(rand.Int(), servers, true)
-
-	really := make([]int, lastIndex+1)
-	for index := 1; index <= lastIndex; index++ {
-		v := cfg.wait(index, servers, -1)
-		if vi, ok := v.(int); ok {
-			really = append(really, vi)
-		} else {
-			t.Fatalf("not an int")
+		case <-time.After(waitTime):
+			sleeped += (waitTime)
+			continue
 		}
 	}
+	DPrintf("Index:%d Out loop in processCandidate, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+	if sleeped > ElectionBaseTime {
+		return
+	}
+	
+	time.Sleep(rf.getRandomTicker(ElectionBaseTime - sleeped))
+}
 
-	for _, v1 := range values {
-		ok := false
-		for _, v2 := range really {
-			if v1 == v2 {
-				ok = true
-			}
-		}
-		if ok == false {
-			cfg.t.Fatalf("didn't find a value")
+func (rf *Raft) processFollwer() {
+	if rf.role.Load() != FOLLOWER {
+		return
+	}
+	time.Sleep(rf.getRandomTicker(ElectionBaseTime))
+	DPrintf("Index:%d, change to follower", rf.me)
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	if rf.currentLeader == -1 || !rf.rcvdHB.Load() {
+		rf.changeRole(CANDIDATE)
+		return
+	}
+	rf.rcvdHB.Store(false)
+}
+
+// The ticker go routine starts a new election if this peer hasn't received
+// heartsbeats recently.
+func (rf *Raft) ticker() {
+	for !rf.killed() {
+		
+		// Your code here to check if a leader election should
+		// be started and to randomize sleeping time using
+		// time.Sleep().
+		
+		DPrintf("Index:%d, Role:%d, In loop, log len:%d", rf.me, rf.role.Load(), len(rf.log))
+		switch rf.role.Load() {
+		case FOLLOWER:
+			rf.processFollwer()
+		case CANDIDATE:
+			rf.processCandidate()
+		case LEADER:
+			rf.syncLog()
 		}
 	}
-
-	cfg.end()
 }
 
-func TestReliableChurn2C(t *testing.T) {
-	internalChurn(t, false)
-}
-
-func TestUnreliableChurn2C(t *testing.T) {
-	internalChurn(t, true)
-}
-
-const MAXLOGSIZE = 2000
-
-func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash bool) {
-	iters := 30
-	servers := 3
-	cfg := make_config(t, servers, !reliable, true)
-	defer cfg.cleanup()
-
-	cfg.begin(name)
-
-	cfg.one(rand.Int(), servers, true)
-	leader1 := cfg.checkOneLeader()
-
-	for i := 0; i < iters; i++ {
-		victim := (leader1 + 1) % servers
-		sender := leader1
-		if i%3 == 1 {
-			sender = (leader1 + 1) % servers
-			victim = leader1
-		}
-
-		if disconnect {
-			cfg.disconnect(victim)
-			cfg.one(rand.Int(), servers-1, true)
-		}
-		if crash {
-			cfg.crash1(victim)
-			cfg.one(rand.Int(), servers-1, true)
-		}
-
-		// perhaps send enough to get a snapshot
-		nn := (SnapShotInterval / 2) + (rand.Int() % SnapShotInterval)
-		for i := 0; i < nn; i++ {
-			cfg.rafts[sender].Start(rand.Int())
-		}
-
-		// let applier threads catch up with the Start()'s
-		if disconnect == false && crash == false {
-			// make sure all followers have caught up, so that
-			// an InstallSnapshot RPC isn't required for
-			// TestSnapshotBasic2D().
-			cfg.one(rand.Int(), servers, true)
-		} else {
-			cfg.one(rand.Int(), servers-1, true)
-		}
-
-		if cfg.LogSize() >= MAXLOGSIZE {
-			cfg.t.Fatalf("Log size too large")
-		}
-		if disconnect {
-			// reconnect a follower, who maybe behind and
-			// needs to rceive a snapshot to catch up.
-			cfg.connect(victim)
-			cfg.one(rand.Int(), servers, true)
-			leader1 = cfg.checkOneLeader()
-		}
-		if crash {
-			cfg.start1(victim, cfg.applierSnap)
-			cfg.connect(victim)
-			cfg.one(rand.Int(), servers, true)
-			leader1 = cfg.checkOneLeader()
-		}
-	}
-	cfg.end()
-}
-
-func TestSnapshotBasic2D(t *testing.T) {
-	snapcommon(t, "Test (2D): snapshots basic", false, true, false)
-}
-
-func TestSnapshotInstall2D(t *testing.T) {
-	snapcommon(t, "Test (2D): install snapshots (disconnect)", true, true, false)
-}
-
-func TestSnapshotInstallUnreliable2D(t *testing.T) {
-	snapcommon(t, "Test (2D): install snapshots (disconnect+unreliable)",
-		true, false, false)
-}
-
-func TestSnapshotInstallCrash2D(t *testing.T) {
-	snapcommon(t, "Test (2D): install snapshots (crash)", false, true, true)
-}
-
-func TestSnapshotInstallUnCrash2D(t *testing.T) {
-	snapcommon(t, "Test (2D): install snapshots (unreliable+crash)", false, false, true)
-}
-
-//
-// do the servers persist the snapshots, and
-// restart using snapshot along with the
-// tail of the log?
-//
-func TestSnapshotAllCrash2D(t *testing.T) {
-	servers := 3
-	iters := 5
-	cfg := make_config(t, servers, false, true)
-	defer cfg.cleanup()
-
-	cfg.begin("Test (2D): crash and restart all servers")
-
-	cfg.one(rand.Int(), servers, true)
-
-	for i := 0; i < iters; i++ {
-		// perhaps enough to get a snapshot
-		nn := (SnapShotInterval / 2) + (rand.Int() % SnapShotInterval)
-		for i := 0; i < nn; i++ {
-			cfg.one(rand.Int(), servers, true)
-		}
-
-		index1 := cfg.one(rand.Int(), servers, true)
-
-		// crash all
-		for i := 0; i < servers; i++ {
-			cfg.crash1(i)
-		}
-
-		// revive all
-		for i := 0; i < servers; i++ {
-			cfg.start1(i, cfg.applierSnap)
-			cfg.connect(i)
-		}
-
-		index2 := cfg.one(rand.Int(), servers, true)
-		if index2 < index1+1 {
-			t.Fatalf("index decreased from %v to %v", index1, index2)
-		}
-	}
-	cfg.end()
+// the service or tester wants to create a Raft server. the ports
+// of all the Raft servers (including this one) are in peers[]. this
+// server's port is peers[me]. all the servers' peers[] arrays
+// have the same order. persister is a place for this server to
+// save its persistent state, and also initially holds the most
+// recent saved state, if any. applyCh is a channel on which the
+// tester or service expects Raft to send ApplyMsg messages.
+// Make() must return quickly, so it should start goroutines
+// for any long-running work.
+func Make(peers []*labrpc.ClientEnd, me int,
+	persister *Persister, applyCh chan ApplyMsg) *Raft {
+	rf := &Raft{}
+	rf.peers = peers
+	rf.persister = persister
+	rf.me = me
+	
+	// Your initialization code here (2A, 2B, 2C).
+	rf.currentTerm = 0
+	rf.role.Store(FOLLOWER)
+	rf.currentLeader = -1
+	rf.voteFor = -1
+	
+	rf.log = make([]LogEntries, 0, 10)
+	rf.initLeaderData()
+	rf.applyCh = applyCh
+	
+	// initialize from state persisted before a crash
+	rf.readPersist(persister.ReadRaftState())
+	DPrintf("Index:%d, we have %d peers", rf.me, len(peers))
+	// start ticker goroutine to start elections
+	go rf.ticker()
+	
+	return rf
 }
