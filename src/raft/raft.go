@@ -285,13 +285,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	// if rf.role.Load() != FOLLOWER {
-	// 	DPrintf("Index:%d Reject vote to:%d same term but i'm not follower, role:%d", rf.me, args.CandiddateID, rf.role.Load())
-	// 	reply.VoteGranted = false
-	// 	return
-	// }
-
-	if rf.voteFor != -1 && rf.voteFor != args.CandiddateID {
+	if rf.voteFor != -1 && rf.voteFor != args.CandiddateID && rf.currentTerm == args.Term {
 		DPrintf("Index:%d, Reject vote to:%d, already voteFor:%d, term:%d", rf.me, args.CandiddateID, rf.voteFor, rf.currentTerm)
 		reply.VoteGranted = false
 		return
@@ -379,6 +373,7 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 
 					args.Entries = rf.log[args.PrevLogIndex:]
 					args.LeaderCommit = rf.commitIndex
+					args.Term = rf.currentTerm
 					rf.mu.Unlock()
 					continue
 				}

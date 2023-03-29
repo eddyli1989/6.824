@@ -55,8 +55,12 @@
 - - [x] 重试同步log成功时，nextIndex是老的，没有更新
 - - [x] Match算的是错的
 - - [x] Success Count变化后应该立即Commit
-- Commit Index的计算需要根据Log长度和match数组进行计算，不然有可能有的日志永远不会被提交。
+- - [x] Commit Index的计算需要根据Log长度和match数组进行计算，不然有可能有的日志永远不会被提交。
 
 ## TestFailNoAgree2B
-- 每个人都投给自己，结果无法选出Leader，每个人每一轮只能投一个人，因此VoteFor是和Term绑定的，如果Term变了，那么VoteFor应该变为无效
-- log在重试同步的时候似乎忘记填Term字段了
+- - [x] 每个人都投给自己，结果无法选出Leader，每个人每一轮只能投一个人，因此VoteFor是和Term绑定的，如果Term变了，那么VoteFor应该变为无效
+- - [x] log在重试同步的时候似乎忘记填Term字段了
+
+## Test (2B): rejoin of partitioned leader ...
+- - [ ] 发完消息后判断一下kill，如果kill了就退出
+- - [ ] 3个Peer，Index0 Leader，日志长度5，然后0和1，2分区，1，2中，2短暂变为Leader并且接受了一个日志同步到了1，后来和0联通以后，0同步自己的日志到1，2，此时1，2的日志位置2已经和0不同且已经Apply，再次Apply后将报错
