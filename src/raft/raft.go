@@ -20,6 +20,7 @@ package raft
 import (
 	//	"bytes"
 	"fmt"
+	"math/big"
 	"sync"
 	"sync/atomic"
 
@@ -353,7 +354,7 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 				rf.mu.Lock()
 				DPrintf("Index:%d Send AppendEntries to :%d Successed", rf.me, index)
 				if rf.role.Load() != LEADER {
-					DPrintf("Index:%d Role changed,return", rf.me, index)
+					DPrintf("Index:%d Role changed,return", rf.me)
 					rf.mu.Unlock()
 					return
 				}
