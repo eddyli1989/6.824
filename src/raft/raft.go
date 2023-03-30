@@ -26,7 +26,7 @@ import (
 	//	"6.824/labgob"
 	"6.824/labrpc"
 
-	"math/rand"
+	"crypto/rand"
 	"time"
 )
 
@@ -57,9 +57,9 @@ const (
 	FOLLOWER
 )
 
-const ElectionBaseTime = 400 * time.Millisecond
+const ElectionBaseTime = 300 * time.Millisecond
 const ElectionRandTime = 150 // ms
-const HBInterval = 150 * time.Millisecond
+const HBInterval = 110 * time.Millisecond
 
 type LogEntries struct {
 	Term    int
@@ -352,6 +352,11 @@ func (rf *Raft) sendAppendLogAsync(server int, args *AppendEntriesArgs, ch chan 
 			if ret {
 				rf.mu.Lock()
 				DPrintf("Index:%d Send AppendEntries to :%d Successed", rf.me, index)
+				if rf.role.Load() != LEADER {
+					DPrintf("Index:%d Role changed,return", rf.me, index)
+					rf.mu.Unlock()
+					return
+				}
 				if appendRsp.Term > rf.currentTerm {
 					rf.currentTerm = appendRsp.Term
 					rf.changeRole(FOLLOWER)
@@ -476,29 +481,32 @@ func (rf *Raft) syncLog() {
 	totalCount := 0
 	var sleeped time.Duration = 0
 	waitTime := 5 * time.Millisecond
+	success := false
 	for sleeped < HBInterval && totalCount < len(rf.peers)-1 {
 		select {
 		case ret := <-ch:
 			if ret {
 				successCount++
 				if successCount > len(rf.peers)/2 {
-					break
+					success = true
 				}
 			}
 			totalCount++
 		case <-time.After(waitTime):
 			sleeped += waitTime
 		}
-
+		if success {
+			break
+		}
 		if rf.killed() || rf.role.Load() != LEADER {
 			return
 		}
 	}
 	DPrintf("Index:%d Out loop in processLeader, sleep:%d ms", rf.me, sleeped/time.Millisecond)
+	rf.caculateCommitIndex()
 	if sleeped < HBInterval {
 		time.Sleep(HBInterval - sleeped)
 	}
-	rf.caculateCommitIndex()
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -549,10 +557,9 @@ func (rf *Raft) killed() bool {
 }
 
 func (rf *Raft) getRandomTicker(base time.Duration) time.Duration {
-	rand.Seed(int64(time.Now().UnixNano()))
-	randTime := rand.Intn(ElectionRandTime)
+	randTime, _ := rand.Int(rand.Reader, big.NewInt(ElectionRandTime))
 	DPrintf("Index:%d, rand:%d", rf.me, randTime)
-	return base + (time.Duration)(randTime)*time.Millisecond
+	return base + (time.Duration)(randTime.Int64())*time.Millisecond
 }
 
 func (rf *Raft) initLeaderData() {
